@@ -1,0 +1,37 @@
+### signer test08
+Lobby test:
+tondev c d  WarGameLobby -v 123456789012
+0:ccc82ed4bf2005f72fe5c20cc2c5921180329a3e367cf29b5410f049b543fb8e
+
+
+root-------
+tondev c d  WarGameBase --data baseID:0  -v 1234567890123
+0:3377643c15b2d0360c635070329c8fd75acdf5b4075980b3040fe5d13c8a9d00
+
+tondev c d  WarGameWarrior --data warriorID:0  -v 1234567890123
+0:032f31a8b6d98aa13080a2f6b6ca6f9aaad24bbcaf6d5f31ded1da429047f73d
+-------root
+
+
+test08 base
+0:af8a2b937bab497db03989b6658f6bf266a3101d1bb1429074f71eb74c57f8da
+
+defender base
+0:ce084ad3124412b10ed796b7533e5def21dba27bfd07df3ac878a8b024d4b011
+
+attacker base
+0:30acd084b65f416b7dd135a71ab267172cf0abc54819efffb3686fd3958ff631
+
+
+
+
+
+
+
+Player 1 Warrior 1
+0:084e0e5c69a6c96ab8c68965e010b5830ae4b6e940a6ff927ea1c61ff9434930
+
+
+
+
+

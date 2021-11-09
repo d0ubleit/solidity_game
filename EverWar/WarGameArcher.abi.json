@@ -1,0 +1,95 @@
+{
+	"ABI version": 2,
+	"version": "2.1",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"yourBaseAddr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setAttackVal",
+			"inputs": [
+				{"name":"_objAttackVal","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "attackEnemy",
+			"inputs": [
+				{"name":"_aimAddr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deathOfBase",
+			"inputs": [
+				{"name":"_enemyAddr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acceptAttack",
+			"inputs": [
+				{"name":"aimAddr","type":"address"},
+				{"name":"enemyAttackVal","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setDefenceVal",
+			"inputs": [
+				{"name":"_objDefenceVal","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "objHealth",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"objHealth","type":"int256"}
+			]
+		},
+		{
+			"name": "attackersArr",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"attackersArr","type":"address[]"}
+			]
+		},
+		{
+			"name": "BaseAddr",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"BaseAddr","type":"address"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"objHealth","type":"int256"},
+		{"name":"objDefenceVal","type":"uint256"},
+		{"name":"attackersArr","type":"address[]"},
+		{"name":"BaseAddr","type":"address"},
+		{"name":"objAttackVal","type":"uint256"},
+		{"name":"UnitName","type":"string"}
+	]
+}

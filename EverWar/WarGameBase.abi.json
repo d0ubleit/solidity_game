@@ -1,0 +1,115 @@
+{
+	"ABI version": 2,
+	"version": "2.1",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"_rootWarrior","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "removeWarUnit",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "produceWarrior",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "selfProduceBase",
+			"inputs": [
+				{"name":"answerId","type":"uint32"},
+				{"name":"_baseID","type":"uint256"},
+				{"name":"senderPubkey","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "acceptAttack",
+			"inputs": [
+				{"name":"aimAddr","type":"address"},
+				{"name":"enemyAttackVal","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setDefenceVal",
+			"inputs": [
+				{"name":"_objDefenceVal","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "objHealth",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"objHealth","type":"int256"}
+			]
+		},
+		{
+			"name": "attackersArr",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"attackersArr","type":"address[]"}
+			]
+		},
+		{
+			"name": "warriorID",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"warriorID","type":"uint256"}
+			]
+		},
+		{
+			"name": "UnitsMap",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"UnitsMap","type":"map(address,bool)"}
+			]
+		},
+		{
+			"name": "thisPubkey",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"thisPubkey","type":"uint256"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"baseID","type":"uint256"}
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"objHealth","type":"int256"},
+		{"name":"objDefenceVal","type":"uint256"},
+		{"name":"attackersArr","type":"address[]"},
+		{"name":"baseID","type":"uint256"},
+		{"name":"warriorID","type":"uint256"},
+		{"name":"rootWarrior","type":"address"},
+		{"name":"UnitsMap","type":"map(address,bool)"},
+		{"name":"thisPubkey","type":"uint256"}
+	]
+}
