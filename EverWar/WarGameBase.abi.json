@@ -1,14 +1,21 @@
 {
 	"ABI version": 2,
-	"version": "2.1",
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"_rootWarrior","type":"address"}
+				{"name":"playerPubkey","type":"uint256"}
 			],
 			"outputs": [
+			]
+		},
+		{
+			"name": "getInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"value0","type":"tuple"}
 			]
 		},
 		{
@@ -19,28 +26,10 @@
 			]
 		},
 		{
-			"name": "produceWarrior",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "selfProduceBase",
-			"inputs": [
-				{"name":"answerId","type":"uint32"},
-				{"name":"_baseID","type":"uint256"},
-				{"name":"senderPubkey","type":"uint256"}
-			],
-			"outputs": [
-				{"name":"value0","type":"address"}
-			]
-		},
-		{
 			"name": "acceptAttack",
 			"inputs": [
 				{"name":"aimAddr","type":"address"},
-				{"name":"enemyAttackVal","type":"uint256"}
+				{"name":"_objAttackVal","type":"int32"}
 			],
 			"outputs": [
 			]
@@ -48,7 +37,7 @@
 		{
 			"name": "setDefenceVal",
 			"inputs": [
-				{"name":"_objDefenceVal","type":"uint256"}
+				{"name":"_objDefenceVal","type":"int32"}
 			],
 			"outputs": [
 			]
@@ -58,7 +47,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"objHealth","type":"int256"}
+				{"name":"objHealth","type":"uint32"}
 			]
 		},
 		{
@@ -74,7 +63,15 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"warriorID","type":"uint256"}
+				{"name":"warriorID","type":"int32"}
+			]
+		},
+		{
+			"name": "baseInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"baseInfo","type":"tuple"}
 			]
 		},
 		{
@@ -92,24 +89,19 @@
 			"outputs": [
 				{"name":"thisPubkey","type":"uint256"}
 			]
+		},
+		{
+			"name": "ownerPubkey",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"ownerPubkey","type":"uint256"}
+			]
 		}
 	],
 	"data": [
-		{"key":1,"name":"baseID","type":"uint256"}
+		{"key":1,"name":"baseID","type":"int32"}
 	],
 	"events": [
-	],
-	"fields": [
-		{"name":"_pubkey","type":"uint256"},
-		{"name":"_timestamp","type":"uint64"},
-		{"name":"_constructorFlag","type":"bool"},
-		{"name":"objHealth","type":"int256"},
-		{"name":"objDefenceVal","type":"uint256"},
-		{"name":"attackersArr","type":"address[]"},
-		{"name":"baseID","type":"uint256"},
-		{"name":"warriorID","type":"uint256"},
-		{"name":"rootWarrior","type":"address"},
-		{"name":"UnitsMap","type":"map(address,bool)"},
-		{"name":"thisPubkey","type":"uint256"}
 	]
 }

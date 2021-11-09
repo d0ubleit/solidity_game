@@ -1,12 +1,12 @@
-pragma ton-solidity >= 0.6;
+pragma ton-solidity >=0.35.0;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 import "IWarGameObj.sol";
 
 contract WarGameObj is IWarGameObj {
 
-    int public objHealth = 10;
-    uint objDefenceVal = 0;
+    uint32 public objHealth = 10;
+    int32 objDefenceVal = 2;
     address[] public attackersArr;
     
     constructor() public {
@@ -22,19 +22,19 @@ contract WarGameObj is IWarGameObj {
         _;
     }
 
-    function acceptAttack(address aimAddr, uint enemyAttackVal) external override {
+    function acceptAttack(address aimAddr, int32 _objAttackVal) external override {
         tvm.accept();
         address enemyAddr = msg.sender;
         attackersArr.push(msg.sender);
-        if (enemyAttackVal > objDefenceVal) {
-            objHealth -= int(enemyAttackVal) - int(objDefenceVal);
+        if (_objAttackVal > objDefenceVal) {
+            objHealth -= uint32(_objAttackVal) - uint32(objDefenceVal);  
         }
         if (checkObjIsDead()) {
             deathProcessing(enemyAddr);
         }
     }
 
-    function setDefenceVal(uint _objDefenceVal) public checkOwnerAndAccept {
+    function setDefenceVal(int32 _objDefenceVal) public checkOwnerAndAccept {
         objDefenceVal = _objDefenceVal;
     }
 

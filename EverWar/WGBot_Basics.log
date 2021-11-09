@@ -1,0 +1,17 @@
+Config: default
+Input arguments:
+     tvc: WGBot_Basics.tvc
+      wc: None
+    keys: WGBot_Basics.keys.json
+init_data: None
+is_update_tvc: None
+
+Seed phrase: "cargo nut awkward illness merit belt bright force winner suggest rescue bench"
+Raw address: 0:cba2299f827b0d6378962e4f5c08578662fb21a60c6026c375aac4ee5f3ae22b
+testnet:
+Non-bounceable address (for init): 0QDLoimfgnsNY3iWLk9cCFeGYvshpgxgJsN1qsTuXzriK7hR
+Bounceable address (for later access): kQDLoimfgnsNY3iWLk9cCFeGYvshpgxgJsN1qsTuXzriK-WU
+mainnet:
+Non-bounceable address (for init): UQDLoimfgnsNY3iWLk9cCFeGYvshpgxgJsN1qsTuXzriKwPb
+Bounceable address (for later access): EQDLoimfgnsNY3iWLk9cCFeGYvshpgxgJsN1qsTuXzriK14e
+Succeeded
