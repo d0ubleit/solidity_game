@@ -1,17 +1,26 @@
 pragma ton-solidity >=0.35.0;
 pragma AbiHeader expire;
+pragma AbiHeader time;
 pragma AbiHeader pubkey;
 import "WarGameUnit.sol";
 
 contract WarGameWarrior is WarGameUnit {
 
-    uint static warriorID;
+    int32 static exampleID;
     string UnitName = "Warrior";
     
-    constructor(address yourBaseAddr) WarGameUnit(yourBaseAddr) public {
+    constructor(uint playerPubkey, address yourBaseAddr) WarGameUnit(playerPubkey, yourBaseAddr) public {
         //require(tvm.pubkey() != 0, 101);
         //require(msg.pubkey() == tvm.pubkey(), 102);
         tvm.accept();
+        objInfo = Information( 
+            exampleID,
+            "Warrior",
+            address(this),
+            playerPubkey,
+            10,
+            6,
+            2);
     }
     
     // function selfProduceWarrior(uint _warriorID, uint senderPubkey) external responsible returns(address) {
@@ -36,20 +45,20 @@ contract WarGameWarrior is WarGameUnit {
 
 
 
-    function produceWarrior() external returns(address newWarrior) {
-        tvm.accept();
-        TvmCell code = tvm.code();
-        newWarrior = new WarGameWarrior{
-            value: 10 ton,
-            code: code,
-            pubkey: tvm.pubkey(),
-            bounce: false,
-            varInit: {
-                warriorID: warriorID + 1
-            }
-        }(msg.sender);
-       // warriorCnt++;
-     } 
+    // function produceWarrior() external returns(address newWarrior) {
+    //     tvm.accept();
+    //     TvmCell code = tvm.code();
+    //     newWarrior = new WarGameWarrior{
+    //         value: 10 ton,
+    //         code: code,
+    //         pubkey: tvm.pubkey(),
+    //         bounce: false,
+    //         varInit: {
+    //             warriorID: warriorID + 1
+    //         }
+    //     }(msg.sender);
+    //    // warriorCnt++;
+    //  } 
 
 
   

@@ -5,17 +5,10 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"playerPubkey","type":"uint256"}
+				{"name":"playerPubkey","type":"uint256"},
+				{"name":"playerBaseAddr","type":"address"}
 			],
 			"outputs": [
-			]
-		},
-		{
-			"name": "getInfo",
-			"inputs": [
-			],
-			"outputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"value0","type":"tuple"}
 			]
 		},
 		{
@@ -43,6 +36,14 @@
 			]
 		},
 		{
+			"name": "getInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"value0","type":"tuple"}
+			]
+		},
+		{
 			"name": "objHealth",
 			"inputs": [
 			],
@@ -59,19 +60,19 @@
 			]
 		},
 		{
+			"name": "objInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"objInfo","type":"tuple"}
+			]
+		},
+		{
 			"name": "warriorID",
 			"inputs": [
 			],
 			"outputs": [
 				{"name":"warriorID","type":"int32"}
-			]
-		},
-		{
-			"name": "baseInfo",
-			"inputs": [
-			],
-			"outputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"baseInfo","type":"tuple"}
 			]
 		},
 		{
@@ -89,18 +90,10 @@
 			"outputs": [
 				{"name":"thisPubkey","type":"uint256"}
 			]
-		},
-		{
-			"name": "ownerPubkey",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"ownerPubkey","type":"uint256"}
-			]
 		}
 	],
 	"data": [
-		{"key":1,"name":"baseID","type":"int32"}
+		{"key":1,"name":"exampleID","type":"int32"}
 	],
 	"events": [
 	]

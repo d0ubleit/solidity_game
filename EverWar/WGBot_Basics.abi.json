@@ -3,6 +3,24 @@
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
+			"name": "getDebotInfo",
+			"id": "0xDEB",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"name","type":"bytes"},
+				{"name":"version","type":"bytes"},
+				{"name":"publisher","type":"bytes"},
+				{"name":"key","type":"bytes"},
+				{"name":"author","type":"bytes"},
+				{"name":"support","type":"address"},
+				{"name":"hello","type":"bytes"},
+				{"name":"language","type":"bytes"},
+				{"name":"dabi","type":"bytes"},
+				{"name":"icon","type":"bytes"}
+			]
+		},
+		{
 			"name": "goKingdomMenu",
 			"inputs": [
 			],
@@ -10,9 +28,55 @@
 			]
 		},
 		{
-			"name": "requestBaseInformation",
+			"name": "goKingdomMenu_Units",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setWGWarriorCode",
+			"inputs": [
+				{"name":"code","type":"cell"},
+				{"name":"data","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "produceWarrior",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onSuccess",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setAddrForRequest_Base",
 			"inputs": [
 				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setAddrForRequest_Warrior",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "requestInformation",
+			"inputs": [
+				{"name":"ExampleAddr","type":"address"}
 			],
 			"outputs": [
 			]
@@ -35,23 +99,29 @@
 			]
 		},
 		{
-			"name": "onError",
-			"inputs": [
-				{"name":"sdkError","type":"uint32"},
-				{"name":"exitCode","type":"uint32"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "onSuccess",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "start",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "savePublicKey",
+			"inputs": [
+				{"name":"value","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "goMainMenu_Signed",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "goMainMenu_UnSigned",
 			"inputs": [
 			],
 			"outputs": [
@@ -60,40 +130,6 @@
 		{
 			"name": "produceBase",
 			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "getDebotInfo",
-			"id": "0xDEB",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"name","type":"bytes"},
-				{"name":"version","type":"bytes"},
-				{"name":"publisher","type":"bytes"},
-				{"name":"key","type":"bytes"},
-				{"name":"author","type":"bytes"},
-				{"name":"support","type":"address"},
-				{"name":"hello","type":"bytes"},
-				{"name":"language","type":"bytes"},
-				{"name":"dabi","type":"bytes"},
-				{"name":"icon","type":"bytes"}
-			]
-		},
-		{
-			"name": "getRequiredInterfaces",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"interfaces","type":"uint256[]"}
-			]
-		},
-		{
-			"name": "savePublicKey",
-			"inputs": [
-				{"name":"value","type":"bytes"}
 			],
 			"outputs": [
 			]
@@ -145,6 +181,23 @@
 				{"name":"exitCode","type":"uint32"}
 			],
 			"outputs": [
+			]
+		},
+		{
+			"name": "onError",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getRequiredInterfaces",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"interfaces","type":"uint256[]"}
 			]
 		},
 		{

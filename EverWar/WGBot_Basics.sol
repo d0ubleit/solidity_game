@@ -4,31 +4,172 @@ pragma AbiHeader time;
 pragma AbiHeader pubkey;
     
 import "WGBot_Init.sol";
- 
+import "AWarGameExample.sol"; 
+import "IWarGameObj.sol";
+
 // SL = Shopping List
 contract WGBot_Basics is WGBot_Init {
+    
+    TvmCell Warrior_Code;
+    TvmCell Warrior_Data;
+    TvmCell Warrior_StateInit; 
+    address Warrior_Addr;         
+    int32 WarriorID = 1; 
+    mapping(int32 => address) UnitsAliveList;
+    int32 UnitsAliveCnt;
+
+
+    function getDebotInfo() public functionID(0xDEB) virtual override view returns(
+        string name, string version, string publisher, string key, string author,
+        address support, string hello, string language, string dabi, bytes icon
+    ) {
+        name = "EverWar Game DeBot";
+        version = "0.0.1";
+        publisher = "d0ubleit";
+        key = "EverWar Game DeBot";
+        author = "d0ubleit";
+        support = address.makeAddrStd(0, 0x81b6312da6eaed183f9976622b5a39a90d5cff47e4d2a541bd97ee216e8300b1);
+        hello = "Welcome to strategy blockchain game!";
+        language = "en";
+        dabi = m_debotAbi.get();
+        icon = m_icon;
+    }
     
     function goKingdomMenu() public override {
         string sep = '----------------------------------------';
         Menu.select(
             format(
-                "Kingdoms alive: {}",
-                    gameStat.basesAlive
+                "Kingdoms alive: {}, My units alive: {}",
+                    gameStat.basesAlive,
+                    UnitsAliveCnt
                     
             ),
             sep,
             [
-                MenuItem("Show INFO","",tvm.functionId(requestBaseInformation))
-               // MenuItem("My kingdom","",tvm.functionId(goKingdomMenu))
-               // MenuItem("Delete from shopping list","",tvm.functionId(deleteListItem))
+                MenuItem("Show INFO","",tvm.functionId(setAddrForRequest_Base)),
+                MenuItem("Produce warrior","",tvm.functionId(produceWarrior)),
+                MenuItem("<=== Back","",tvm.functionId(goMainMenu_Signed)) 
             ]
         );
-    }   
+    } 
 
-    function requestBaseInformation(uint32 index) public view {
+    function goKingdomMenu_Units() public {
+        string sep = '----------------------------------------';
+        Menu.select(
+            format(
+                "Kingdoms alive: {}, My units alive: {}",
+                    gameStat.basesAlive,
+                    UnitsAliveCnt
+                    
+            ),
+            sep,
+            [
+                MenuItem("Show INFO","",tvm.functionId(setAddrForRequest_Base)),
+                MenuItem("Units","",tvm.functionId(setAddrForRequest_Warrior)),
+                MenuItem("Produce warrior","",tvm.functionId(produceWarrior)), 
+                MenuItem("<=== Back","",tvm.functionId(goMainMenu_Signed))
+
+            ]
+        );
+    } 
+
+    // function goUnitsMenu() public override {
+    //     string sep = '----------------------------------------';
+    //     Menu.select(
+    //         format(
+    //             "Kingdoms alive: {}, My units alive: {}",
+    //                 gameStat.basesAlive,
+    //                 UnitsAliveCnt
+                    
+    //         ),
+    //         sep,
+    //         [
+    //             MenuItem("Show INFO","",tvm.functionId(setAddrForRequest_Base)),
+    //             MenuItem("Units","",tvm.functionId(produceWarrior)),
+    //             MenuItem("Produce warrior","",tvm.functionId(produceWarrior)), 
+    //             MenuItem("<=== Back","",tvm.functionId(goMainMenu_Signed))
+
+    //         ]
+    //     );
+    // }        
+    
+    function setWGWarriorCode(TvmCell code, TvmCell data) public {
+        require(msg.pubkey() == tvm.pubkey(), 101); 
+        tvm.accept();
+        Warrior_Code = code;
+        Warrior_Data = data;
+        //Warrior_StateInit = tvm.buildStateInit(Warrior_Code, Warrior_Data);
+    }
+
+    function produceWarrior() public {
+        produceType = 1;
+        Terminal.print(0, "Preparing...");
+        Warrior_StateInit = tvm.buildStateInit({code: Warrior_Code, contr: AWarGameExample, varInit: {exampleID: WarriorID}});//////////////////////////////////////   
+        TvmCell deployState = tvm.insertPubkey(Warrior_StateInit, playerPubkey);
+        Warrior_Addr = address.makeAddrStd(0, tvm.hash(deployState));
+        Terminal.print(0, format( "Info: your Warrior address is {}", Warrior_Addr));
+        produceAddr = Warrior_Addr;
+        Sdk.getAccountType(tvm.functionId(checkAccountStatus), produceAddr);
+    }
+
+    function deploy() internal virtual override view { 
+            TvmCell image;
+            if (produceType == 0){
+                image = tvm.insertPubkey(Base_StateInit, playerPubkey);
+            }
+            else if (produceType == 1){
+                image = tvm.insertPubkey(Warrior_StateInit, playerPubkey);
+            } 
+            optional(uint256) none;
+            TvmCell deployMsg = tvm.buildExtMsg({
+                abiVer: 2,
+                dest: produceAddr,
+                callbackId: tvm.functionId(WGBot_Basics.onSuccess),  
+                onErrorId:  tvm.functionId(onErrorRepeatDeploy),    // Just repeat if something went wrong
+                time: 0,
+                expire: 0,
+                sign: true,
+                pubkey: none,
+                stateInit: image, 
+                call: {AWarGameExample, playerPubkey, playersAliveList[playerPubkey]} 
+            });
+            tvm.sendrawmsg(deployMsg, 1);
+    }
+
+    function onSuccess() public override {       //view{
+        //requestGetSummary(tvm.functionId(setSummary));
+        if (produceType == 0){ 
+            BaseID++;
+            playersAliveList[playerPubkey] = produceAddr;
+            gameStat.basesAlive++;
+            Terminal.print(0, "Your kingdom is ready! Have a nice game!");
+            goMainMenu_Signed();         
+        }
+        else if (produceType == 1){
+            WarriorID++;
+            UnitsAliveCnt++;
+            UnitsAliveList[UnitsAliveCnt] = Warrior_Addr;
+            Terminal.print(0, "Your Warrior is ready for battle!");
+            goKingdomMenu_Units();       
+        } 
+        
+    } 
+
+    function setAddrForRequest_Base(uint32 index) public view {
         index = index;
+        address ExampleAddr = playersAliveList[playerPubkey];
+        requestInformation(ExampleAddr);
+    }
+
+    function setAddrForRequest_Warrior(uint32 index) public view {
+        index = index;
+        address ExampleAddr = Warrior_Addr; ////////////////////////////////////////////////// JUST FOR TEST! SET IN ANOTHER WAY!
+        requestInformation(ExampleAddr);
+    }
+
+    function requestInformation(address ExampleAddr) public view {
         optional(uint256) none;
-        IWarGameBase(Base_Addr).getInfo{
+        IWarGameObj(ExampleAddr).getInfo{
             abiVer: 2,
             extMsg: true,
             sign: false,
@@ -42,15 +183,15 @@ contract WGBot_Basics is WGBot_Init {
 
     function showBaseInfo(Information BaseInfo) public {
         Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
-                        BaseInfo.itemID,
-                        BaseInfo.itemType,
-                        BaseInfo.itemAddr,
-                        BaseInfo.itemOwnerPubkey,
-                        BaseInfo.itemHealth,
-                        BaseInfo.itemAttack, 
-                        BaseInfo.itemDefence));
+            BaseInfo.itemID,
+            BaseInfo.itemType,
+            BaseInfo.itemAddr,
+            BaseInfo.itemOwnerPubkey,
+            BaseInfo.itemHealth,
+            BaseInfo.itemAttack, 
+            BaseInfo.itemDefence)); 
         goKingdomMenu();
-        
+    }
         // uint32 i;
         // if (showShopList.length > 0 ) {
         //     Terminal.print(0, "Here is your shopping list:");
@@ -81,7 +222,7 @@ contract WGBot_Basics is WGBot_Init {
         //     Terminal.print(0, "Your shopping list is empty. Add something ;)");
         // }
         
-    }
+    
 
     // function deleteListItem(uint32 index) public {
     //     index = index;

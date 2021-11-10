@@ -1,5 +1,6 @@
 pragma ton-solidity >=0.35.0;
 pragma AbiHeader expire;
+pragma AbiHeader time;
 pragma AbiHeader pubkey;
 import "WarGameObj.sol";
 import "WarGameBase.sol";
@@ -7,18 +8,18 @@ import "WarGameBase.sol";
 contract WarGameUnit is WarGameObj {
 
     address public BaseAddr; 
-    uint objAttackVal;
+    //uint objAttackVal;
 
-    constructor(address yourBaseAddr) public {
+    constructor(uint playerPubkey, address playerBaseAddr) public {
         //require(tvm.pubkey() != 0, 101);
         //require(msg.pubkey() == tvm.pubkey(), 102);
         tvm.accept();
-        BaseAddr = yourBaseAddr;
+        BaseAddr = playerBaseAddr; 
         //WarGameBase(BaseAddr).addWarUnit();
     }  
 
-    function setAttackVal(uint _objAttackVal) public checkOwnerAndAccept {
-        objAttackVal = _objAttackVal;
+    function setAttackVal(int32 _objAttackVal) public checkOwnerAndAccept {
+        objAttackVal = _objAttackVal;  
     }
 
     function attackEnemy(address _aimAddr) public checkOwnerAndAccept{

@@ -27,10 +27,13 @@ fi
 
 DEBOT_NAME=${1%.*} # filename without extension
 CONTRACT1=${2%.*} # filename without extension
-NETWORK="${3:-http://net.ton.dev}"
+CONTRACT2=${3%.*} # filename without extension
+NETWORK="${4:-http://net.ton.dev}"
+
 
 echo $DEBOT_NAME
 echo $CONTRACT1
+echo $CONTRACT2
 echo $NETWORK
 #
 # This is TON OS SE giver address, correct it if you use another giver
@@ -60,7 +63,7 @@ function giver {
         --abi ../debotBase/Mygiver.abi.json \
         --sign ../debotBase/Mygiver.keys.json \
         $GIVER_ADDRESS \
-        sendTransactionSimple "{\"dest\":\"$1\",\"value\":5000000000}" \
+        sendTransactionSimple "{\"dest\":\"$1\",\"value\":2000000000}" \
         1>/dev/null
 }
 
@@ -83,6 +86,7 @@ function genaddr {
 echo "Step 0. Compiling"
 tondev sol compile $DEBOT_NAME.sol
 tondev sol compile $CONTRACT1.sol
+tondev sol compile $CONTRACT2.sol
 
 
 echo "Step 1. Calculating debot address"
@@ -104,6 +108,8 @@ $tos --url $NETWORK call $DEBOT_ADDRESS setABI "{\"dabi\":\"$DEBOT_ABI\"}" \
     --sign $DEBOT_NAME.keys.json \
     --abi $DEBOT_NAME.abi.json 1>/dev/null
 
+echo "Success"
+echo "Step 4. Set code for WGBase contract"
 
 #todo_code=$(base64 -w 0 todo.tvc)
 $tos decode stateinit $CONTRACT1.tvc --tvc > $CONTRACT1.decodeToCut.json
@@ -113,6 +119,20 @@ head -12 $CONTRACT1.decodeToCut2.json > $CONTRACT1.decode.json
 
 $tos --url $NETWORK call $DEBOT_ADDRESS setWGBaseCode $CONTRACT1.decode.json \
     --sign $DEBOT_NAME.keys.json \
-    --abi $DEBOT_NAME.abi.json # 1>/dev/null
+    --abi $DEBOT_NAME.abi.json  1>/dev/null
 
+echo "Success"
+echo "Step 5. Set code for WGWarrior contract"
+
+
+$tos decode stateinit $CONTRACT2.tvc --tvc > $CONTRACT2.decodeToCut.json
+#tail -12 $CONTRACT1.decodeToCut.json > $CONTRACT1.decode.json
+tail -12 $CONTRACT2.decodeToCut.json > $CONTRACT2.decodeToCut2.json
+head -12 $CONTRACT2.decodeToCut2.json > $CONTRACT2.decode.json
+
+$tos --url $NETWORK call $DEBOT_ADDRESS setWGWarriorCode $CONTRACT2.decode.json \
+    --sign $DEBOT_NAME.keys.json \
+    --abi $DEBOT_NAME.abi.json  1>/dev/null
+
+echo "Success"
 echo "Done! Deployed debot with address: $DEBOT_ADDRESS"

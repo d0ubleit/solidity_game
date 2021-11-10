@@ -4,6 +4,6 @@ pragma AbiHeader time;
 pragma AbiHeader pubkey;
 import "WarGameStructs.sol";
 
-interface IWarGameBase {
+interface IWarGameObj {
     function getInfo() external returns(Information);
 }

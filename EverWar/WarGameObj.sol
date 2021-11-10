@@ -1,14 +1,25 @@
 pragma ton-solidity >=0.35.0;
 pragma AbiHeader expire;
+pragma AbiHeader time;
 pragma AbiHeader pubkey;
+
 import "IWarGameObj.sol";
+import "WarGameStructs.sol";
 
 contract WarGameObj is IWarGameObj {
 
+    int32 objID;
+    string objType;
+    uint ownerPubkey;
     uint32 public objHealth = 10;
+    int32 objAttackVal = 0; 
     int32 objDefenceVal = 2;
+    
     address[] public attackersArr;
     
+    
+    Information public objInfo;
+
     constructor() public {
         //require(tvm.pubkey() != 0, 101);
         //require(msg.pubkey() == tvm.pubkey(), 102);
@@ -57,6 +68,10 @@ contract WarGameObj is IWarGameObj {
         tvm.accept();
         _enemyAddr.transfer(1, true, 160); 
     }
+
+    function getInfo() external override returns(Information){
+        return objInfo;
+    } 
 
 
 } 

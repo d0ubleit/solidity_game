@@ -4,42 +4,38 @@ pragma AbiHeader time;
 pragma AbiHeader pubkey;
 import "WarGameObj.sol";
 import "WarGameStructs.sol";
+import "AWarGameExample.sol";
 //import "WarGameUnit.sol" as WGUnit;
 //import "WarGameWarrior.sol" as WGW;
     
 
 contract WarGameBase is WarGameObj {
     
-    int32 static baseID;
-    int32 public warriorID = 1;
+    int32 static exampleID;
+    int32 public warriorID = 1; 
     //address rootWarrior;
-    Information public baseInfo;
-    mapping(address => bool) public UnitsMap;
+    
+    mapping(address => bool) public UnitsMap; 
     uint public thisPubkey;
-    uint public ownerPubkey;
+    
 
     //constructor(address _rootWarrior) public {
-    constructor(uint playerPubkey) public { 
+    constructor(uint playerPubkey, address playerBaseAddr) public { 
         //require(tvm.pubkey() != 0, 101);
         //require(msg.pubkey() == tvm.pubkey(), 102);
         //rootWarrior = _rootWarrior;
         tvm.accept();
-        ownerPubkey = playerPubkey;
-        thisPubkey = tvm.pubkey();
-        baseInfo = Information(
-            baseID,
+        objInfo = Information( 
+            exampleID,
             "Base",
             address(this),
-            ownerPubkey,
-            objHealth, 
+            playerPubkey,
+            25,
             0,
-            objDefenceVal
-        );
-
-    } 
-
-    function getInfo() external returns(Information){
-        return baseInfo;
+            3);
+        
+        thisPubkey = tvm.pubkey();
+        
     } 
 
     // function addWarrior(address _warriorAddr) internal {
