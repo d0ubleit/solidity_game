@@ -13,6 +13,7 @@ import "../debotBase/Sdk.sol";
 
 import "AWarGameExample.sol";
 import "WarGameStructs.sol";
+import "IWarGame_interfaces.sol";
 import "Itransactable.sol";
 
 
@@ -33,12 +34,21 @@ abstract contract WGBot_Init is Debot, Upgradable {
     // Don't like to use it this way //
     // Find a way to set parameters for callback functions or another //
     address produceAddr;
+    address StorageAddr;
+    bool produceProcessing; 
+        //true - debot is deploying contract
+        //false - debot not deploying
     int32 produceType = 0;
         //produceType means what type of contract will be deployed:
         //  0 = WarGameBase
         //  1 = WarGameWarrior
         //  ...
 
+    function setStorageAddr(address storageAddress) public {
+        require(msg.pubkey() == tvm.pubkey(), 101);
+        tvm.accept();
+        StorageAddr = storageAddress; 
+    }
 
     function setWGBaseCode(TvmCell code, TvmCell data) public {
         require(msg.pubkey() == tvm.pubkey(), 101);
@@ -52,6 +62,7 @@ abstract contract WGBot_Init is Debot, Upgradable {
         Terminal.print(0, "Welcome to EverWar! Prepare to battle!");
         //goMainMenu(); 
         Terminal.input(tvm.functionId(savePublicKey),"Please enter your public key",false);
+        
     }
  
     function savePublicKey(string value) public {
@@ -63,11 +74,70 @@ abstract contract WGBot_Init is Debot, Upgradable {
             // Base_Addr = address.makeAddrStd(0, tvm.hash(deployState));
             // Terminal.print(0, format( "Info: your Shopping List contract address is {}", Base_Addr));
             // Sdk.getAccountType(tvm.functionId(checkAccountStatus), Base_Addr);
-            checkIfBaseExists();
-            
+            //checkIfBaseExists();
+            requestGetPlayersList(tvm.functionId(setPlayersList)); 
+
         } else {
             Terminal.input(tvm.functionId(savePublicKey),"Wrong public key. Try again!\nPlease enter your public key",false);
         }
+    }
+
+
+    //////////////////////////////////////////////////////
+    // Join PlayersList and Stat later to make 1 request//
+    //////////////////////////////////////////////////////
+    function requestGetPlayersList(uint32 answerId) internal view {
+        optional(uint256) none;
+        IWarGameStorage(StorageAddr).getPlayersAliveList{
+            abiVer: 2,
+            extMsg: true,
+            sign: false,
+            pubkey: none,
+            time: uint64(now),
+            expire: 0,
+            callbackId: answerId,
+            onErrorId: 0
+        }();
+    }
+
+    function setPlayersList(mapping(uint => address) playersList) public {
+        playersAliveList = playersList;
+        requestGetStat(tvm.functionId(setStat));
+    }
+    
+    function requestGetStat(uint32 answerId) internal view { 
+        optional(uint256) none;
+        IWarGameStorage(StorageAddr).getStat{
+            abiVer: 2,
+            extMsg: true,
+            sign: false,
+            pubkey: none,
+            time: uint64(now),
+            expire: 0,
+            callbackId: answerId,
+            onErrorId: 0
+        }();
+    }
+
+    function setStat(GameStat Statistics) public {
+        gameStat = Statistics;
+        Terminal.print(0, "Stat updated");
+        commutator();
+    }
+
+    function commutator() public {
+        if (produceProcessing && produceType==0) {  
+            checkIfBaseExists();
+        }
+        else if (produceProcessing) {
+            goKingdomMenu();
+        }
+        else if (!playersAliveList.exists(playerPubkey)){
+            goMainMenu_UnSigned();
+        }
+        else {    
+            goMainMenu_Signed();
+        }    
     }
 
     function checkIfBaseExists() internal{
@@ -94,11 +164,21 @@ abstract contract WGBot_Init is Debot, Upgradable {
             sep,
             [
                 //MenuItem("Create KINGDOM!","",tvm.functionId(savePublicKey)),
-                MenuItem("My kingdom","",tvm.functionId(goKingdomMenu))
-                // MenuItem("Delete from shopping list","",tvm.functionId(deleteListItem))
+                MenuItem("My kingdom","",tvm.functionId(goKingdomMenu)),
+                MenuItem("Update players list","",tvm.functionId(goSetListAndStat)),
+                MenuItem("Show players list","",tvm.functionId(showPlayesrList)) 
             ]
         );
     } 
+
+    function showPlayesrList() public {
+        int showID = 0; //Here will be good to show NAME OF KINGDOM instead ID
+        for ((, address addr) : playersAliveList) {
+            showID++;
+            Terminal.print(0, format("| {} | at address {}", showID, addr));  
+        }
+        commutator();
+    }
 
     function goMainMenu_UnSigned() public {
         string sep = '----------------------------------------';
@@ -115,9 +195,14 @@ abstract contract WGBot_Init is Debot, Upgradable {
                 //MenuItem("Delete from shopping list","",tvm.functionId(deleteListItem))
             ]
         );
-    }     
+    }
+
+    function goSetListAndStat() public {  
+        requestGetPlayersList(tvm.functionId(setPlayersList)); 
+    }    
         
     function produceBase() public {
+        produceProcessing = true;
         produceType = 0;
         Terminal.print(0, "Preparing...");
         Base_StateInit = tvm.buildStateInit({code: Base_Code, contr: AWarGameExample, varInit: {exampleID: BaseID}});//////////////////////////////////////   
@@ -191,7 +276,7 @@ abstract contract WGBot_Init is Debot, Upgradable {
             TvmCell deployMsg = tvm.buildExtMsg({
                 abiVer: 2,
                 dest: produceAddr,
-                callbackId: tvm.functionId(onSuccess),
+                callbackId: tvm.functionId(onSuccessDeploy), 
                 onErrorId:  tvm.functionId(onErrorRepeatDeploy),    // Just repeat if something went wrong
                 time: 0,
                 expire: 0,
@@ -210,15 +295,35 @@ abstract contract WGBot_Init is Debot, Upgradable {
         deploy();
     }   
      
-    function onSuccess() public virtual  {       //view{
-        //requestGetSummary(tvm.functionId(setSummary));
-        BaseID++;
-        playersAliveList[playerPubkey] = produceAddr;
-        gameStat.basesAlive++;
+    function onSuccessDeploy() public virtual {       //view{
+        produceProcessing = false;
+        if (produceType == 0) {
+            BaseID++; 
+        }
         Terminal.print(0, "Your kingdom is ready! Have a nice game!");
-        goMainMenu_Signed(); 
+        Terminal.print(0, "One more transaction to register your kingdom at storage..");
+        memPlayersList(playerPubkey, produceAddr);        
     }
 
+    function memPlayersList(uint _playerPubkey, address _produceAddr) internal {
+        optional(uint256) pubkey = 0;
+        IWarGameStorage(StorageAddr).addToPlayersAliveList{
+                abiVer: 2,
+                extMsg: true,
+                sign: true,
+                pubkey: pubkey,
+                time: uint64(now), 
+                expire: 0,
+                callbackId: tvm.functionId(onSuccessFunc),
+                onErrorId: tvm.functionId(onError)
+            }(_playerPubkey, _produceAddr); 
+    } 
+
+    function onSuccessFunc() public {       //view{
+        requestGetPlayersList(tvm.functionId(setPlayersList));
+        //goMainMenu_Signed();
+    } 
+    
     function onError(uint32 sdkError, uint32 exitCode) public {
         Terminal.print(0, format("Operation failed. sdkError {}, exitCode {}", sdkError, exitCode));
         goMainMenu_UnSigned();
@@ -227,26 +332,7 @@ abstract contract WGBot_Init is Debot, Upgradable {
     function onCodeUpgrade() internal override {
         tvm.resetStorage();
     }
-
-    // function requestGetSummary(uint32 answerId) private view {
-    //     optional(uint256) none;
-    //     IshoppingList(Base_Addr).getShoppinngSummary{
-    //         abiVer: 2,
-    //         extMsg: true,
-    //         sign: false,
-    //         pubkey: none,
-    //         time: uint64(now),
-    //         expire: 0,
-    //         callbackId: answerId,
-    //         onErrorId: 0
-    //     }();
-    // }
-
-    // function setSummary(GameStat summary) public {
-    //     SL_Summary = summary;
-    //     openMenu();
-    // }
-    
+   
     function goKingdomMenu() public virtual{
 
     }

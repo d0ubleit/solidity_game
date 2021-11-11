@@ -5,7 +5,7 @@ pragma AbiHeader pubkey;
     
 import "WGBot_Init.sol";
 import "AWarGameExample.sol"; 
-import "IWarGameObj.sol";
+//import "IWarGameObj.sol";
 
 // SL = Shopping List
 contract WGBot_Basics is WGBot_Init {
@@ -17,7 +17,7 @@ contract WGBot_Basics is WGBot_Init {
     int32 WarriorID = 1; 
     mapping(int32 => address) UnitsAliveList;
     int32 UnitsAliveCnt;
-
+    
 
     function getDebotInfo() public functionID(0xDEB) virtual override view returns(
         string name, string version, string publisher, string key, string author,
@@ -102,6 +102,7 @@ contract WGBot_Basics is WGBot_Init {
     }
 
     function produceWarrior() public {
+        produceProcessing = true; 
         produceType = 1;
         Terminal.print(0, "Preparing...");
         Warrior_StateInit = tvm.buildStateInit({code: Warrior_Code, contr: AWarGameExample, varInit: {exampleID: WarriorID}});//////////////////////////////////////   
@@ -124,7 +125,7 @@ contract WGBot_Basics is WGBot_Init {
             TvmCell deployMsg = tvm.buildExtMsg({
                 abiVer: 2,
                 dest: produceAddr,
-                callbackId: tvm.functionId(WGBot_Basics.onSuccess),  
+                callbackId: tvm.functionId(WGBot_Basics.onSuccessDeploy),  
                 onErrorId:  tvm.functionId(onErrorRepeatDeploy),    // Just repeat if something went wrong
                 time: 0,
                 expire: 0,
@@ -136,14 +137,13 @@ contract WGBot_Basics is WGBot_Init {
             tvm.sendrawmsg(deployMsg, 1);
     }
 
-    function onSuccess() public override {       //view{
-        //requestGetSummary(tvm.functionId(setSummary));
-        if (produceType == 0){ 
+    function onSuccessDeploy() public override {       //view{
+        produceProcessing = false;
+        if (produceType == 0) {
             BaseID++;
-            playersAliveList[playerPubkey] = produceAddr;
-            gameStat.basesAlive++;
             Terminal.print(0, "Your kingdom is ready! Have a nice game!");
-            goMainMenu_Signed();         
+            Terminal.print(0, "One more transaction to register your kingdom at storage..");
+            memPlayersList(playerPubkey, produceAddr); 
         }
         else if (produceType == 1){
             WarriorID++;
@@ -151,8 +151,7 @@ contract WGBot_Basics is WGBot_Init {
             UnitsAliveList[UnitsAliveCnt] = Warrior_Addr;
             Terminal.print(0, "Your Warrior is ready for battle!");
             goKingdomMenu_Units();       
-        } 
-        
+        }              
     } 
 
     function setAddrForRequest_Base(uint32 index) public view {

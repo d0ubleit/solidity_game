@@ -28,22 +28,26 @@ contract WarGameStorage {
 
 
     function addToPlayersAliveList(uint playerPubkey, address Base_Addr) external {
+        tvm.accept();
         playersAliveList[playerPubkey] = Base_Addr;
         Stat.basesAlive++;
     }
 
     function removeFromPlayersAliveList(uint playerPubkey) external {
+        tvm.accept();
         if (playersAliveList.exists(playerPubkey)){
             delete playersAliveList[playerPubkey];
             Stat.basesAlive--;
         }
     } 
     
-    function getStat() external view returns(GameStat){ 
+    function getStat() external view returns(GameStat){
+        tvm.accept(); 
         return Stat;
     }
 
     function getPlayersAliveList() external view returns(mapping(uint => address)){
+        tvm.accept();
         return(playersAliveList);
     }
 
