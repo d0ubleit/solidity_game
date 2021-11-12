@@ -15,9 +15,15 @@ contract WGBot_Basics is WGBot_Init {
     TvmCell Warrior_StateInit; 
     address Warrior_Addr;         
     int32 WarriorID = 1; 
+    mapping(int32 => Information) UnitsInfo;
     mapping(int32 => address) UnitsAliveList;
     int32 UnitsAliveCnt;
     
+    bool attackProcessing;
+    int32 attackerUnitID;
+    address attackerUnitAddr;
+    address _aimAddr;
+
 
     function getDebotInfo() public functionID(0xDEB) virtual override view returns(
         string name, string version, string publisher, string key, string author,
@@ -46,32 +52,35 @@ contract WGBot_Basics is WGBot_Init {
             ),
             sep,
             [
-                MenuItem("Show INFO","",tvm.functionId(setAddrForRequest_Base)),
+                MenuItem("Base info","",tvm.functionId(setAddrForRequest_Base)),
+                MenuItem("Units info","",tvm.functionId(getBaseUnitsInfo)),
+                MenuItem("Attack!","",tvm.functionId(sendAttackStart)),
                 MenuItem("Produce warrior","",tvm.functionId(produceWarrior)),
-                MenuItem("<=== Back","",tvm.functionId(goMainMenu_Signed)) 
-            ]
-        );
-    } 
-
-    function goKingdomMenu_Units() public {
-        string sep = '----------------------------------------';
-        Menu.select(
-            format(
-                "Kingdoms alive: {}, My units alive: {}",
-                    gameStat.basesAlive,
-                    UnitsAliveCnt
-                    
-            ),
-            sep,
-            [
-                MenuItem("Show INFO","",tvm.functionId(setAddrForRequest_Base)),
-                MenuItem("Units","",tvm.functionId(setAddrForRequest_Warrior)),
-                MenuItem("Produce warrior","",tvm.functionId(produceWarrior)), 
                 MenuItem("<=== Back","",tvm.functionId(goMainMenu_Signed))
-
+                
             ]
         );
     } 
+
+    // function goKingdomMenu_Units() public {
+    //     string sep = '----------------------------------------';
+    //     Menu.select(
+    //         format(
+    //             "Kingdoms alive: {}, My units alive: {}",
+    //                 gameStat.basesAlive,
+    //                 UnitsAliveCnt
+                    
+    //         ),
+    //         sep,
+    //         [
+    //             MenuItem("Show INFO","",tvm.functionId(setAddrForRequest_Base)),
+    //             MenuItem("Units","",tvm.functionId(setAddrForRequest_Warrior)),
+    //             MenuItem("Produce warrior","",tvm.functionId(produceWarrior)), 
+    //             MenuItem("<=== Back","",tvm.functionId(goMainMenu_Signed))
+
+    //         ]
+    //     );
+    // } 
 
     // function goUnitsMenu() public override {
     //     string sep = '----------------------------------------';
@@ -150,7 +159,8 @@ contract WGBot_Basics is WGBot_Init {
             UnitsAliveCnt++;
             UnitsAliveList[UnitsAliveCnt] = Warrior_Addr;
             Terminal.print(0, "Your Warrior is ready for battle!");
-            goKingdomMenu_Units();       
+            //goKingdomMenu();
+            setAddrForRequest_Warrior(0);       
         }              
     } 
 
@@ -175,22 +185,113 @@ contract WGBot_Basics is WGBot_Init {
             pubkey: none,
             time: uint64(now),
             expire: 0,
-            callbackId: tvm.functionId(showBaseInfo),
+            callbackId: tvm.functionId(showObjInfo),
             onErrorId: 0
         }();
     }
 
-    function showBaseInfo(Information BaseInfo) public {
+    function showObjInfo(Information ObjectInfo) public {
         Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
-            BaseInfo.itemID,
-            BaseInfo.itemType,
-            BaseInfo.itemAddr,
-            BaseInfo.itemOwnerPubkey,
-            BaseInfo.itemHealth,
-            BaseInfo.itemAttack, 
-            BaseInfo.itemDefence)); 
+            ObjectInfo.itemID,
+            ObjectInfo.itemType,
+            ObjectInfo.itemAddr,
+            ObjectInfo.itemOwnerPubkey,
+            ObjectInfo.itemHealth,
+            ObjectInfo.itemAttack, 
+            ObjectInfo.itemDefence)); 
         goKingdomMenu();
     }
+
+    function getBaseUnitsInfo() public {
+        optional(uint256) none;
+        IWarGameBase(Base_Addr).getUnitsInfo{
+            abiVer: 2,
+            extMsg: true,
+            sign: false,
+            pubkey: none, 
+            time: uint64(now),
+            expire: 0,
+            callbackId: tvm.functionId(setUnitsInfo),
+            onErrorId: 0
+        }();
+    }
+
+    function setUnitsInfo(mapping(int32 => Information) newUnitsInfo) public {
+        UnitsInfo = newUnitsInfo;
+        showUnitsInfo();
+        
+    }
+
+    function showUnitsInfo() internal {
+        if (UnitsInfo.empty()) {
+            Terminal.print(0, "You have no alive units. Produce some in kingdom menu.");
+        }
+        else {
+            for ((int32 unitID , Information InfoExample) : UnitsInfo) {    
+            Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
+                unitID, 
+                InfoExample.itemType,
+                InfoExample.itemAddr,
+                InfoExample.itemOwnerPubkey,
+                InfoExample.itemHealth,
+                InfoExample.itemAttack, 
+                InfoExample.itemDefence)); 
+            }
+        }
+        showUnitsInfoExit();
+    }
+
+    function showUnitsInfoExit() internal{
+        if (attackProcessing) {
+            Terminal.input(tvm.functionId(sendAttackChooseAim),"Enter ID of unit who will attack",false);
+            
+        }
+        else {
+            goKingdomMenu();
+        }
+    }
+    
+    function sendAttackStart() public{
+        attackProcessing = true;
+        sendAttackChooseUnit();
+    }
+
+    function sendAttackChooseUnit() internal {
+        if (UnitsInfo.empty()) {
+            Terminal.print(0, "You have no alive units. Produce some in kingdom menu.");
+            goKingdomMenu();
+        }
+        else {
+            showUnitsInfo();
+        }
+    }
+
+    function sendAttackChooseAim(string value) public {
+        (uint res, bool status) = stoi(value);
+        attackerUnitID = int32(res);
+        attackerUnitAddr = UnitsInfo[attackerUnitID].itemAddr;
+        AddressInput.get(tvm.functionId(sendAttack), "Input address of unit to attack");
+    }
+
+    function sendAttack(address value) public {
+        attackProcessing = false;
+        _aimAddr = value;
+        optional(uint256) pubkey = 0;
+        IWarGameUnit(attackerUnitID).attackEnemy{
+                abiVer: 2,
+                extMsg: true,
+                sign: true,
+                pubkey: pubkey,
+                time: uint64(now), 
+                expire: 0,
+                callbackId: tvm.functionId(onSuccessFunc),
+                onErrorId: tvm.functionId(onError)
+            }(_aimAddr); 
+    }
+
+
+
+
         // uint32 i;
         // if (showShopList.length > 0 ) {
         //     Terminal.print(0, "Here is your shopping list:");

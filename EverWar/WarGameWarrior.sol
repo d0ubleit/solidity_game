@@ -8,11 +8,13 @@ contract WarGameWarrior is WarGameUnit {
 
     int32 static exampleID;
     string UnitName = "Warrior";
-    
+    uint SomeSalt = 1234;
+
     constructor(uint playerPubkey, address yourBaseAddr) WarGameUnit(playerPubkey, yourBaseAddr) public {
         //require(tvm.pubkey() != 0, 101);
         //require(msg.pubkey() == tvm.pubkey(), 102);
         tvm.accept();
+        BaseAddr = yourBaseAddr;
         objInfo = Information( 
             exampleID,
             "Warrior",
@@ -21,6 +23,8 @@ contract WarGameWarrior is WarGameUnit {
             10,
             6,
             2);
+          
+        IWarGameBase(BaseAddr).addUnit(objInfo);   
     }
     
     // function selfProduceWarrior(uint _warriorID, uint senderPubkey) external responsible returns(address) {

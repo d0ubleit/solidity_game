@@ -28,13 +28,6 @@
 			]
 		},
 		{
-			"name": "goKingdomMenu_Units",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "setWGWarriorCode",
 			"inputs": [
 				{"name":"code","type":"cell"},
@@ -51,7 +44,7 @@
 			]
 		},
 		{
-			"name": "onSuccess",
+			"name": "onSuccessDeploy",
 			"inputs": [
 			],
 			"outputs": [
@@ -82,9 +75,55 @@
 			]
 		},
 		{
-			"name": "showBaseInfo",
+			"name": "showObjInfo",
 			"inputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"BaseInfo","type":"tuple"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"ObjectInfo","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getBaseUnitsInfo",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setUnitsInfo",
+			"inputs": [
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"newUnitsInfo","type":"map(int32,tuple)"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendAttackStart",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendAttackChooseAim",
+			"inputs": [
+				{"name":"value","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendAttack",
+			"inputs": [
+				{"name":"value","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setStorageAddr",
+			"inputs": [
+				{"name":"storageAddress","type":"address"}
 			],
 			"outputs": [
 			]
@@ -114,6 +153,29 @@
 			]
 		},
 		{
+			"name": "setPlayersList",
+			"inputs": [
+				{"name":"playersList","type":"map(uint256,address)"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setStat",
+			"inputs": [
+				{"components":[{"name":"basesAlive","type":"int32"}],"name":"Statistics","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "commutator",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "goMainMenu_Signed",
 			"inputs": [
 			],
@@ -121,7 +183,21 @@
 			]
 		},
 		{
+			"name": "showPlayesrList",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "goMainMenu_UnSigned",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "goSetListAndStat",
 			"inputs": [
 			],
 			"outputs": [
@@ -179,6 +255,13 @@
 			"inputs": [
 				{"name":"sdkError","type":"uint32"},
 				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onSuccessFunc",
+			"inputs": [
 			],
 			"outputs": [
 			]

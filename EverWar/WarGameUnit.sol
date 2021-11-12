@@ -3,7 +3,7 @@ pragma AbiHeader expire;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 import "WarGameObj.sol";
-import "WarGameBase.sol";
+//import "IWarGame_interfaces.sol"; 
 
 contract WarGameUnit is WarGameObj {
 
@@ -14,16 +14,16 @@ contract WarGameUnit is WarGameObj {
         //require(tvm.pubkey() != 0, 101);
         //require(msg.pubkey() == tvm.pubkey(), 102);
         tvm.accept();
-        BaseAddr = playerBaseAddr; 
-        //WarGameBase(BaseAddr).addWarUnit();
+        // BaseAddr = playerBaseAddr; 
+        // IWarGameBase(BaseAddr).addUnit(objInfo);    
     }  
 
     function setAttackVal(int32 _objAttackVal) public checkOwnerAndAccept {
-        objAttackVal = _objAttackVal;  
+        objInfo.itemAttack = _objAttackVal;  
     }
 
-    function attackEnemy(address _aimAddr) public checkOwnerAndAccept{
-        IWarGameObj(_aimAddr).acceptAttack(_aimAddr, objAttackVal);  
+    function attackEnemy(address _aimAddr) external checkOwnerAndAccept{
+        IWarGameObj(_aimAddr).acceptAttack(_aimAddr, objInfo.itemAttack);  
     }
 
     function deathOfBase(address _enemyAddr) external {
@@ -34,10 +34,13 @@ contract WarGameUnit is WarGameObj {
 
     function deathProcessing(address _enemyAddr) internal override {
         tvm.accept();
-        WarGameBase(BaseAddr).removeWarUnit();
+        IWarGameBase(BaseAddr).removeWarUnit();
         destroyAndTransfer(_enemyAddr);  
     }  
 
+    function onAcceptAttack() internal override{
+        IWarGameBase(BaseAddr).updateUnitsInfo(objInfo);
+    } 
 
 
 }

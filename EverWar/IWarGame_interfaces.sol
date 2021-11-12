@@ -19,3 +19,18 @@ interface IWarGameStorage {
 
     function getPlayersAliveList() external view returns(mapping(uint => address));
 } 
+
+interface IWarGameBase {
+    function addUnit(Information _objInfo) external;
+
+    function updateUnitsInfo(Information _objInfo) external;
+
+    function getUnitsInfo() external returns(mapping(int32 => Information));
+
+    function removeWarUnit() external;
+}
+
+interface IWarGameUnit {
+    function attackEnemy(address _aimAddr) external;
+
+} 

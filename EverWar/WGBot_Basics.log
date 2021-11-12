@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "spin ivory matter bulb sun embark firm embrace lawsuit will second wisdom"
-Raw address: 0:ddf29f3ac2cf121f33de5697587f769ac9e0598350f63cb1b18b02c3164504b9
+Seed phrase: "pipe base casual broom city hidden jump settle dash resource wrap toilet"
+Raw address: 0:44be8cbd6163152a07c03844b3bb42a3d25695bc97fce744d0581907871f949b
 testnet:
-Non-bounceable address (for init): 0QDd8p86ws8SHzPeVpdYf3aayeBZg1D2PLGxiwLDFkUEuUkg
-Bounceable address (for later access): kQDd8p86ws8SHzPeVpdYf3aayeBZg1D2PLGxiwLDFkUEuRTl
+Non-bounceable address (for init): 0QBEvoy9YWMVKgfAOESzu0Kj0laVvJf850TQWBkHhx-Um-64
+Bounceable address (for later access): kQBEvoy9YWMVKgfAOESzu0Kj0laVvJf850TQWBkHhx-Um7N9
 mainnet:
-Non-bounceable address (for init): UQDd8p86ws8SHzPeVpdYf3aayeBZg1D2PLGxiwLDFkUEufKq
-Bounceable address (for later access): EQDd8p86ws8SHzPeVpdYf3aayeBZg1D2PLGxiwLDFkUEua9v
+Non-bounceable address (for init): UQBEvoy9YWMVKgfAOESzu0Kj0laVvJf850TQWBkHhx-Um1Uy
+Bounceable address (for later access): EQBEvoy9YWMVKgfAOESzu0Kj0laVvJf850TQWBkHhx-Umwj3
 Succeeded

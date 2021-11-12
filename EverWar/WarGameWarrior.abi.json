@@ -61,11 +61,11 @@
 			]
 		},
 		{
-			"name": "objHealth",
+			"name": "objInfo",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"objHealth","type":"uint32"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"objInfo","type":"tuple"}
 			]
 		},
 		{
@@ -74,14 +74,6 @@
 			],
 			"outputs": [
 				{"name":"attackersArr","type":"address[]"}
-			]
-		},
-		{
-			"name": "objInfo",
-			"inputs": [
-			],
-			"outputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"objInfo","type":"tuple"}
 			]
 		},
 		{

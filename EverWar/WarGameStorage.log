@@ -1,0 +1,16 @@
+Config: default
+Input arguments:
+     tvc: WarGameStorage.tvc
+      wc: None
+    keys: WGBot_Basics.keys.json
+init_data: None
+is_update_tvc: None
+
+Raw address: 0:c2134a282de08f9d4f2dfa113a9b0533a1dde4ac000e6cec556a1257ae4ab953
+testnet:
+Non-bounceable address (for init): 0QDCE0ooLeCPnU8t-hE6mwUzod3krAAObOxVahJXrkq5U_5a
+Bounceable address (for later access): kQDCE0ooLeCPnU8t-hE6mwUzod3krAAObOxVahJXrkq5U6Of
+mainnet:
+Non-bounceable address (for init): UQDCE0ooLeCPnU8t-hE6mwUzod3krAAObOxVahJXrkq5U0XQ
+Bounceable address (for later access): EQDCE0ooLeCPnU8t-hE6mwUzod3krAAObOxVahJXrkq5UxgV
+Succeeded

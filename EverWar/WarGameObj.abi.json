@@ -1,6 +1,5 @@
 {
 	"ABI version": 2,
-	"version": "2.1",
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
@@ -14,7 +13,7 @@
 			"name": "acceptAttack",
 			"inputs": [
 				{"name":"aimAddr","type":"address"},
-				{"name":"enemyAttackVal","type":"uint256"}
+				{"name":"_objAttackVal","type":"int32"}
 			],
 			"outputs": [
 			]
@@ -22,17 +21,25 @@
 		{
 			"name": "setDefenceVal",
 			"inputs": [
-				{"name":"_objDefenceVal","type":"uint256"}
+				{"name":"_objDefenceVal","type":"int32"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "objHealth",
+			"name": "getInfo",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"objHealth","type":"int256"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"value0","type":"tuple"}
+			]
+		},
+		{
+			"name": "objInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"objInfo","type":"tuple"}
 			]
 		},
 		{
@@ -47,13 +54,5 @@
 	"data": [
 	],
 	"events": [
-	],
-	"fields": [
-		{"name":"_pubkey","type":"uint256"},
-		{"name":"_timestamp","type":"uint64"},
-		{"name":"_constructorFlag","type":"bool"},
-		{"name":"objHealth","type":"int256"},
-		{"name":"objDefenceVal","type":"uint256"},
-		{"name":"attackersArr","type":"address[]"}
 	]
 }

@@ -29,7 +29,7 @@ abstract contract WGBot_Init is Debot, Upgradable {
     uint256 playerPubkey; 
     address playerWalletAddr;
     mapping(uint => address) playersAliveList; 
-    uint32 INITIAL_BALANCE =  200000000;
+    uint32 INITIAL_BALANCE =  2000000000;
 
     // Don't like to use it this way //
     // Find a way to set parameters for callback functions or another //
@@ -236,6 +236,9 @@ abstract contract WGBot_Init is Debot, Upgradable {
     }
 
     function creditAccount(address value) public {
+        Terminal.print(0, format("function creditAccount"));
+        Terminal.print(0, format("playerWalletAddr: {} ", playerWalletAddr));
+        Terminal.print(0, format("Can not continue: account {} is frozen", produceAddr));
         playerWalletAddr = value;
         optional(uint256) pubkey = 0;
         TvmCell empty;
@@ -255,6 +258,7 @@ abstract contract WGBot_Init is Debot, Upgradable {
         //check errors if needed.
         sdkError;
         exitCode;
+        Terminal.print(0, format("On error repeat credit \n sdkError {} \n exitCode {} ", sdkError, exitCode));
         creditAccount(playerWalletAddr);
     }
 

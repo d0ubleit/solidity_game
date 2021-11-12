@@ -3,19 +3,26 @@ pragma AbiHeader expire;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 import "WarGameObj.sol";
-import "WarGameStructs.sol";
+//import "WarGameStructs.sol";
 import "AWarGameExample.sol";
 //import "WarGameUnit.sol" as WGUnit;
 //import "WarGameWarrior.sol" as WGW;
     
 
-contract WarGameBase is WarGameObj {
+contract WarGameBase is WarGameObj { 
     
+    //FOR DEBUG ONLY
+    uint SomeSalt = 1234;
+    
+
     int32 static exampleID;
     int32 public warriorID = 1; 
     //address rootWarrior;
-    
-    mapping(address => bool) public UnitsMap; 
+    int32 unitID = 1;
+
+    mapping(address => int32) public UnitsMap;
+    mapping (int32 => Information) UnitsInfo;
+        
     uint public thisPubkey;
     
 
@@ -25,7 +32,7 @@ contract WarGameBase is WarGameObj {
         //require(msg.pubkey() == tvm.pubkey(), 102);
         //rootWarrior = _rootWarrior;
         tvm.accept();
-        objInfo = Information( 
+        objInfo = Information(  
             exampleID,
             "Base",
             address(this),
@@ -38,23 +45,34 @@ contract WarGameBase is WarGameObj {
         
     } 
 
-    // function addWarrior(address _warriorAddr) internal {
-    //     tvm.accept();
-    //     UnitsMap.add(_warriorAddr, true); 
-    // }
+    function updateUnitsInfo(Information unitInform) external {
+        tvm.accept();
+        require(UnitsMap.exists(msg.sender), 105, "Error: This unit not associated with this base");
+        UnitsInfo[UnitsMap[msg.sender]] = unitInform;
+    } 
+
+    function getUnitsInfo() external returns(mapping(int32 => Information)) { 
+        tvm.accept();
+        return UnitsInfo; 
+    }
+
+    function addUnit(Information _objInfo) external {
+        tvm.accept();
+        UnitsMap.add(msg.sender, unitID);
+        UnitsInfo[unitID] = _objInfo;
+        unitID++;
+    }
 
     function removeWarUnit() external {
         require(UnitsMap.exists(msg.sender), 102, "Error: This unit not associated with this base");
         tvm.accept();
+        delete UnitsInfo[UnitsMap[msg.sender]];
         delete UnitsMap[msg.sender];   
     } 
 
     function deathProcessing(address _enemyAddr) internal override { 
         tvm.accept(); 
-        mapping(address => bool) TempMap = UnitsMap;
-        // for ((address UnitAddr, ) : TempMap) {
-        //     WGUnit.WarGameUnit(UnitAddr).deathOfBase(_enemyAddr);
-        // }
+        //mapping(address => bool) TempMap = UnitsMap;
         destroyAndTransfer(_enemyAddr);   
     }  
 
@@ -82,6 +100,7 @@ contract WarGameBase is WarGameObj {
     //     tvm.accept();
     //     return newBase; 
     // } 
-
+    function onAcceptAttack() internal override{
+    }
     
 }

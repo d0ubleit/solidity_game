@@ -29,7 +29,7 @@ DEBOT_NAME=${1%.*} # filename without extension
 BASE=${2%.*} # filename without extension
 WARRIOR=${3%.*} # filename without extension
 STORAGE_NAME=${4%.*} # filename without extension
-NETWORK="${5:-http://net.ton.dev}"
+NETWORK="${5:-http://127.0.0.1}"
 
 
 echo $DEBOT_NAME
@@ -40,10 +40,10 @@ echo $STORAGE_NAME
 #
 # This is TON OS SE giver address, correct it if you use another giver
 #
-#GIVER_ADDRESS=0:b5e9240fc2d2f1ff8cbb1d1dee7fb7cae155e5f6320e585fcc685698994a19a5
+GIVER_ADDRESS=0:b5e9240fc2d2f1ff8cbb1d1dee7fb7cae155e5f6320e585fcc685698994a19a5
 
 # net.ton.dev 
-GIVER_ADDRESS=0:a532822fe755b19792cca1c26c705984ba18786d8048bd36d50c7664ec9089c0
+#GIVER_ADDRESS=0:a532822fe755b19792cca1c26c705984ba18786d8048bd36d50c7664ec9089c0
 
 
 # Check if tonos-cli installed 
@@ -62,10 +62,10 @@ fi
 
 function giver {
     $tos --url $NETWORK call \
-        --abi ../debotBase/Mygiver.abi.json \
-        --sign ../debotBase/Mygiver.keys.json \
+        --abi ../debotBase/giver.abi.json \
+        --sign ../debotBase/giver.keys.json \
         $GIVER_ADDRESS \
-        sendTransactionSimple "{\"dest\":\"$1\",\"value\":2000000000}" \
+        sendTransaction "{\"dest\":\"$1\",\"value\":10000000000,\"bounce\":false}" \
         1>/dev/null
 }
 
@@ -159,4 +159,10 @@ echo "Success"
 echo "Done! Deployed storage with address: $STORAGE_ADDRESS"
 echo "Done! Deployed debot with address: $DEBOT_ADDRESS"
 
-#tonos-cli --url http://net.ton.dev call 0:6d9ac12edc0aaded6562aacf11be38e1158e867396ab20d57193faf851a0abad getUnitsInfo '{}' --sign WGBot_Basics.keys.json --abi WarGameBase.abi.json
+#$tos --url $NETWORK debot fetch $DEBOT_ADDRESS
+#tonos-cli --url http://127.0.0.1 debot fetch 0:69a7a3d7c28c7fb5c8895cd8398fe65dbc468b29c0153b7602ae9e6126e07f9d
+
+#  "pubkey" : "99c84f920c299b5d80e4fcce2d2054b05466ec9df19532a688c10eb6dd8d6b33",
+#  "address" : "0:d5f5cfc4b52d2eb1bd9d3a8e51707872c7ce0c174facddd0e06ae5ffd17d2fcd",
+#  "seed phrase" : "fan harsh baby section father problem person void depth already powder chicken"
+

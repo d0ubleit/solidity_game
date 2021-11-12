@@ -3,22 +3,15 @@ pragma AbiHeader expire;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 
-import "IWarGameObj.sol";
-import "WarGameStructs.sol";
+import "IWarGame_interfaces.sol";
+//import "IWarGameObj.sol";
+//import "WarGameStructs.sol";
 
 contract WarGameObj is IWarGameObj {
 
-    int32 objID;
-    string objType;
-    uint ownerPubkey;
-    uint32 public objHealth = 10;
-    int32 objAttackVal = 0; 
-    int32 objDefenceVal = 2;
+    Information public objInfo;
     
     address[] public attackersArr;
-    
-    
-    Information public objInfo;
 
     constructor() public {
         //require(tvm.pubkey() != 0, 101);
@@ -37,21 +30,28 @@ contract WarGameObj is IWarGameObj {
         tvm.accept();
         address enemyAddr = msg.sender;
         attackersArr.push(msg.sender);
-        if (_objAttackVal > objDefenceVal) {
-            objHealth -= uint32(_objAttackVal) - uint32(objDefenceVal);  
+        if (_objAttackVal > objInfo.itemDefence) {
+            objInfo.itemHealth -= uint32(_objAttackVal) - uint32(objInfo.itemDefence);  
         }
+        
         if (checkObjIsDead()) {
             deathProcessing(enemyAddr);
         }
+        else{
+            onAcceptAttack(); 
+        }
+    }
+
+    function onAcceptAttack() internal virtual{   
     }
 
     function setDefenceVal(int32 _objDefenceVal) public checkOwnerAndAccept {
-        objDefenceVal = _objDefenceVal;
+        objInfo.itemDefence = _objDefenceVal;
     }
 
     function checkObjIsDead() private returns(bool) {
         tvm.accept();
-        if (objHealth <= 0) {
+        if (objInfo.itemHealth <= 0) {
             return true;
         }
         else {
