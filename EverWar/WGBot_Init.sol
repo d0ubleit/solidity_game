@@ -42,6 +42,7 @@ abstract contract WGBot_Init is Debot, Upgradable {
         //produceType means what type of contract will be deployed:
         //  0 = WarGameBase
         //  1 = WarGameWarrior
+        //  2 = WarGameScout
         //  ...
 
     function setStorageAddr(address storageAddress) public {
@@ -221,7 +222,7 @@ abstract contract WGBot_Init is Debot, Upgradable {
 
 
         } else if (acc_type == -1)  { // acc is inactive
-            Terminal.print(0, "Contract with an initial balance of 0.2 tokens will be deployed");
+            Terminal.print(0, "Contract with an initial balance of 2 tokens will be deployed");
             AddressInput.get(tvm.functionId(creditAccount),"Select a wallet for payment. We will ask you to sign two transactions");
 
         } else  if (acc_type == 0) { // acc is uninitialized
@@ -236,9 +237,9 @@ abstract contract WGBot_Init is Debot, Upgradable {
     }
 
     function creditAccount(address value) public {
-        Terminal.print(0, format("function creditAccount"));
-        Terminal.print(0, format("playerWalletAddr: {} ", playerWalletAddr));
-        Terminal.print(0, format("Can not continue: account {} is frozen", produceAddr));
+        // Terminal.print(0, format("function creditAccount"));
+        // Terminal.print(0, format("playerWalletAddr: {} ", playerWalletAddr));
+        // Terminal.print(0, format("Can not continue: account {} is frozen", produceAddr));
         playerWalletAddr = value;
         optional(uint256) pubkey = 0;
         TvmCell empty;

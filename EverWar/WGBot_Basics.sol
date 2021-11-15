@@ -8,7 +8,7 @@ import "AWarGameExample.sol";
 //import "IWarGameObj.sol";
 
 // SL = Shopping List
-contract WGBot_Basics is WGBot_Init {
+contract WGBot_Basics is WGBot_Init { 
     
     TvmCell Warrior_Code;
     TvmCell Warrior_Data;
@@ -19,7 +19,7 @@ contract WGBot_Basics is WGBot_Init {
     mapping(int32 => address) UnitsAliveList;
     int32 UnitsAliveCnt;
     
-    bool attackProcessing;
+    bool attackProcessing = false;
     int32 attackerUnitID;
     address attackerUnitAddr;
     address _aimAddr;
@@ -41,7 +41,8 @@ contract WGBot_Basics is WGBot_Init {
         icon = m_icon;
     }
     
-    function goKingdomMenu() public override {
+    function goKingdomMenu() public virtual override {
+        attackProcessing = false;
         string sep = '----------------------------------------';
         Menu.select(
             format(
@@ -143,10 +144,10 @@ contract WGBot_Basics is WGBot_Init {
                 stateInit: image, 
                 call: {AWarGameExample, playerPubkey, playersAliveList[playerPubkey]} 
             });
-            tvm.sendrawmsg(deployMsg, 1);
+            tvm.sendrawmsg(deployMsg, 1); 
     }
 
-    function onSuccessDeploy() public override {       //view{
+    function onSuccessDeploy() public virtual override {       //view{
         produceProcessing = false;
         if (produceType == 0) {
             BaseID++;
@@ -216,8 +217,8 @@ contract WGBot_Basics is WGBot_Init {
         }();
     }
 
-    function setUnitsInfo(mapping(int32 => Information) newUnitsInfo) public {
-        UnitsInfo = newUnitsInfo;
+    function setUnitsInfo(mapping(int32 => Information) _UnitsInfo) public {
+        UnitsInfo = _UnitsInfo;
         showUnitsInfo();
         
     }
@@ -268,16 +269,26 @@ contract WGBot_Basics is WGBot_Init {
 
     function sendAttackChooseAim(string value) public {
         (uint res, bool status) = stoi(value);
-        attackerUnitID = int32(res);
-        attackerUnitAddr = UnitsInfo[attackerUnitID].itemAddr;
-        AddressInput.get(tvm.functionId(sendAttack), "Input address of unit to attack");
+        if (status) {
+            attackerUnitID = int32(res);
+            attackerUnitAddr = UnitsInfo[attackerUnitID].itemAddr;
+            //Terminal.print(0, format(" Attacker addr: {} ", attackerUnitAddr));
+            //Terminal.input(tvm.functionId(sendAttack),"Enter address of aim",false);
+            //AddressInput.get(tvm.functionId(sendAttack), "Input address of unit to attack");
+            sendAttack();
+        }
+        else {
+            Terminal.input(tvm.functionId(sendAttackChooseAim),"Wrong ID. Try again!\nEnter ID of unit who will attack",false);
+
+        }
     }
 
-    function sendAttack(address value) public {
+
+    function sendAttack() public {
         attackProcessing = false;
-        _aimAddr = value;
+        _aimAddr = Base_Addr;//address.makeAddrStd(0,value);
         optional(uint256) pubkey = 0;
-        IWarGameUnit(attackerUnitID).attackEnemy{
+        IWarGameUnit(attackerUnitAddr).attackEnemy{
                 abiVer: 2,
                 extMsg: true,
                 sign: true,

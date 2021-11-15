@@ -46,6 +46,7 @@ contract WarGameObj is IWarGameObj {
     }
 
     function setDefenceVal(int32 _objDefenceVal) public checkOwnerAndAccept {
+        tvm.accept();
         objInfo.itemDefence = _objDefenceVal;
     }
 
@@ -70,7 +71,8 @@ contract WarGameObj is IWarGameObj {
     }
 
     function getInfo() external override returns(Information){
-        return objInfo;
+        tvm.accept();
+        return objInfo; 
     } 
 
 

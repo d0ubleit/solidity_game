@@ -92,7 +92,7 @@
 		{
 			"name": "setUnitsInfo",
 			"inputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"newUnitsInfo","type":"map(int32,tuple)"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_UnitsInfo","type":"map(int32,tuple)"}
 			],
 			"outputs": [
 			]
@@ -115,7 +115,6 @@
 		{
 			"name": "sendAttack",
 			"inputs": [
-				{"name":"value","type":"address"}
 			],
 			"outputs": [
 			]

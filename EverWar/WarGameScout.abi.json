@@ -6,39 +6,55 @@
 			"name": "constructor",
 			"inputs": [
 				{"name":"playerPubkey","type":"uint256"},
-				{"name":"playerBaseAddr","type":"address"}
+				{"name":"yourBaseAddr","type":"address"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "updateUnitsInfo",
+			"name": "getEnemyUnitsInfo",
 			"inputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"unitInform","type":"tuple"}
+				{"name":"enemyAddr","type":"address"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "getUnitsInfo",
+			"name": "setEnemyUnitsInfo",
 			"inputs": [
-				{"name":"_answer_id","type":"uint32"}
-			],
-			"outputs": [
 				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_UnitsInfo","type":"map(int32,tuple)"}
-			]
-		},
-		{
-			"name": "addUnit",
-			"inputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_objInfo","type":"tuple"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "removeWarUnit",
+			"name": "getScoutedInfo",
 			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"value0","type":"map(address,map(int32,tuple))"}
+			]
+		},
+		{
+			"name": "setAttackVal",
+			"inputs": [
+				{"name":"_objAttackVal","type":"int32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "attackEnemy",
+			"inputs": [
+				{"name":"_aimAddr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deathOfBase",
+			"inputs": [
+				{"name":"_enemyAddr","type":"address"}
 			],
 			"outputs": [
 			]
@@ -85,35 +101,35 @@
 			]
 		},
 		{
-			"name": "warriorID",
+			"name": "BaseAddr",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"warriorID","type":"int32"}
+				{"name":"BaseAddr","type":"address"}
 			]
 		},
 		{
-			"name": "UnitsMap",
+			"name": "nowEnemy",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"UnitsMap","type":"map(address,int32)"}
+				{"name":"nowEnemy","type":"address"}
 			]
 		},
 		{
-			"name": "UnitsInfo",
+			"name": "store",
 			"inputs": [
 			],
 			"outputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"UnitsInfo","type":"map(int32,tuple)"}
+				{"name":"store","type":"uint256"}
 			]
 		},
 		{
-			"name": "thisPubkey",
+			"name": "ScoutedInfo",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"thisPubkey","type":"uint256"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"ScoutedInfo","type":"map(address,map(int32,tuple))"}
 			]
 		}
 	],

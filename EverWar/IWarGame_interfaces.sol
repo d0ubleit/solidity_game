@@ -25,7 +25,9 @@ interface IWarGameBase {
 
     function updateUnitsInfo(Information _objInfo) external;
 
-    function getUnitsInfo() external returns(mapping(int32 => Information));
+    function getUnitsInfo() external responsible returns(mapping(int32 => Information) _UnitsInfo);
+
+    // function getUnitsInfo() external responsible returns(uint incstore);
 
     function removeWarUnit() external;
 }
@@ -34,3 +36,9 @@ interface IWarGameUnit {
     function attackEnemy(address _aimAddr) external;
 
 } 
+
+interface IWarGameScout {
+    function getEnemyUnitsInfo(address enemyAddr) external;
+
+     function getScoutedInfo() external returns(mapping(address => mapping (int32 => Information)));
+}

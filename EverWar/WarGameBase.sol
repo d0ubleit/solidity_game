@@ -13,7 +13,9 @@ contract WarGameBase is WarGameObj {
     
     //FOR DEBUG ONLY
     uint SomeSalt = 1234;
-    
+    uint SomeSalt2 = 1234;
+    uint SomeSalt3 = 1234;
+
 
     int32 static exampleID;
     int32 public warriorID = 1; 
@@ -21,7 +23,7 @@ contract WarGameBase is WarGameObj {
     int32 unitID = 1;
 
     mapping(address => int32) public UnitsMap;
-    mapping (int32 => Information) UnitsInfo;
+    mapping (int32 => Information) public UnitsInfo;
         
     uint public thisPubkey;
     
@@ -51,10 +53,17 @@ contract WarGameBase is WarGameObj {
         UnitsInfo[UnitsMap[msg.sender]] = unitInform;
     } 
 
-    function getUnitsInfo() external returns(mapping(int32 => Information)) { 
+    function getUnitsInfo() external responsible returns(mapping(int32 => Information) _UnitsInfo) {
         tvm.accept();
-        return UnitsInfo; 
-    }
+        //mapping(int32 => Information) _UnitsInfo = UnitsInfo;
+        //return _UnitsInfo; 
+        _UnitsInfo = UnitsInfo;
+    } 
+
+    // function getUnitsInfo() external responsible returns(uint incstore) {
+    //     tvm.accept();
+    //     return 777; 
+    // }
 
     function addUnit(Information _objInfo) external {
         tvm.accept();

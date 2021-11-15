@@ -9,6 +9,9 @@ contract WarGameWarrior is WarGameUnit {
     int32 static exampleID;
     string UnitName = "Warrior";
     uint SomeSalt = 1234;
+    uint SomeSalt2 = 1234;
+    uint SomeSalt3 = 1234;
+
 
     constructor(uint playerPubkey, address yourBaseAddr) WarGameUnit(playerPubkey, yourBaseAddr) public {
         //require(tvm.pubkey() != 0, 101);
