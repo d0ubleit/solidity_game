@@ -18,6 +18,10 @@ import "Itransactable.sol";
 
 
 abstract contract WGBot_Init is Debot, Upgradable {
+    string debotAbi1;
+    string debotAbi2;
+    string debotAbi;
+
     bytes m_icon;
 
     TvmCell Base_Code;
@@ -44,6 +48,24 @@ abstract contract WGBot_Init is Debot, Upgradable {
         //  1 = WarGameWarrior
         //  2 = WarGameScout
         //  ...
+
+    function setABIpt1(string dabi) public {
+        require(tvm.pubkey() == msg.pubkey(), 100);
+        tvm.accept();
+        debotAbi1 = dabi;
+    }
+
+    function setABIpt2(string dabi) public {
+        require(tvm.pubkey() == msg.pubkey(), 100);
+        tvm.accept();
+        debotAbi2 = dabi;
+        debotAbi = debotAbi1+debotAbi2;
+        delete debotAbi1;
+        delete debotAbi2;
+        setABI(debotAbi);
+    }
+
+
 
     function setStorageAddr(address storageAddress) public {
         require(msg.pubkey() == tvm.pubkey(), 101);
@@ -126,7 +148,7 @@ abstract contract WGBot_Init is Debot, Upgradable {
         commutator();
     }
 
-    function commutator() public {
+    function commutator() internal {
         if (produceProcessing && produceType==0) {  
             checkIfBaseExists();
         }
@@ -181,7 +203,7 @@ abstract contract WGBot_Init is Debot, Upgradable {
         commutator();
     }
 
-    function goMainMenu_UnSigned() public {
+    function goMainMenu_UnSigned() internal {
         string sep = '----------------------------------------';
         Menu.select(
             format(

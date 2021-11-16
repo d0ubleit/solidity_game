@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "sea monkey jaguar eternal medal horror goat stand street tissue laptop rigid"
-Raw address: 0:d7c161b49000ea4862b19351c6693484812f8c3e3a7a2d72bec544fe5c0481d0
+Seed phrase: "alarm latin elevator balcony sudden orange town senior invest security nose hire"
+Raw address: 0:5b2ebb10a9c057c31d5043384565440476221a08e91367d99f1bf64a60b2e752
 testnet:
-Non-bounceable address (for init): 0QDXwWG0kADqSGKxk1HGaTSEgS-MPjp6LXK-xUT-XASB0D5m
-Bounceable address (for later access): kQDXwWG0kADqSGKxk1HGaTSEgS-MPjp6LXK-xUT-XASB0GOj
+Non-bounceable address (for init): 0QBbLrsQqcBXwx1QQzhFZUQEdiIaCOkTZ9mfG_ZKYLLnUmZs
+Bounceable address (for later access): kQBbLrsQqcBXwx1QQzhFZUQEdiIaCOkTZ9mfG_ZKYLLnUjup
 mainnet:
-Non-bounceable address (for init): UQDXwWG0kADqSGKxk1HGaTSEgS-MPjp6LXK-xUT-XASB0IXs
-Bounceable address (for later access): EQDXwWG0kADqSGKxk1HGaTSEgS-MPjp6LXK-xUT-XASB0Ngp
+Non-bounceable address (for init): UQBbLrsQqcBXwx1QQzhFZUQEdiIaCOkTZ9mfG_ZKYLLnUt3m
+Bounceable address (for later access): EQBbLrsQqcBXwx1QQzhFZUQEdiIaCOkTZ9mfG_ZKYLLnUoAj
 Succeeded

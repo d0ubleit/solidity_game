@@ -1,0 +1,17 @@
+Config: default
+Input arguments:
+     tvc: WGBot_Units.tvc
+      wc: None
+    keys: WGBot_Units.keys.json
+init_data: None
+is_update_tvc: None
+
+Seed phrase: "robot glimpse chalk tuition put correct into marble town stool neutral force"
+Raw address: 0:4cbbdf7f94b3034d9ef66cccf90a31067d7d1e551d617960f2491a26b1b683af
+testnet:
+Non-bounceable address (for init): 0QBMu99_lLMDTZ72bMz5CjEGfX0eVR1heWDySRomsbaDr41u
+Bounceable address (for later access): kQBMu99_lLMDTZ72bMz5CjEGfX0eVR1heWDySRomsbaDr9Cr
+mainnet:
+Non-bounceable address (for init): UQBMu99_lLMDTZ72bMz5CjEGfX0eVR1heWDySRomsbaDrzbk
+Bounceable address (for later access): EQBMu99_lLMDTZ72bMz5CjEGfX0eVR1heWDySRomsbaDr2sh
+Succeeded
