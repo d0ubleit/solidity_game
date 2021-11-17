@@ -15,6 +15,7 @@ contract WarGameBase is WarGameObj {
     uint SomeSalt = 1234;
     uint SomeSalt2 = 1234;
     uint SomeSalt3 = 1234;
+    uint SomeSalt4 = 1234;
 
 
     int32 static exampleID;

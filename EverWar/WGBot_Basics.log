@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "alarm latin elevator balcony sudden orange town senior invest security nose hire"
-Raw address: 0:5b2ebb10a9c057c31d5043384565440476221a08e91367d99f1bf64a60b2e752
+Seed phrase: "can bench differ code rotate banana parrot debate expose evolve video inhale"
+Raw address: 0:080125a1664c4914035ba1d6698bd88c18d5647b3e29f29547ea88a1d810d443
 testnet:
-Non-bounceable address (for init): 0QBbLrsQqcBXwx1QQzhFZUQEdiIaCOkTZ9mfG_ZKYLLnUmZs
-Bounceable address (for later access): kQBbLrsQqcBXwx1QQzhFZUQEdiIaCOkTZ9mfG_ZKYLLnUjup
+Non-bounceable address (for init): 0QAIASWhZkxJFANbodZpi9iMGNVkez4p8pVH6oih2BDUQ5L5
+Bounceable address (for later access): kQAIASWhZkxJFANbodZpi9iMGNVkez4p8pVH6oih2BDUQ888
 mainnet:
-Non-bounceable address (for init): UQBbLrsQqcBXwx1QQzhFZUQEdiIaCOkTZ9mfG_ZKYLLnUt3m
-Bounceable address (for later access): EQBbLrsQqcBXwx1QQzhFZUQEdiIaCOkTZ9mfG_ZKYLLnUoAj
+Non-bounceable address (for init): UQAIASWhZkxJFANbodZpi9iMGNVkez4p8pVH6oih2BDUQylz
+Bounceable address (for later access): EQAIASWhZkxJFANbodZpi9iMGNVkez4p8pVH6oih2BDUQ3S2
 Succeeded

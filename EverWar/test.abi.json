@@ -1,0 +1,40 @@
+{
+	"ABI version": 2,
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "getStatus",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint8"}
+			]
+		},
+		{
+			"name": "setStatus",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "status",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"status","type":"uint8"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}

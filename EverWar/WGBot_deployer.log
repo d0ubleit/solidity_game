@@ -1,0 +1,16 @@
+Config: default
+Input arguments:
+     tvc: WGBot_deployer.tvc
+      wc: None
+    keys: WGBot_initial.keys.json
+init_data: None
+is_update_tvc: None
+
+Raw address: 0:42d698f6bcc44dfd06f2f720cfb60622d22293e30e26c5f6cecf0b9454ca5a64
+testnet:
+Non-bounceable address (for init): 0QBC1pj2vMRN_Qby9yDPtgYi0iKT4w4mxfbOzwuUVMpaZKYa
+Bounceable address (for later access): kQBC1pj2vMRN_Qby9yDPtgYi0iKT4w4mxfbOzwuUVMpaZPvf
+mainnet:
+Non-bounceable address (for init): UQBC1pj2vMRN_Qby9yDPtgYi0iKT4w4mxfbOzwuUVMpaZB2Q
+Bounceable address (for later access): EQBC1pj2vMRN_Qby9yDPtgYi0iKT4w4mxfbOzwuUVMpaZEBV
+Succeeded

@@ -26,17 +26,23 @@ if [[ $2 != *".sol"  ]] ; then
 fi
 
 DEBOT_NAME=${1%.*} # filename without extension
-BASE=${2%.*} # filename without extension
-WARRIOR=${3%.*} # filename without extension
-STORAGE_NAME=${4%.*} # filename without extension
-NETWORK="${5:-http://net.ton.dev}"
+DEBOT_NAME2=${2%.*} # filename without extension
+STORAGE_NAME=${3%.*} # filename without extension
+BASE=${4%.*} # filename without extension
+WARRIOR=${5%.*} # filename without extension
+SCOUT=${6%.*} # filename without extension
+NETWORK="${7:-http://net.ton.dev}"
 
 
 echo $DEBOT_NAME
+echo $DEBOT_NAME2
+echo $STORAGE_NAME
 echo $BASE
 echo $WARRIOR
+echo $SCOUT
 echo $NETWORK
-echo $STORAGE_NAME
+
+
 #
 # This is TON OS SE giver address, correct it if you use another giver
 #
@@ -85,78 +91,124 @@ function genaddr {
     $tos genaddr $1.tvc $1.abi.json --genkey $1.keys.json > $1.log
 }
 
-function genaddrStorage {
+function genaddr_setkey {
     $tos genaddr $1.tvc $1.abi.json --setkey $2.keys.json > $1.log
 }
 
 echo "Step 0. Compiling"
 tondev sol compile $DEBOT_NAME.sol
+tondev sol compile $DEBOT_NAME2.sol
+tondev sol compile $STORAGE_NAME.sol
 tondev sol compile $BASE.sol
 tondev sol compile $WARRIOR.sol
-tondev sol compile $STORAGE_NAME.sol
+tondev sol compile $SCOUT.sol
 
-echo "Step 1. Calculating debot address"
+
+echo "Step 1. Calculating debots address"
 genaddr $DEBOT_NAME
 DEBOT_ADDRESS=$(get_address $DEBOT_NAME)
 
+genaddr_setkey $DEBOT_NAME2 $DEBOT_NAME
+DEBOT_ADDRESS2=$(get_address $DEBOT_NAME2)
+
+
 echo "Step 2. Calculating storage address"
-genaddrStorage $STORAGE_NAME $DEBOT_NAME
+genaddr_setkey $STORAGE_NAME $DEBOT_NAME
 STORAGE_ADDRESS=$(get_address $STORAGE_NAME)
+
 
 echo "Step 3. Sending tokens to storage address: $STORAGE_ADDRESS"
 giver $STORAGE_ADDRESS
-echo success
+
 
 echo "Step 4. Deploying storage contract"
 $tos --url $NETWORK deploy $STORAGE_NAME.tvc "{}" \
     --sign $DEBOT_NAME.keys.json \
     --abi $STORAGE_NAME.abi.json 1>/dev/null
 
-echo "Step 5. Sending tokens to address: $DEBOT_ADDRESS"
-giver $DEBOT_ADDRESS
-echo success
-DEBOT_ABI=$(cat $DEBOT_NAME.abi.json | xxd -ps -c 20000)
 
-echo "Step 6. Deploying debot"
+echo "Step 5. Sending tokens to debot1 address: $DEBOT_ADDRESS"
+giver $DEBOT_ADDRESS
+
+
+echo "Step 6. Deploying debot1"
 $tos --url $NETWORK deploy $DEBOT_NAME.tvc "{}" \
     --sign $DEBOT_NAME.keys.json \
     --abi $DEBOT_NAME.abi.json 1>/dev/null
 
+echo "Creating ABI"
+DEBOT_ABI=$(cat $DEBOT_NAME.abi.json | xxd -ps -c 20000)
+echo "Success"
+
 echo "Set ABI"
 $tos --url $NETWORK call $DEBOT_ADDRESS setABI "{\"dabi\":\"$DEBOT_ABI\"}" \
     --sign $DEBOT_NAME.keys.json \
-    --abi $DEBOT_NAME.abi.json #1>/dev/null
+    --abi $DEBOT_NAME.abi.json 1>/dev/null
 echo "Success"
 
-echo "Set storage address to debot"
-$tos --url $NETWORK call $DEBOT_ADDRESS setStorageAddr "{\"storageAddress\":\"$STORAGE_ADDRESS\"}" \
+echo "Set storage address and debot2 address to debot1"
+$tos --url $NETWORK call $DEBOT_ADDRESS setAddreses "{\"storageAddress\":\"$STORAGE_ADDRESS\",\"wgBot_deployerAddr\":\"$DEBOT_ADDRESS2\"}" \
     --sign $DEBOT_NAME.keys.json \
-    --abi $DEBOT_NAME.abi.json #1>/dev/null
+    --abi $DEBOT_NAME.abi.json 1>/dev/null
 echo "Success"
 
-echo "Step 7. Set code for WGBase contract"
+
+echo "Step 7. Sending tokens to debot2 address: $DEBOT_ADDRESS2"
+giver $DEBOT_ADDRESS2
+
+
+echo "Step 8. Deploying debot2"
+$tos --url $NETWORK deploy $DEBOT_NAME2.tvc "{}" \
+    --sign $DEBOT_NAME.keys.json \
+    --abi $DEBOT_NAME2.abi.json 1>/dev/null
+
+echo "Creating ABI"
+DEBOT_ABI2=$(cat $DEBOT_NAME2.abi.json | xxd -ps -c 20000)
+echo "Success"
+
+echo "Set ABI"
+$tos --url $NETWORK call $DEBOT_ADDRESS2 setABI "{\"dabi\":\"$DEBOT_ABI2\"}" \
+    --sign $DEBOT_NAME.keys.json \
+    --abi $DEBOT_NAME2.abi.json 1>/dev/null
+echo "Success"
+
+
+echo "Step 9. Setting conracts codes"
+echo "Set code for WGBase contract"
 #todo_code=$(base64 -w 0 todo.tvc)
 $tos decode stateinit $BASE.tvc --tvc > $BASE.decodeToCut.json
 #tail -12 $BASE.decodeToCut.json > $BASE.decode.json
 tail -12 $BASE.decodeToCut.json > $BASE.decodeToCut2.json
 head -12 $BASE.decodeToCut2.json > $BASE.decode.json
 
-$tos --url $NETWORK call $DEBOT_ADDRESS setWGBaseCode $BASE.decode.json \
+$tos --url $NETWORK call $DEBOT_ADDRESS2 setWGBaseCode $BASE.decode.json \
     --sign $DEBOT_NAME.keys.json \
-    --abi $DEBOT_NAME.abi.json  #1>/dev/null
+    --abi $DEBOT_NAME2.abi.json  1>/dev/null
 echo "Success"
 
-echo "Step 8. Set code for WGWarrior contract"
+echo "Set code for WGWarrior contract"
 $tos decode stateinit $WARRIOR.tvc --tvc > $WARRIOR.decodeToCut.json
 #tail -12 $BASE.decodeToCut.json > $BASE.decode.json
 tail -12 $WARRIOR.decodeToCut.json > $WARRIOR.decodeToCut2.json
 head -12 $WARRIOR.decodeToCut2.json > $WARRIOR.decode.json
 
-$tos --url $NETWORK call $DEBOT_ADDRESS setWGWarriorCode $WARRIOR.decode.json \
+$tos --url $NETWORK call $DEBOT_ADDRESS2 setWGWarriorCode $WARRIOR.decode.json \
     --sign $DEBOT_NAME.keys.json \
-    --abi $DEBOT_NAME.abi.json  #1>/dev/null
+    --abi $DEBOT_NAME2.abi.json  1>/dev/null
+echo "Success"
+
+echo "Set code for WGScout contract"
+$tos decode stateinit $SCOUT.tvc --tvc > $SCOUT.decodeToCut.json
+#tail -12 $BASE.decodeToCut.json > $BASE.decode.json
+tail -12 $SCOUT.decodeToCut.json > $SCOUT.decodeToCut2.json
+head -12 $SCOUT.decodeToCut2.json > $SCOUT.decode.json
+
+$tos --url $NETWORK call $DEBOT_ADDRESS2 setWGScoutCode $SCOUT.decode.json \
+    --sign $DEBOT_NAME.keys.json \
+    --abi $DEBOT_NAME2.abi.json  1>/dev/null
 echo "Success"
 echo "Done! Deployed storage with address: $STORAGE_ADDRESS"
-echo "Done! Deployed debot with address: $DEBOT_ADDRESS"
+echo "Done! Deployed debot1 with address: $DEBOT_ADDRESS"
+echo "Done! Deployed debot2 with address: $DEBOT_ADDRESS2"
 
 #tonos-cli --url http://net.ton.dev call 0:6d9ac12edc0aaded6562aacf11be38e1158e867396ab20d57193faf851a0abad getUnitsInfo '{}' --sign WGBot_Basics.keys.json --abi WarGameBase.abi.json

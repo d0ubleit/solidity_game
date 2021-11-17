@@ -168,13 +168,6 @@
 			]
 		},
 		{
-			"name": "commutator",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "goMainMenu_Signed",
 			"inputs": [
 			],
@@ -183,13 +176,6 @@
 		},
 		{
 			"name": "showPlayesrList",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "goMainMenu_UnSigned",
 			"inputs": [
 			],
 			"outputs": [

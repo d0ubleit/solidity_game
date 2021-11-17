@@ -193,7 +193,7 @@ contract WGBot_Units is WGBot_Basics {
             pubkey: none, 
             time: uint64(now),
             expire: 0,
-            callbackId: tvm.functionId(setScoutedInfo),
+            callbackId: tvm.functionId(setScoutedInfo),  
             onErrorId: 0
         }();
     }

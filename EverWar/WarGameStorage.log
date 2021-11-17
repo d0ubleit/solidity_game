@@ -2,15 +2,15 @@ Config: default
 Input arguments:
      tvc: WarGameStorage.tvc
       wc: None
-    keys: WGBot_Units.keys.json
+    keys: WGBot_initial.keys.json
 init_data: None
 is_update_tvc: None
 
-Raw address: 0:0a1d093662be29f8c1243f57516e11949060962f3670f8ba03b084f4fde8354c
+Raw address: 0:7c33ca91f30b5c44119732d88f63e891ea26a87e8420dfce290e482f0ad3e216
 testnet:
-Non-bounceable address (for init): 0QAKHQk2Yr4p-MEkP1dRbhGUkGCWLzZw-LoDsIT0_eg1TC2f
-Bounceable address (for later access): kQAKHQk2Yr4p-MEkP1dRbhGUkGCWLzZw-LoDsIT0_eg1THBa
+Non-bounceable address (for init): 0QB8M8qR8wtcRBGXMtiPY-iR6iaofoQg384pDkgvCtPiFlno
+Bounceable address (for later access): kQB8M8qR8wtcRBGXMtiPY-iR6iaofoQg384pDkgvCtPiFgQt
 mainnet:
-Non-bounceable address (for init): UQAKHQk2Yr4p-MEkP1dRbhGUkGCWLzZw-LoDsIT0_eg1TJYV
-Bounceable address (for later access): EQAKHQk2Yr4p-MEkP1dRbhGUkGCWLzZw-LoDsIT0_eg1TMvQ
+Non-bounceable address (for init): UQB8M8qR8wtcRBGXMtiPY-iR6iaofoQg384pDkgvCtPiFuJi
+Bounceable address (for later access): EQB8M8qR8wtcRBGXMtiPY-iR6iaofoQg384pDkgvCtPiFr-n
 Succeeded

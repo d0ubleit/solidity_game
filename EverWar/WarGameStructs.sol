@@ -18,17 +18,16 @@ struct GameStat {
 }
 
 
-// struct ShopItem {
-//     int32 itemID;
-//     string itemName;
-//     int32 itemNum;
-//     uint64 itemCreationTime;
-//     bool itemIsPurchased;
-//     int32 itemTotalPrice;
-// }
+enum DeployType {
+    Base,
+    Warrior,
+    Scout
+}
 
-// struct ShopListSummary {
-//     int32 numItemsPaid;
-//     int32 numItemsNotPaid;
-//     int32 totalPricePaid; 
-// }
+enum Status {
+    Error,
+    Success,
+    AlreadyDeployed,
+    LowFunds,
+    FrozenAcc
+}

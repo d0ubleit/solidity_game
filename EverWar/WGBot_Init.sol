@@ -18,9 +18,9 @@ import "Itransactable.sol";
 
 
 abstract contract WGBot_Init is Debot, Upgradable {
-    string debotAbi1;
-    string debotAbi2;
-    string debotAbi;
+    // string debotAbi1;
+    // string debotAbi2;
+    // string debotAbi;
 
     bytes m_icon;
 
@@ -49,21 +49,21 @@ abstract contract WGBot_Init is Debot, Upgradable {
         //  2 = WarGameScout
         //  ...
 
-    function setABIpt1(string dabi) public {
-        require(tvm.pubkey() == msg.pubkey(), 100);
-        tvm.accept();
-        debotAbi1 = dabi;
-    }
+    // function setABIpt1(string dabi) public {
+    //     require(tvm.pubkey() == msg.pubkey(), 100);
+    //     tvm.accept();
+    //     debotAbi1 = dabi;
+    // }
 
-    function setABIpt2(string dabi) public {
-        require(tvm.pubkey() == msg.pubkey(), 100);
-        tvm.accept();
-        debotAbi2 = dabi;
-        debotAbi = debotAbi1+debotAbi2;
-        delete debotAbi1;
-        delete debotAbi2;
-        setABI(debotAbi);
-    }
+    // function setABIpt2(string dabi) public {
+    //     require(tvm.pubkey() == msg.pubkey(), 100);
+    //     tvm.accept();
+    //     debotAbi2 = dabi;
+    //     debotAbi = debotAbi1+debotAbi2;
+    //     delete debotAbi1;
+    //     delete debotAbi2;
+    //     setABI(debotAbi);
+    // }
 
 
 
