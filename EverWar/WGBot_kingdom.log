@@ -1,0 +1,17 @@
+Config: default
+Input arguments:
+     tvc: WGBot_kingdom.tvc
+      wc: None
+    keys: WGBot_kingdom.keys.json
+init_data: None
+is_update_tvc: None
+
+Seed phrase: "slender shuffle else mom program shift helmet hen library fatigue old slow"
+Raw address: 0:62f683217c4c7ffb06416e7a3ace4e2ae2d32acb6410edbc505201e55da4867f
+testnet:
+Non-bounceable address (for init): 0QBi9oMhfEx_-wZBbno6zk4q4tMqy2QQ7bxQUgHlXaSGf_Y3
+Bounceable address (for later access): kQBi9oMhfEx_-wZBbno6zk4q4tMqy2QQ7bxQUgHlXaSGf6vy
+mainnet:
+Non-bounceable address (for init): UQBi9oMhfEx_-wZBbno6zk4q4tMqy2QQ7bxQUgHlXaSGf029
+Bounceable address (for later access): EQBi9oMhfEx_-wZBbno6zk4q4tMqy2QQ7bxQUgHlXaSGfxB4
+Succeeded

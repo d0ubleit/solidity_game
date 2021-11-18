@@ -11,7 +11,7 @@ import "AWarGameExample.sol";
 
 contract WarGameBase is WarGameObj { 
     
-    //FOR DEBUG ONLY
+    //FOR DEBUG ONLY 
     uint SomeSalt = 1234;
     uint SomeSalt2 = 1234;
     uint SomeSalt3 = 1234;

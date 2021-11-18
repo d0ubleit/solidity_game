@@ -23,6 +23,7 @@ contract WGBot_initial is Debot, Upgradable {
     bytes m_icon;
 
     uint32 returnFuncID;
+    uint32 callerFuncID;
     bool showPL = false;
 
     address StorageAddr;
@@ -34,8 +35,12 @@ contract WGBot_initial is Debot, Upgradable {
     Status deployStatus;
 
     GameStat gameStat;
-    mapping(uint => address) playersAliveList; 
+    
+    mapping(uint => int32) playersAliveList; 
+    mapping (int32 => address) playersIDList;
+    
     address Base_Addr;
+    address Scout_Addr;
 
     address Produce_Addr;
 
@@ -86,8 +91,9 @@ contract WGBot_initial is Debot, Upgradable {
         }();
     }
 
-    function setPlayersList(mapping(uint => address) playersList) public {
+    function setPlayersList(mapping(uint => int32) playersList, mapping (int32 => address) _playersIDList) public { 
         playersAliveList = playersList;
+        playersIDList = _playersIDList;
         requestGetStat(tvm.functionId(setStat));
     }
     
@@ -107,7 +113,7 @@ contract WGBot_initial is Debot, Upgradable {
 
     function setStat(GameStat Statistics) public {
         gameStat = Statistics;
-        Terminal.print(0, "Stat updated");
+        //Terminal.print(0, "Stat updated");
         if (showPL) {
             showPlayersList_m();
         }
@@ -117,10 +123,9 @@ contract WGBot_initial is Debot, Upgradable {
     }
 
     function showPlayersList_m() internal { 
-        int showID = 0; //Here will be good to show NAME OF KINGDOM instead ID
-        for ((, address addr) : playersAliveList) {
-            showID++;
-            Terminal.print(0, format("| {} | at address {}", showID, addr));  
+        //Here will be good to show NAME OF KINGDOM instead ID
+        for ((, int32 itemID) : playersAliveList) {
+            Terminal.print(0, format("| {} | at address {}", itemID, playersIDList[itemID]));  
         }
         showPL = false; 
         commutator();
@@ -128,9 +133,11 @@ contract WGBot_initial is Debot, Upgradable {
 
     function commutator() public virtual {
         if (returnFuncID == tvm.functionId(goMainMenu)) { 
+            returnFuncID = 0;
             goMainMenu();
         }
         else {
+            returnFuncID = 0;
             goMainMenu();
         }
     }
@@ -154,7 +161,8 @@ contract WGBot_initial is Debot, Upgradable {
             ]
         );
         }
-        else {        
+        else {
+            Base_Addr = playersIDList[playersAliveList[playerPubkey]];       
             Menu.select(
                 format(
                     "Kingdoms alive: {}",
@@ -193,11 +201,15 @@ contract WGBot_initial is Debot, Upgradable {
         // Handle errors ///////////////////////////////////////////////////////
         if (deployStatus == Status.Success) {
             if (deployType == DeployType.Base) {
-                Base_Addr = _Produce_Addr;
+                Base_Addr = Produce_Addr;
                 saveToStorage(); 
             }
+            else if (deployType == DeployType.Scout) {
+                Scout_Addr = Produce_Addr;
+                req_ObjInfo(Produce_Addr);
+            }
             else {
-                getObjInfo();
+                req_ObjInfo(Produce_Addr);
                 // showPL = false;
                 // returnFuncID = tvm.functionId(goMainMenu);
                 // requestGetPlayersList(tvm.functionId(setPlayersList));
@@ -229,7 +241,7 @@ contract WGBot_initial is Debot, Upgradable {
     } 
 
     function onSuccessFunc() public {        //view{
-        getObjInfo();
+        getBaseObjInfo();
         // showPL = false;
         // returnFuncID = tvm.functionId(goMainMenu);
         // requestGetPlayersList(tvm.functionId(setPlayersList)); 
@@ -245,14 +257,21 @@ contract WGBot_initial is Debot, Upgradable {
     // Child necessary functions
     //
     function goKingdomMenu() public virtual{ 
+        goMainMenu();
     }
 
-    function getObjInfo() internal virtual{
+    function getBaseObjInfo() public virtual{
         showPL = false;
         returnFuncID = tvm.functionId(goMainMenu);
-        requestGetPlayersList(tvm.functionId(setPlayersList));
-
+        requestGetPlayersList(tvm.functionId(setPlayersList)); 
     }
+
+    function req_ObjInfo(address _Produce_Addr) internal virtual {
+        showPL = false;
+        returnFuncID = tvm.functionId(goMainMenu);
+        requestGetPlayersList(tvm.functionId(setPlayersList)); 
+    }
+
 
 
 

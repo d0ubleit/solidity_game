@@ -79,21 +79,28 @@ contract WGBot_deployer is Debot, Upgradable {
         InitialWGB_addr = msg.sender;
         playerPubkey = _playerPubkey;
         deployType = _deployType;
+
+        TvmBuilder salt;
+        salt.store(address(this));
+
         if (deployType == DeployType.Base) {
-            Produce_StateInit = tvm.buildStateInit({code: Base_Code, contr: AWarGameExample, varInit: {exampleID: BaseID}});   
+            TvmCell Base_Code_salt = tvm.setCodeSalt(Base_Code, salt.toCell()); 
+            Produce_StateInit = tvm.buildStateInit({code: Base_Code_salt, contr: AWarGameExample, varInit: {exampleID: BaseID}});   
             TvmCell deployState = tvm.insertPubkey(Produce_StateInit, playerPubkey);
             Produce_Addr = address.makeAddrStd(0, tvm.hash(deployState));
             Base_Addr = Produce_Addr;                                             ///////////////////May be send in invoke? When deeploy any unit
             Terminal.print(0, format( "Info: your Kingdom address is {}", Produce_Addr));
         }
         else if (deployType == DeployType.Warrior) {
-            Produce_StateInit = tvm.buildStateInit({code: Warrior_Code, contr: AWarGameExample, varInit: {exampleID: WarriorID}});  
+            TvmCell Warrior_Code_salt = tvm.setCodeSalt(Warrior_Code, salt.toCell());
+            Produce_StateInit = tvm.buildStateInit({code: Warrior_Code_salt, contr: AWarGameExample, varInit: {exampleID: WarriorID}});  
             TvmCell deployState = tvm.insertPubkey(Produce_StateInit, playerPubkey);
             Produce_Addr = address.makeAddrStd(0, tvm.hash(deployState)); 
             Terminal.print(0, format( "Info: your Warrior address is {}", Produce_Addr));
         }
         else if (deployType == DeployType.Scout) {
-            Produce_StateInit = tvm.buildStateInit({code: Scout_Code, contr: AWarGameExample, varInit: {exampleID: ScoutID}});  
+            TvmCell Scout_Code_salt = tvm.setCodeSalt(Scout_Code, salt.toCell());
+            Produce_StateInit = tvm.buildStateInit({code: Scout_Code_salt, contr: AWarGameExample, varInit: {exampleID: ScoutID}});  
             TvmCell deployState = tvm.insertPubkey(Produce_StateInit, playerPubkey);
             Produce_Addr = address.makeAddrStd(0, tvm.hash(deployState)); 
             Terminal.print(0, format( "Info: your Scout address is {}", Produce_Addr));
@@ -191,16 +198,19 @@ contract WGBot_deployer is Debot, Upgradable {
     function onSuccessDeploy() public virtual {       //view{
         status = Status.Success;
         if (deployType == DeployType.Base) {
-            BaseID++; 
+            BaseID++;
+            Terminal.print(0, "Your kingdom is ready! Have a nice game!\nOne more transaction to register your kingdom at storage... "); 
         }
         else if (deployType == DeployType.Warrior) {
-            WarriorID++; 
+            WarriorID++;
+            Terminal.print(0, "Your warrior is ready to attack!"); 
         }
         else if (deployType == DeployType.Scout) {
             ScoutID++; 
+            Terminal.print(0, "Your scout is ready to explore other kingdoms!");
         }
-        Terminal.print(0, "Your kingdom is ready! Have a nice game!");
-        Terminal.print(0, "One more transaction to register your kingdom at storage..");   
+        
+           
         returnResult();     
     }
 

@@ -2,15 +2,15 @@ Config: default
 Input arguments:
      tvc: WGBot_deployer.tvc
       wc: None
-    keys: WGBot_initial.keys.json
+    keys: WGBot_kingdom.keys.json
 init_data: None
 is_update_tvc: None
 
-Raw address: 0:42d698f6bcc44dfd06f2f720cfb60622d22293e30e26c5f6cecf0b9454ca5a64
+Raw address: 0:4a97c307f9970aa24b7a60086a712f325eeb1619ad2e06288745c76f58b644f5
 testnet:
-Non-bounceable address (for init): 0QBC1pj2vMRN_Qby9yDPtgYi0iKT4w4mxfbOzwuUVMpaZKYa
-Bounceable address (for later access): kQBC1pj2vMRN_Qby9yDPtgYi0iKT4w4mxfbOzwuUVMpaZPvf
+Non-bounceable address (for init): 0QBKl8MH-ZcKokt6YAhqcS8yXusWGa0uBiiHRcdvWLZE9R94
+Bounceable address (for later access): kQBKl8MH-ZcKokt6YAhqcS8yXusWGa0uBiiHRcdvWLZE9UK9
 mainnet:
-Non-bounceable address (for init): UQBC1pj2vMRN_Qby9yDPtgYi0iKT4w4mxfbOzwuUVMpaZB2Q
-Bounceable address (for later access): EQBC1pj2vMRN_Qby9yDPtgYi0iKT4w4mxfbOzwuUVMpaZEBV
+Non-bounceable address (for init): UQBKl8MH-ZcKokt6YAhqcS8yXusWGa0uBiiHRcdvWLZE9aTy
+Bounceable address (for later access): EQBKl8MH-ZcKokt6YAhqcS8yXusWGa0uBiiHRcdvWLZE9fk3
 Succeeded

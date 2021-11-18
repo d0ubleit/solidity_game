@@ -38,8 +38,8 @@ contract WarGameScout is WarGameUnit {
         tvm.accept();
         nowEnemy = enemyAddr;
         optional(uint256) none;
-        IWarGameBase(enemyAddr).getUnitsInfo{
-            value: 1 ton, 
+        IWarGameBase(enemyAddr).getUnitsInfo{ 
+        //    value: 1 ton, 
             callback: WarGameScout.setEnemyUnitsInfo 
         }();
         // IWarGameBase(nowEnemy).getUnitsInfo{

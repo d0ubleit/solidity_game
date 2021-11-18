@@ -17,7 +17,7 @@ interface IWarGameStorage {
     
     function getStat() external view returns(GameStat);
 
-    function getPlayersAliveList() external view returns(mapping(uint => address));
+    function getPlayersAliveList() external view returns(mapping(uint => int32), mapping (int32 => address));
 } 
 
 interface IWarGameBase {

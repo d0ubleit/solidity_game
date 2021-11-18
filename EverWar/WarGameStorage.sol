@@ -12,8 +12,10 @@ contract WarGameStorage {
     // int32 basesAlive;
 
     GameStat Stat;
-    mapping(uint => address) playersAliveList; 
-    
+    mapping(uint => int32) playersAliveList; 
+    mapping (int32 => address) playersIDList;
+    int32 playerID = 1;
+
     constructor() public {
         //require(tvm.pubkey() != 0, 101);
         //require(msg.pubkey() == tvm.pubkey(), 102);
@@ -29,13 +31,16 @@ contract WarGameStorage {
 
     function addToPlayersAliveList(uint playerPubkey, address Base_Addr) external {
         tvm.accept();
-        playersAliveList[playerPubkey] = Base_Addr;
+        playersAliveList[playerPubkey] = playerID;
+        playersIDList[playerID] = Base_Addr;
+        playerID++;
         Stat.basesAlive++;
     }
 
     function removeFromPlayersAliveList(uint playerPubkey) external {
         tvm.accept();
         if (playersAliveList.exists(playerPubkey)){
+            delete playersIDList[playersAliveList[playerPubkey]];
             delete playersAliveList[playerPubkey];
             Stat.basesAlive--;
         }
@@ -46,9 +51,9 @@ contract WarGameStorage {
         return Stat;
     }
 
-    function getPlayersAliveList() external view returns(mapping(uint => address)){
+    function getPlayersAliveList() external view returns(mapping(uint => int32), mapping (int32 => address)){
         tvm.accept();
-        return(playersAliveList);
+        return(playersAliveList, playersIDList); 
     }
 
 

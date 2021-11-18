@@ -15,10 +15,12 @@ struct Information {
 
 struct GameStat {
     int32 basesAlive;
+    
 }
 
 
 enum DeployType {
+    Empty,
     Base,
     Warrior,
     Scout

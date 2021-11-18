@@ -1,0 +1,246 @@
+{
+	"ABI version": 2,
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "sendScout_Start",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendScout_1",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendScout_2",
+			"inputs": [
+				{"name":"value","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "req_sendScout",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getScoutedInfo",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setScoutedInfo",
+			"inputs": [
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_scoutedInfo","type":"map(address,map(int32,tuple))"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getDebotInfo",
+			"id": "0xDEB",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"name","type":"bytes"},
+				{"name":"version","type":"bytes"},
+				{"name":"publisher","type":"bytes"},
+				{"name":"key","type":"bytes"},
+				{"name":"author","type":"bytes"},
+				{"name":"support","type":"address"},
+				{"name":"hello","type":"bytes"},
+				{"name":"language","type":"bytes"},
+				{"name":"dabi","type":"bytes"},
+				{"name":"icon","type":"bytes"}
+			]
+		},
+		{
+			"name": "getBaseObjInfo",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "showObjInfo",
+			"inputs": [
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"ObjectInfo","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getBaseUnitsInfo",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setUnitsInfo",
+			"inputs": [
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_UnitsInfo","type":"map(int32,tuple)"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setAddreses",
+			"inputs": [
+				{"name":"storageAddress","type":"address"},
+				{"name":"wgBot_deployerAddr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "start",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "savePublicKey",
+			"inputs": [
+				{"name":"value","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setPlayersList",
+			"inputs": [
+				{"name":"playersList","type":"map(uint256,int32)"},
+				{"name":"_playersIDList","type":"map(int32,address)"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setStat",
+			"inputs": [
+				{"components":[{"name":"basesAlive","type":"int32"}],"name":"Statistics","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "commutator",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "goMainMenu",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "showPlayersList_1",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "req_produceBase",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployResult",
+			"inputs": [
+				{"name":"_status","type":"uint8"},
+				{"name":"_deployType","type":"uint8"},
+				{"name":"_Produce_Addr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onSuccessFunc",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onError",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "goKingdomMenu",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getRequiredInterfaces",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"interfaces","type":"uint256[]"}
+			]
+		},
+		{
+			"name": "upgrade",
+			"inputs": [
+				{"name":"state","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getDebotOptions",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"options","type":"uint8"},
+				{"name":"debotAbi","type":"bytes"},
+				{"name":"targetAbi","type":"bytes"},
+				{"name":"targetAddr","type":"address"}
+			]
+		},
+		{
+			"name": "setABI",
+			"inputs": [
+				{"name":"dabi","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}

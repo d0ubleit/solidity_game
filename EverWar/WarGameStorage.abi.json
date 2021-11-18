@@ -39,7 +39,8 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"value0","type":"map(uint256,address)"}
+				{"name":"value0","type":"map(uint256,int32)"},
+				{"name":"value1","type":"map(int32,address)"}
 			]
 		}
 	],

@@ -2,26 +2,28 @@ pragma ton-solidity >=0.35.0;
 pragma AbiHeader expire;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
-    
-import "WGBot_initial.sol";
+
+//import "WGBot_infos.sol";    
+import "WGBot_attack.sol";
 import "AWarGameExample.sol"; 
 //import "IWarGameObj.sol";
 
-contract WGBot_kingdom is WGBot_initial { 
+contract WGBot_kingdom is WGBot_attack {  
     
-    mapping(int32 => Information) UnitsInfo;
-    mapping(int32 => address) UnitsAliveList;
-    int32 UnitsAliveCnt;
+    int32 UnitsAliveCnt = 404;
     
     
-    bool attackProcessing = false;
-    int32 attackerUnitID;
-    address attackerUnitAddr;
-    address _aimAddr;
+    // bool attackProcessing = false;
+    // int32 attackerUnitID;
+    // address attackerUnitAddr;
+    // address _aimAddr;
+    
 
+
+    // !!!!!!!!!ON BUTTON PRESS [My KINGDOM] need to update units info and set Scout_Addr!!!!!!!!!!!!!!!!!!! 
     
-    function goKingdomMenu() public virtual override {
-        attackProcessing = false;
+    function goKingdomMenu() public override {
+        //attackProcessing = false; 
         string sep = '----------------------------------------';
         Menu.select(
             format(
@@ -32,16 +34,19 @@ contract WGBot_kingdom is WGBot_initial {
             ),
             sep,
             [
-                MenuItem("Base info","",tvm.functionId(setAddrForRequest_Base)),
-                MenuItem("Units info","",tvm.functionId(getBaseUnitsInfo)),
-                MenuItem("Attack!","",tvm.functionId(sendAttackStart)),
+                MenuItem("Base info","",tvm.functionId(WGBot_infos.getBaseObjInfo)),
+                MenuItem("Units info","",tvm.functionId(WGBot_infos.getBaseUnitsInfo)),
+                MenuItem("Attack!","",tvm.functionId(sendAttack_Start)),
+                MenuItem("Scout!","",tvm.functionId(sendScout_Start)),
                 MenuItem("Produce warrior","",tvm.functionId(req_produceWarrior)),
+                MenuItem("Produce scout","",tvm.functionId(req_produceScout)),
                 MenuItem("<=== Back","",tvm.functionId(goMainMenu))
                 
             ]
         );
     } 
 
+    
     function req_produceWarrior() public {
         uint _playerPubkey = playerPubkey;
         deployType = DeployType.Warrior;
@@ -57,151 +62,55 @@ contract WGBot_kingdom is WGBot_initial {
     }
 
     
-    function getObjInfo() internal override {
-        req_ObjInfo();
-    }
-
-    // function setAddrForRequest_Base(uint32 index) public view {
-    //     index = index;
-    //     address ExampleAddr = playersAliveList[playerPubkey];
-    //     requestInformation(ExampleAddr);
-    // }
-
-    // function setAddrForRequest_Warrior(uint32 index) public view {
-    //     index = index;
-    //     address ExampleAddr = Warrior_Addr; ////////////////////////////////////////////////// JUST FOR TEST! SET IN ANOTHER WAY!
-    //     requestInformation(ExampleAddr);
-    // }
-
-    function req_ObjInfo() public view {
-        optional(uint256) none;
-        IWarGameObj(Produce_Addr).getInfo{
-            abiVer: 2,
-            extMsg: true,
-            sign: false,
-            pubkey: none,
-            time: uint64(now),
-            expire: 0,
-            callbackId: tvm.functionId(showObjInfo),
-            onErrorId: 0
-        }();
-    }
-
-    function showObjInfo(Information ObjectInfo) public {
-        Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
-            ObjectInfo.itemID,
-            ObjectInfo.itemType,
-            ObjectInfo.itemAddr,
-            ObjectInfo.itemOwnerPubkey,
-            ObjectInfo.itemHealth,
-            ObjectInfo.itemAttack, 
-            ObjectInfo.itemDefence
-            )); 
-        
-        showPL = false;
-        returnFuncID = tvm.functionId(goKingdomMenu);
-        requestGetPlayersList(tvm.functionId(setPlayersList));
-    }
-
-    function getBaseUnitsInfo() public {
-        optional(uint256) none;
-        IWarGameBase(Base_Addr).getUnitsInfo{
-            abiVer: 2,
-            extMsg: true,
-            sign: false,
-            pubkey: none, 
-            time: uint64(now),
-            expire: 0,
-            callbackId: tvm.functionId(setUnitsInfo),
-            onErrorId: 0
-        }();
-    }
-
-    function setUnitsInfo(mapping(int32 => Information) _UnitsInfo) public {
-        UnitsInfo = _UnitsInfo;
-        showUnitsInfo();
-        
-    }
-
-    function showUnitsInfo() internal {
-        if (UnitsInfo.empty()) {
-            Terminal.print(0, "You have no alive units. Produce some in kingdom menu.");
-        }
-        else {
-            for ((int32 unitID , Information InfoExample) : UnitsInfo) {    
-            Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
-                unitID, 
-                InfoExample.itemType,
-                InfoExample.itemAddr,
-                InfoExample.itemOwnerPubkey,
-                InfoExample.itemHealth,
-                InfoExample.itemAttack, 
-                InfoExample.itemDefence)); 
-            }
-        }
-        showUnitsInfoExit();
-    }
-
-    function showUnitsInfoExit() internal{
-        if (attackProcessing) {
-            Terminal.input(tvm.functionId(sendAttackChooseAim),"Enter ID of unit who will attack",false);
-            
-        }
-        else {
-            goKingdomMenu();
-        }
-    }
     
-    function sendAttackStart() public{
-        attackProcessing = true;
-        sendAttackChooseUnit();
-    }
-
-    function sendAttackChooseUnit() internal {
-        if (UnitsInfo.empty()) {
-            Terminal.print(0, "You have no alive units. Produce some in kingdom menu.");
+    // function commutator() public virtual override {
+    //     if (returnFuncID == tvm.functionId(goMainMenu)) {
+    //         returnFuncID = 0; 
+    //         goMainMenu();
+    //     }
+    //     else if (returnFuncID == tvm.functionId(this.goKingdomMenu)) { 
+    //         returnFuncID = 0;
+    //         goKingdomMenu();
+    //     }
+    //     else if (returnFuncID == tvm.functionId(sendScout_1)) {
+    //         sendScout_1();
+    //     }
+    //     else {
+    //         returnFuncID = 0;
+    //         goMainMenu();
+    //     }
+    // }
+    
+    function commutator() public virtual override {
+        if (returnFuncID == tvm.functionId(goMainMenu)) {
+            returnFuncID = 0; 
+            goMainMenu();
+        }
+        else if (returnFuncID == tvm.functionId(this.goKingdomMenu)) { 
+            returnFuncID = 0;
             goKingdomMenu();
         }
-        else {
-            showUnitsInfo();
+        else if (returnFuncID == tvm.functionId(sendScout_1)) {
+            returnFuncID = 0;
+            sendScout_1();
         }
-    }
-
-    function sendAttackChooseAim(string value) public {
-        (uint res, bool status) = stoi(value);
-        if (status) {
-            attackerUnitID = int32(res);
-            attackerUnitAddr = UnitsInfo[attackerUnitID].itemAddr;
-            //Terminal.print(0, format(" Attacker addr: {} ", attackerUnitAddr));
-            //Terminal.input(tvm.functionId(sendAttack),"Enter address of aim",false);
-            //AddressInput.get(tvm.functionId(sendAttack), "Input address of unit to attack");
-            sendAttack();
+        else if (returnFuncID == tvm.functionId(sendAttack_3)) {
+            returnFuncID = 0;
+            sendAttack_3();
+        }
+        else if (returnFuncID == tvm.functionId(sendAttack_5)) {
+            returnFuncID = 0;
+            sendAttack_5();
         }
         else {
-            Terminal.input(tvm.functionId(sendAttackChooseAim),"Wrong ID. Try again!\nEnter ID of unit who will attack",false);
-
+            returnFuncID = 0;
+            goMainMenu();
         }
     }
 
 
-    function sendAttack() public {
-        attackProcessing = false;
-        _aimAddr = Base_Addr;//address.makeAddrStd(0,value);
-        optional(uint256) pubkey = 0;
-        IWarGameUnit(attackerUnitAddr).attackEnemy{
-                abiVer: 2,
-                extMsg: true,
-                sign: true,
-                pubkey: pubkey,
-                time: uint64(now), 
-                expire: 0,
-                callbackId: tvm.functionId(onSuccessFunc),
-                onErrorId: tvm.functionId(onError)
-            }(_aimAddr); 
-    }
 
-
-    function getDebotInfo() public functionID(0xDEB) virtual override view returns(
+    function getDebotInfo() public functionID(0xDEB) virtual override view returns( 
         string name, string version, string publisher, string key, string author,
         address support, string hello, string language, string dabi, bytes icon
     ) {
