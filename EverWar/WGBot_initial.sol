@@ -41,9 +41,9 @@ contract WGBot_initial is Debot, Upgradable {
     
     address Base_Addr;
     address Scout_Addr;
-
     address Produce_Addr;
 
+    int32 mainUnitID;
 
     function setAddreses(address storageAddress, address wgBot_deployerAddr) public {
         require(msg.pubkey() == tvm.pubkey(), 101);
@@ -131,7 +131,7 @@ contract WGBot_initial is Debot, Upgradable {
         commutator();
     }
 
-    function commutator() public virtual {
+    function commutator() internal virtual {
         if (returnFuncID == tvm.functionId(goMainMenu)) { 
             returnFuncID = 0;
             goMainMenu();
@@ -156,7 +156,7 @@ contract WGBot_initial is Debot, Upgradable {
             sep,
             [
                 MenuItem("Create KINGDOM!","",tvm.functionId(req_produceBase)) 
-                //MenuItem("My kingdom","",tvm.functionId(goKingdomMenu))
+                //MenuItem("My kingdom","",tvm.functionId(updateUnitsInfo))
                 //MenuItem("Delete from shopping list","",tvm.functionId(deleteListItem))
             ]
         );
@@ -172,7 +172,7 @@ contract WGBot_initial is Debot, Upgradable {
                 sep,
                 [
                     //MenuItem("Create KINGDOM!","",tvm.functionId(savePublicKey)),
-                    MenuItem("My kingdom","",tvm.functionId(goKingdomMenu)),
+                    MenuItem("My kingdom","",tvm.functionId(updateUnitsInfo)),
                     MenuItem("Show players list","",tvm.functionId(showPlayersList_1)) 
                 ]
             );
@@ -189,7 +189,10 @@ contract WGBot_initial is Debot, Upgradable {
         uint _playerPubkey = playerPubkey;
         deployType = DeployType.Base;
         DeployType _deployType = deployType;
-        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType);
+        address _Base_Addr = Base_Addr;
+        mainUnitID++;
+        int32 _mainUnitID = mainUnitID;
+        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType, _Base_Addr, _mainUnitID);
     }
 
     function deployResult(Status _status, DeployType _deployType, address _Produce_Addr) virtual external {
@@ -206,10 +209,10 @@ contract WGBot_initial is Debot, Upgradable {
             }
             else if (deployType == DeployType.Scout) {
                 Scout_Addr = Produce_Addr;
-                req_ObjInfo(Produce_Addr);
+                checkAccStatus(Produce_Addr);
             }
             else {
-                req_ObjInfo(Produce_Addr);
+                checkAccStatus(Produce_Addr);
                 // showPL = false;
                 // returnFuncID = tvm.functionId(goMainMenu);
                 // requestGetPlayersList(tvm.functionId(setPlayersList));
@@ -241,7 +244,7 @@ contract WGBot_initial is Debot, Upgradable {
     } 
 
     function onSuccessFunc() public {        //view{
-        getBaseObjInfo();
+        checkAccStatus(Base_Addr);
         // showPL = false;
         // returnFuncID = tvm.functionId(goMainMenu);
         // requestGetPlayersList(tvm.functionId(setPlayersList)); 
@@ -256,17 +259,21 @@ contract WGBot_initial is Debot, Upgradable {
     //
     // Child necessary functions
     //
+    function updateUnitsInfo() public virtual{ 
+        goMainMenu();
+    }
+    
     function goKingdomMenu() public virtual{ 
         goMainMenu();
     }
 
-    function getBaseObjInfo() public virtual{
-        showPL = false;
-        returnFuncID = tvm.functionId(goMainMenu);
-        requestGetPlayersList(tvm.functionId(setPlayersList)); 
-    }
+    // function getBaseObjInfo() public virtual{
+    //     showPL = false;
+    //     returnFuncID = tvm.functionId(goMainMenu);
+    //     requestGetPlayersList(tvm.functionId(setPlayersList)); 
+    // }
 
-    function req_ObjInfo(address _Produce_Addr) internal virtual {
+    function checkAccStatus(address _Produce_Addr) internal virtual {
         showPL = false;
         returnFuncID = tvm.functionId(goMainMenu);
         requestGetPlayersList(tvm.functionId(setPlayersList)); 

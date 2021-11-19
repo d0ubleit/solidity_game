@@ -29,6 +29,8 @@ interface IWarGameBase {
 
     // function getUnitsInfo() external responsible returns(uint incstore);
 
+    function getUnitInfoByAddr(address _unitAddr) external returns(Information _unitInfo);
+    
     function removeWarUnit() external;
 }
 

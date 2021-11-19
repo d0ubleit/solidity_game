@@ -39,7 +39,8 @@ contract WarGameUnit is WarGameObj {
     }  
 
     function onAcceptAttack() internal override{
-        IWarGameBase(BaseAddr).updateUnitsInfo(objInfo);
+        Information _objInfo = objInfo;
+        IWarGameBase(BaseAddr).updateUnitsInfo(_objInfo);
     } 
 
 

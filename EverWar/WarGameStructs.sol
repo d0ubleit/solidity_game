@@ -8,7 +8,7 @@ struct Information {
         string itemType;
         address itemAddr;
         uint itemOwnerPubkey;
-        uint32 itemHealth;
+        int32 itemHealth;
         int32 itemAttack; 
         int32 itemDefence;
     }

@@ -6,7 +6,7 @@ import "WarGameStructs.sol";
 
 interface IWGBot_deployer {
 
-    function invokeProduce(uint _playerPubkey, DeployType _deployType) external;
+    function invokeProduce(uint _playerPubkey, DeployType _deployType, address _Base_Addr, int32 _mainUnitID) external;
 } 
 
 interface IWGBot_initial {

@@ -26,13 +26,13 @@ contract WGBot_deployer is Debot, Upgradable {
     address StorageAddr;
 
     TvmCell Base_Code;
-    int32 BaseID = 1;
+    //int32 BaseID = 1;
 
     TvmCell Warrior_Code;         
-    int32 WarriorID = 1;
+    //int32 WarriorID = 1;
 
     TvmCell Scout_Code;         
-    int32 ScoutID = 1; 
+    //int32 ScoutID = 1; 
 
     TvmCell Produce_StateInit;
     address Produce_Addr;
@@ -43,8 +43,9 @@ contract WGBot_deployer is Debot, Upgradable {
 
     DeployType deployType;
     Status status;
+    int32 mainUnitID;
 
-    uint32 INITIAL_BALANCE =  2000000000;
+    uint32 INITIAL_BALANCE =  2000000000; 
 
 
     ///////////////
@@ -74,18 +75,20 @@ contract WGBot_deployer is Debot, Upgradable {
     function start() public override {        
     }
  
-    function invokeProduce(uint _playerPubkey, DeployType _deployType) external {
+    function invokeProduce(uint _playerPubkey, DeployType _deployType, address _Base_Addr, int32 _mainUnitID) external {
         //require(msg.pubkey() == tvm.pubkey(), 150); 
         InitialWGB_addr = msg.sender;
         playerPubkey = _playerPubkey;
         deployType = _deployType;
+        Base_Addr = _Base_Addr;
+        mainUnitID = _mainUnitID;
 
         TvmBuilder salt;
         salt.store(address(this));
 
         if (deployType == DeployType.Base) {
             TvmCell Base_Code_salt = tvm.setCodeSalt(Base_Code, salt.toCell()); 
-            Produce_StateInit = tvm.buildStateInit({code: Base_Code_salt, contr: AWarGameExample, varInit: {exampleID: BaseID}});   
+            Produce_StateInit = tvm.buildStateInit({code: Base_Code_salt, contr: AWarGameExample, varInit: {exampleID: mainUnitID}});    
             TvmCell deployState = tvm.insertPubkey(Produce_StateInit, playerPubkey);
             Produce_Addr = address.makeAddrStd(0, tvm.hash(deployState));
             Base_Addr = Produce_Addr;                                             ///////////////////May be send in invoke? When deeploy any unit
@@ -93,14 +96,14 @@ contract WGBot_deployer is Debot, Upgradable {
         }
         else if (deployType == DeployType.Warrior) {
             TvmCell Warrior_Code_salt = tvm.setCodeSalt(Warrior_Code, salt.toCell());
-            Produce_StateInit = tvm.buildStateInit({code: Warrior_Code_salt, contr: AWarGameExample, varInit: {exampleID: WarriorID}});  
+            Produce_StateInit = tvm.buildStateInit({code: Warrior_Code_salt, contr: AWarGameExample, varInit: {exampleID: mainUnitID}});  
             TvmCell deployState = tvm.insertPubkey(Produce_StateInit, playerPubkey);
             Produce_Addr = address.makeAddrStd(0, tvm.hash(deployState)); 
             Terminal.print(0, format( "Info: your Warrior address is {}", Produce_Addr));
         }
         else if (deployType == DeployType.Scout) {
             TvmCell Scout_Code_salt = tvm.setCodeSalt(Scout_Code, salt.toCell());
-            Produce_StateInit = tvm.buildStateInit({code: Scout_Code_salt, contr: AWarGameExample, varInit: {exampleID: ScoutID}});  
+            Produce_StateInit = tvm.buildStateInit({code: Scout_Code_salt, contr: AWarGameExample, varInit: {exampleID: mainUnitID}});   
             TvmCell deployState = tvm.insertPubkey(Produce_StateInit, playerPubkey);
             Produce_Addr = address.makeAddrStd(0, tvm.hash(deployState)); 
             Terminal.print(0, format( "Info: your Scout address is {}", Produce_Addr));
@@ -198,15 +201,15 @@ contract WGBot_deployer is Debot, Upgradable {
     function onSuccessDeploy() public virtual {       //view{
         status = Status.Success;
         if (deployType == DeployType.Base) {
-            BaseID++;
+            //BaseID++;
             Terminal.print(0, "Your kingdom is ready! Have a nice game!\nOne more transaction to register your kingdom at storage... "); 
         }
         else if (deployType == DeployType.Warrior) {
-            WarriorID++;
+            //WarriorID++;
             Terminal.print(0, "Your warrior is ready to attack!"); 
         }
         else if (deployType == DeployType.Scout) {
-            ScoutID++; 
+            //ScoutID++; 
             Terminal.print(0, "Your scout is ready to explore other kingdoms!");
         }
         

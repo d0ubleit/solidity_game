@@ -10,19 +10,17 @@ import "AWarGameExample.sol";
 
 contract WGBot_kingdom is WGBot_attack {  
     
-    int32 UnitsAliveCnt = 404;
     
     
-    // bool attackProcessing = false;
-    // int32 attackerUnitID;
-    // address attackerUnitAddr;
-    // address _aimAddr;
+    // !!!!!!!!!BETTER TO UPDATE stats and info on every press Button, which lead to choose unit/kingdom menu!!!!!!!!!!!!!!!!!!! 
     
+    
+    function updateUnitsInfo() public override{ 
+        showUInfo = false;
+        req_BaseUnitsInfo(Base_Addr);
+    }
 
-
-    // !!!!!!!!!ON BUTTON PRESS [My KINGDOM] need to update units info and set Scout_Addr!!!!!!!!!!!!!!!!!!! 
-    
-    function goKingdomMenu() public override {
+    function goKingdomMenu() public override{ 
         //attackProcessing = false; 
         string sep = '----------------------------------------';
         Menu.select(
@@ -34,8 +32,8 @@ contract WGBot_kingdom is WGBot_attack {
             ),
             sep,
             [
-                MenuItem("Base info","",tvm.functionId(WGBot_infos.getBaseObjInfo)),
-                MenuItem("Units info","",tvm.functionId(WGBot_infos.getBaseUnitsInfo)),
+                //MenuItem("Base info","",tvm.functionId(WGBot_infos.getBaseObjInfo)),
+                MenuItem("Kingdom info","",tvm.functionId(WGBot_infos.getBaseUnitsInfo)),
                 MenuItem("Attack!","",tvm.functionId(sendAttack_Start)),
                 MenuItem("Scout!","",tvm.functionId(sendScout_Start)),
                 MenuItem("Produce warrior","",tvm.functionId(req_produceWarrior)),
@@ -51,14 +49,18 @@ contract WGBot_kingdom is WGBot_attack {
         uint _playerPubkey = playerPubkey;
         deployType = DeployType.Warrior;
         DeployType _deployType = deployType;
-        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType);
+        address _Base_Addr = Base_Addr;
+        int32 _mainUnitID = mainUnitID;
+        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType, _Base_Addr, _mainUnitID);
     }
 
     function req_produceScout() public {
         uint _playerPubkey = playerPubkey;
         deployType = DeployType.Scout;
         DeployType _deployType = deployType;
-        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType);
+        address _Base_Addr = Base_Addr;
+        int32 _mainUnitID = mainUnitID;
+        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType, _Base_Addr, _mainUnitID);
     }
 
     
@@ -81,7 +83,7 @@ contract WGBot_kingdom is WGBot_attack {
     //     }
     // }
     
-    function commutator() public virtual override {
+    function commutator() internal virtual override {
         if (returnFuncID == tvm.functionId(goMainMenu)) {
             returnFuncID = 0; 
             goMainMenu();
@@ -89,6 +91,10 @@ contract WGBot_kingdom is WGBot_attack {
         else if (returnFuncID == tvm.functionId(this.goKingdomMenu)) { 
             returnFuncID = 0;
             goKingdomMenu();
+        }
+        else if (returnFuncID == tvm.functionId(this.updateUnitsInfo)) { 
+            returnFuncID = 0;
+            updateUnitsInfo();
         }
         else if (returnFuncID == tvm.functionId(sendScout_1)) {
             returnFuncID = 0;

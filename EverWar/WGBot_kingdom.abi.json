@@ -3,6 +3,13 @@
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
+			"name": "updateUnitsInfo",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "goKingdomMenu",
 			"inputs": [
 			],
@@ -18,13 +25,6 @@
 		},
 		{
 			"name": "req_produceScout",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "commutator",
 			"inputs": [
 			],
 			"outputs": [
@@ -137,13 +137,6 @@
 			]
 		},
 		{
-			"name": "req_sendScout",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "getScoutedInfo",
 			"inputs": [
 			],
@@ -153,14 +146,15 @@
 		{
 			"name": "setScoutedInfo",
 			"inputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_scoutedInfo","type":"map(address,map(int32,tuple))"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_scoutedInfo","type":"map(address,map(int32,tuple))"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "getBaseObjInfo",
+			"name": "checkAccountStatus",
 			"inputs": [
+				{"name":"acc_type","type":"int8"}
 			],
 			"outputs": [
 			]
@@ -168,7 +162,7 @@
 		{
 			"name": "showObjInfo",
 			"inputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"ObjectInfo","type":"tuple"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"ObjectInfo","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -183,7 +177,7 @@
 		{
 			"name": "setUnitsInfo",
 			"inputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_UnitsInfo","type":"map(int32,tuple)"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_UnitsInfo","type":"map(int32,tuple)"}
 			],
 			"outputs": [
 			]

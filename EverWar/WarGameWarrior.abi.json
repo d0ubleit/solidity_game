@@ -57,7 +57,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"value0","type":"tuple"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"value0","type":"tuple"}
 			]
 		},
 		{
@@ -65,7 +65,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"uint32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"objInfo","type":"tuple"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"objInfo","type":"tuple"}
 			]
 		},
 		{

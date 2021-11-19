@@ -45,7 +45,7 @@ contract WGBot_scout is WGBot_infos {
         }
     }
 
-    function req_sendScout() public {
+    function req_sendScout() internal {
         //optional(uint256) none;
         IWarGameScout(Scout_Addr).getEnemyUnitsInfo{
             abiVer: 2,
@@ -87,17 +87,18 @@ contract WGBot_scout is WGBot_infos {
             goKingdomMenu();
         }
         else {
+            Terminal.print(0, "Your LAST SCOUTED info:");
             if (_kingdomAddr.isStdZero()) {
                 for ((address addrExample, mapping (int32 => Information) unitsInfoExample) : _scoutedInfo) {
                     enemiesList[ExampleID] = addrExample;
-                    ExampleID++;
-                    Terminal.print(0, format("Units of kingdom || {} ||:", ExampleID)); /////Here better to write NAME of kingdom////////////////////
+                    Terminal.print(0, format("Units of kingdom [ID: {}]:", ExampleID)); /////Here better to write NAME of kingdom////////////////////
                     for ((int32 unitID , Information InfoExample) : unitsInfoExample) {    
-                        Terminal.print(0, format(" ID: {} || Type: \"{}\" || Health: {} ", 
+                        Terminal.print(0, format("      ID: {} || Type: \"{}\" || Health: {} ", 
                         unitID, 
                         InfoExample.itemType,
                         InfoExample.itemHealth
                     )); 
+                    ExampleID++;
                 }
                 }
 

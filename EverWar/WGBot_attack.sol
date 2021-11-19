@@ -74,7 +74,7 @@ contract WGBot_attack is WGBot_scout {
         }
     }
 
-    function commutator() public virtual override {
+    function commutator() internal virtual override {
         if (returnFuncID == tvm.functionId(goMainMenu)) {
             returnFuncID = 0; 
             goMainMenu();
@@ -155,8 +155,30 @@ contract WGBot_attack is WGBot_scout {
 
     function onSuccessAttack() public {
         Terminal.print(0, "Attack successfully done");
-        goKingdomMenu();
-    }
+        checkAccStatus(aimUnitAddr);
+        //goKingdomMenu();
+    } 
+
+    //getUnitInfoByAddr(address _unitAddr) external returns(Information _unitInfo);
+    // function req_attackedUnitInfo() internal {
+    //     optional(uint256) none;
+    //     address _unitAddr = aimUnitAddr;
+    //     IWarGameBase(aimKingdomAddr).getUnitInfoByAddr{
+    //         abiVer: 2,
+    //         extMsg: true,
+    //         sign: false,
+    //         pubkey: none, 
+    //         time: uint64(now),
+    //         expire: 0,
+    //         callbackId: tvm.functionId(showAttackResult),  
+    //         onErrorId: 0
+    //     }(_unitAddr);
+    // }
+
+    // function showAttackResult(Information _unitInfo) public {
+    //     Terminal.print(0, "Result of attack:");
+    //     showObjInfo(_unitInfo);
+    // }
 
     function getDebotInfo() public functionID(0xDEB) virtual override view returns(
         string name, string version, string publisher, string key, string author,

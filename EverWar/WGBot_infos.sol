@@ -9,15 +9,33 @@ import "AWarGameExample.sol";
 
 contract WGBot_infos is WGBot_initial { 
     
+    int32 UnitsAliveCnt;
+    address reqObjInfo_Addr;
+    bool showUInfo = true;
     mapping(int32 => Information) UnitsInfo;
 
     
-    function getBaseObjInfo() public override {  
-        //callerFuncID = tvm.functionId(getBaseObjInfo);
-        req_ObjInfo(Base_Addr); 
+    // function getBaseObjInfo() public override {  
+    //     //callerFuncID = tvm.functionId(getBaseObjInfo);
+    //     checkAccStatus(Base_Addr); 
+    // }
+
+    function checkAccStatus(address _Obj_Addr) internal virtual override {
+        reqObjInfo_Addr = _Obj_Addr;
+        Sdk.getAccountType(tvm.functionId(checkAccountStatus), reqObjInfo_Addr);    
+    }
+    
+    function checkAccountStatus(int8 acc_type) public {
+        if (acc_type == 1) { // acc is active and  contract is already deployed
+            req_ObjInfo(reqObjInfo_Addr);
+        } else {
+            Terminal.print(0, "Unit is DEAD or it's balance too low");
+            deployType = DeployType.Empty;
+            requestGetPlayersList(tvm.functionId(setPlayersList));
+        }
     }
 
-    function req_ObjInfo(address _Produce_Addr) internal override { 
+    function req_ObjInfo(address _Produce_Addr) internal { 
         optional(uint256) none;
         IWarGameObj(_Produce_Addr).getInfo{
             abiVer: 2,
@@ -31,6 +49,16 @@ contract WGBot_infos is WGBot_initial {
         }();
     }
 
+    // function req_ObjInfo_Success(Information ObjectInfo) public{
+    //     if (showUInfo){
+    //         showObjInfo(ObjectInfo);
+    //     }
+    //     else{
+    //         showUInfo = true;
+    //         goKingdomMenu(); 
+    //     }
+    // }
+    
     function showObjInfo(Information ObjectInfo) public {
         Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
             ObjectInfo.itemID,
@@ -47,7 +75,7 @@ contract WGBot_infos is WGBot_initial {
             returnFuncID = tvm.functionId(goMainMenu);
         }
         else {
-            returnFuncID = tvm.functionId(goKingdomMenu);
+            returnFuncID = tvm.functionId(updateUnitsInfo);
         }
         deployType = DeployType.Empty;
         requestGetPlayersList(tvm.functionId(setPlayersList));
@@ -80,7 +108,32 @@ contract WGBot_infos is WGBot_initial {
 
     function setUnitsInfo(mapping(int32 => Information) _UnitsInfo) public {
         UnitsInfo = _UnitsInfo;
-        showUnitsInfo(UnitsInfo);     
+        UnitsAliveCnt = 0;
+        Information NotNeeded;
+        // optional(int32, Information) MaxId = UnitsInfo.max();
+        // mainUnitID = MaxId().get();
+        for ((int32 ExampleID, Information InfoExample) : UnitsInfo) {
+            if (InfoExample.itemType!="Base") {
+                UnitsAliveCnt++;
+            }
+            if (Scout_Addr.isStdZero()){
+                if (InfoExample.itemType=="Scout") {
+                    Scout_Addr = InfoExample.itemAddr;
+                }
+            }
+            if (mainUnitID <= ExampleID) {
+                mainUnitID = ExampleID + 1;
+            }
+
+        }
+
+        if (showUInfo){
+            showUnitsInfo(UnitsInfo); 
+        }
+        else{
+            showUInfo = true;
+            goKingdomMenu(); 
+        }        
     }
 
     function showUnitsInfo(mapping(int32 => Information) _UnitsInfo) internal {
@@ -106,6 +159,10 @@ contract WGBot_infos is WGBot_initial {
     function showUnitsInfoExit() internal virtual{ 
         goKingdomMenu();
     }
+
+    // function updateUnitsInfo() public virtual{
+    //     goKingdomMenu();
+    // } 
     
 
 
@@ -127,5 +184,5 @@ contract WGBot_infos is WGBot_initial {
     //     dabi = m_debotAbi.get();
     //     icon = m_icon;
     // }
-    
+      
 }

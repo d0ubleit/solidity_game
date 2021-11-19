@@ -46,12 +46,13 @@ contract WarGameBase is WarGameObj {
         
         thisPubkey = tvm.pubkey();
         
+        UnitsInfo[0] = objInfo;
     } 
 
-    function updateUnitsInfo(Information unitInform) external {
+    function updateUnitsInfo(Information _objInfo) external {
         tvm.accept();
         require(UnitsMap.exists(msg.sender), 105, "Error: This unit not associated with this base");
-        UnitsInfo[UnitsMap[msg.sender]] = unitInform;
+        UnitsInfo[UnitsMap[msg.sender]] = _objInfo;
     } 
 
     function getUnitsInfo() external responsible returns(mapping(int32 => Information) _UnitsInfo) {
@@ -60,6 +61,15 @@ contract WarGameBase is WarGameObj {
         //return _UnitsInfo; 
         _UnitsInfo = UnitsInfo;
     } 
+
+    function getUnitInfoByAddr(address _unitAddr) external returns(Information _unitInfo) {
+        require(UnitsMap.exists(_unitAddr), 107, "Error: There are no unit with such ID");
+        tvm.accept();
+        //mapping(int32 => Information) _UnitsInfo = UnitsInfo;
+        //return _UnitsInfo; 
+        Information _unitInfo = UnitsInfo[UnitsMap[_unitAddr]];
+        return _unitInfo;
+    }
 
     // function getUnitsInfo() external responsible returns(uint incstore) {
     //     tvm.accept();

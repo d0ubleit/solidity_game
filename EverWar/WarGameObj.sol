@@ -29,17 +29,28 @@ contract WarGameObj is IWarGameObj {
     function acceptAttack(address aimAddr, int32 _objAttackVal) external override {
         tvm.accept();
         address enemyAddr = msg.sender;
+        int32 damage = 0;
         attackersArr.push(msg.sender);
         if (_objAttackVal > objInfo.itemDefence) {
-            objInfo.itemHealth -= uint32(_objAttackVal) - uint32(objInfo.itemDefence);  
-        }
+            damage = _objAttackVal - objInfo.itemDefence;
+            if (damage > objInfo.itemHealth) {
+                deathProcessing(enemyAddr);
+            }
+            else {
+                onAcceptAttack();
+            }
+        }        
         
-        if (checkObjIsDead()) {
-            deathProcessing(enemyAddr);
-        }
-        else{
-            onAcceptAttack(); 
-        }
+        // if (_objAttackVal > objInfo.itemDefence) {
+        //     objInfo.itemHealth -= uint32(_objAttackVal) - uint32(objInfo.itemDefence);  
+        // }
+        
+        // if (checkObjIsDead()) {
+        //     deathProcessing(enemyAddr);
+        // }
+        // else{
+        //     onAcceptAttack(); 
+        // }
     }
 
     function onAcceptAttack() internal virtual{   

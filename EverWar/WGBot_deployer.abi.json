@@ -37,7 +37,9 @@
 			"name": "invokeProduce",
 			"inputs": [
 				{"name":"_playerPubkey","type":"uint256"},
-				{"name":"_deployType","type":"uint8"}
+				{"name":"_deployType","type":"uint8"},
+				{"name":"_Base_Addr","type":"address"},
+				{"name":"_mainUnitID","type":"int32"}
 			],
 			"outputs": [
 			]
