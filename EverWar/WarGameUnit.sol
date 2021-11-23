@@ -27,9 +27,10 @@ contract WarGameUnit is WarGameObj {
     }
 
     function deathOfBase(address _enemyAddr) external {
-        require(msg.sender == BaseAddr, 102, "Error: Call from base, which is not owner of this unit");
+        require(msg.sender == BaseAddr, 102, "Error: Call not from owner base");
         tvm.accept();
-        deathProcessing(_enemyAddr);
+        //deathProcessing(_enemyAddr);
+        destroyAndTransfer(_enemyAddr);
     }
 
     function deathProcessing(address _enemyAddr) internal override {

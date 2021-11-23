@@ -2,188 +2,119 @@ pragma ton-solidity >=0.35.0;
 pragma AbiHeader expire;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
-    
-import "WGBot_Basics.sol";
+
+import "../debotBase/Debot.sol";
+import "../debotBase/Terminal.sol";
+import "../debotBase/Menu.sol";
+import "../debotBase/AddressInput.sol";
+import "../debotBase/ConfirmInput.sol";
+import "../debotBase/Upgradable.sol";
+import "../debotBase/Sdk.sol";
+
+import "WarGameStructs.sol";
+import "IWarGame_interfaces.sol";
+import "IWGBot_interfaces.sol";
 //import "AWarGameExample.sol"; 
 //import "IWarGameObj.sol";
 
-contract WGBot_Units is WGBot_Basics { 
-    
-    TvmCell Scout_Code;
-    TvmCell Scout_Data;
-    TvmCell Scout_StateInit; 
-    address Scout_Addr;         
-    int32 ScoutID = 1; 
+contract WGBot_Units is Debot, Upgradable{  
+    bytes m_icon; 
 
-    bool scoutProcessing;
-    address aimToScoutAddr;
+    address InitialWGB_addr;
+    uint256 playerPubkey;
+    
+    address Scout_Addr;
+    address kingdomToScoutAddr;
+
+    bool attackProcessing = false;
+    int32 attackerUnitID;
+    address attackerUnitAddr;
+    address aimKingdomAddr;
+    address aimUnitAddr;
 
     mapping (int32 => address) playersIDList;
     mapping (address => mapping (int32 => Information)) ScoutedInfo;
-    mapping (int32 => Information) enemyUnitsInfo;
-
-    function getDebotInfo() public functionID(0xDEB) virtual override view returns(
-        string name, string version, string publisher, string key, string author,
-        address support, string hello, string language, string dabi, bytes icon
-    ) {
-        name = "EverWar Game DeBot";
-        version = "0.0.2";
-        publisher = "d0ubleit";
-        key = "EverWar Game DeBot";
-        author = "d0ubleit";
-        support = address.makeAddrStd(0, 0x81b6312da6eaed183f9976622b5a39a90d5cff47e4d2a541bd97ee216e8300b1);
-        hello = "Welcome to strategy blockchain game!";
-        language = "en";
-        dabi = m_debotAbi.get();
-        icon = m_icon;
+    
+    
+    mapping(int32 => Information) UnitsInfo;
+    
+    
+    //mapping (int32 => Information) enemyUnitsInfo; 
+    mapping (int32 => address) enemiesList;
+    
+    function start() public override {        
     }
     
-    function goKingdomMenu() public override {
-        attackProcessing = false;
-        string sep = '----------------------------------------';
-        Menu.select(
-            format(
-                "Kingdoms alive: {}, My units alive: {}",
-                    gameStat.basesAlive,
-                    UnitsAliveCnt
-                    
-            ),
-            sep,
-            [
-                MenuItem("Base info","",tvm.functionId(setAddrForRequest_Base)),
-                MenuItem("Units info","",tvm.functionId(getBaseUnitsInfo)),
-                MenuItem("Scout!","",tvm.functionId(sendScoutStart)),
-                MenuItem("Attack!","",tvm.functionId(sendAttackStart)), 
-                MenuItem("Produce warrior","",tvm.functionId(produceWarrior)),
-                MenuItem("Produce scout","",tvm.functionId(produceScout)),
-                MenuItem("<=== Back","",tvm.functionId(goMainMenu_Signed))
-                
-            ]
-        );
-    } 
-
-       
-    function setWGScoutCode(TvmCell code, TvmCell data) public {
-        require(msg.pubkey() == tvm.pubkey(), 101); 
-        tvm.accept();
-        Scout_Code = code;
-        Scout_Data = data;
+    function invokeSendScout(uint256 _playerPubkey, mapping (int32 => address) _playersIDList, address _Scout_Addr) public {
+        playerPubkey = _playerPubkey;
+        InitialWGB_addr = msg.sender;
+        playersIDList = _playersIDList;
+        Scout_Addr = _Scout_Addr;
+        sendScout_Start();
+    }
+    
+    function returnKingdomMenu() internal {
+        IWGBot_initial(InitialWGB_addr).goKingdomMenu();
     }
 
-    function produceScout() public {
-        produceProcessing = true; 
-        produceType = 2;
-        Terminal.print(0, "Preparing...");
-        Scout_StateInit = tvm.buildStateInit({code: Scout_Code, contr: AWarGameExample, varInit: {exampleID: ScoutID}});//////////////////////////////////////   
-        TvmCell deployState = tvm.insertPubkey(Scout_StateInit, playerPubkey);
-        Scout_Addr = address.makeAddrStd(0, tvm.hash(deployState));
-        Terminal.print(0, format( "Info: your Scout address is {}", Scout_Addr));
-        produceAddr = Scout_Addr;
-        Sdk.getAccountType(tvm.functionId(checkAccountStatus), produceAddr);
-    }
-
-    function deploy() internal virtual override view { 
-            TvmCell image;
-            if (produceType == 0){
-                image = tvm.insertPubkey(Base_StateInit, playerPubkey);
-            }
-            else if (produceType == 1){
-                image = tvm.insertPubkey(Warrior_StateInit, playerPubkey);
-            } 
-            else if (produceType == 2){
-                image = tvm.insertPubkey(Scout_StateInit, playerPubkey);
-            } 
-            optional(uint256) none;
-            TvmCell deployMsg = tvm.buildExtMsg({
-                abiVer: 2,
-                dest: produceAddr,
-                callbackId: tvm.functionId(WGBot_Basics.onSuccessDeploy),  
-                onErrorId:  tvm.functionId(onErrorRepeatDeploy),    // Just repeat if something went wrong
-                time: 0,
-                expire: 0,
-                sign: true,
-                pubkey: none,
-                stateInit: image, 
-                call: {AWarGameExample, playerPubkey, playersAliveList[playerPubkey]} 
-            });
-            tvm.sendrawmsg(deployMsg, 1);
-    }
-
-    function onSuccessDeploy() public override {       //view{
-        produceProcessing = false;
-        if (produceType == 0) {
-            BaseID++;
-            Terminal.print(0, "Your kingdom is ready! Have a nice game!");
-            Terminal.print(0, "One more transaction to register your kingdom at storage..");
-            memPlayersList(playerPubkey, produceAddr); 
-        }
-        else if (produceType == 1){
-            WarriorID++;
-            UnitsAliveCnt++;
-            UnitsAliveList[UnitsAliveCnt] = Warrior_Addr;
-            Terminal.print(0, "Your Warrior is ready for battle!");
-            //goKingdomMenu();
-            setAddrForRequest();       
+    function sendScout_Start() public {
+        //scoutProcessing = true;
+        if (Scout_Addr.isStdZero()) {
+            Terminal.print(0, "You don't have scout. [Produce scout] in kingdom menu");
+            returnKingdomMenu();
         } 
-        else if (produceType == 2){
-            ScoutID++;
-            UnitsAliveCnt++;
-            UnitsAliveList[UnitsAliveCnt] = Scout_Addr;
-            Terminal.print(0, "Your Scout is ready to find enemy units!");
-            //goKingdomMenu();
-            setAddrForRequest();       
-        }                          
-    } 
-
-       
-    function setAddrForRequest() internal view {
-        //index = index;
-        address ExampleAddr = produceAddr;
-        requestInformation(ExampleAddr);
-    }
-
-    function sendScoutStart() public {
-        scoutProcessing = true;
-        showListToScout();
-    }
-
-    //////////////////////////BETTER REPLACE IT WITH showPlayersList func, but how to exit from it good
-    function showListToScout() internal {
-        int32 showID = 0; //Here will be good to show NAME OF KINGDOM instead ID
-        for ((, address addr) : playersAliveList) {
-            playersIDList[showID] = addr;
-            showID++;
-            Terminal.print(0, format("| {} | at address {}", showID, addr));  
+        else {
+            //returnFuncID = tvm.functionId(sendScout_1);
+            showPlayersList();
         }
-        Terminal.input(tvm.functionId(sendScoutChooseAim),"Enter ID of kingdom to explore",false);
     }
 
-    function sendScoutChooseAim(string value) public {
+    function showPlayersList() internal { 
+        //Here will be good to show NAME OF KINGDOM instead ID
+        for ((int32 playerID, address playerAddr ) : playersIDList) {
+            Terminal.print(0, format("| {} | at address {}", playerID, playerAddr));  
+        }
+        //showPL = false; 
+        //commutator();
+        Terminal.input(tvm.functionId(sendScout_1),"Enter ID of kingdom to explore",false);
+    }
+
+    // function sendScout_1() public{
+    //     Terminal.input(tvm.functionId(sendScout_2),"Enter ID of kingdom to explore",false);
+    // }
+
+    function sendScout_1(string value) public {
         (uint res, bool status) = stoi(value);
         if (status) {
-            aimToScoutAddr = playersIDList[int32(res)]; 
-            sendScoutForInfo(); 
+            kingdomToScoutAddr = playersIDList[int32(res)]; 
+            req_sendScout(); 
         }
         else {
-            Terminal.input(tvm.functionId(sendScoutChooseAim),"Wrong ID. Try again!\nEnter ID of kingdom to explore",false);
+            Terminal.input(tvm.functionId(sendScout_1),"Wrong ID. Try again!\nEnter ID of kingdom to explore",false);
 
         }
     }
 
-    function sendScoutForInfo() public {
-        optional(uint256) none;
+    function req_sendScout() internal {
+        //optional(uint256) none;
         IWarGameScout(Scout_Addr).getEnemyUnitsInfo{
             abiVer: 2,
             extMsg: true,
-            sign: false,
-            pubkey: none, 
+            sign: true,
+            pubkey: playerPubkey, 
             time: uint64(now),
             expire: 0,
             callbackId: tvm.functionId(getScoutedInfo),
-            onErrorId: 0
-        }(aimToScoutAddr);
+            onErrorId: tvm.functionId(onError) 
+        }(kingdomToScoutAddr);
     }
-    
+
+    function onError(uint32 sdkError, uint32 exitCode) public {
+        Terminal.print(0, format("Operation failed. sdkError {}, exitCode {}", sdkError, exitCode));
+        returnKingdomMenu(); 
+    }
+
+        
     function getScoutedInfo() public {
         optional(uint256) none;
         IWarGameScout(Scout_Addr).getScoutedInfo{
@@ -199,86 +130,80 @@ contract WGBot_Units is WGBot_Basics {
     }
 
     function setScoutedInfo(mapping(address => mapping (int32 => Information)) _scoutedInfo) public {
-        ScoutedInfo = _scoutedInfo; 
-        showScoutedInfo();
-    }
+        //ScoutedInfo.add(_scoutedInfo);
+        for ((address enemyAddr, mapping (int32 => Information) enemyInfo) : _scoutedInfo) {
+            ScoutedInfo[enemyAddr] = enemyInfo;
+        } 
+        
+        if (!attackProcessing) {
+            Terminal.print(0, "Your scout got some info:");
+            showScoutedInfo(kingdomToScoutAddr);
+            returnKingdomMenu(); 
+        }
+        else{
+            sendAttack_Start();
+        }
+        
+        //returnFuncID = tvm.functionId(goKingdomMenu); 
+        //showScoutedInfo(ScoutedInfo, kingdomToScoutAddr);
+    } 
 
-    function showScoutedInfo() internal {
-        enemyUnitsInfo = ScoutedInfo[aimToScoutAddr];
-        if (enemyUnitsInfo.empty()) {
-            Terminal.print(0, "No alive units in this kingdom");
+    function showScoutedInfo(address _kingdomToScoutAddr) internal {
+        //Terminal.print(0, "Your scout got some info:");
+        if (ScoutedInfo.empty()) {
+            Terminal.print(0, "There are no alive units in this kingdom.");
+            //returnKingdomMenu();
         }
         else {
-            for ((int32 unitID , Information InfoExample) : enemyUnitsInfo) {    
-            Terminal.print(0, format(" ID: {} || Type: \"{}\" || Health: {} || Attack power: {} || Defence power: {}", 
-                unitID, 
-                InfoExample.itemType,
-                InfoExample.itemHealth,
-                InfoExample.itemAttack, 
-                InfoExample.itemDefence)); 
-            }
+            for ((int32 unitID , Information InfoExample) : ScoutedInfo[_kingdomToScoutAddr]) {    
+                Terminal.print(0, format("     ID: {} || Type: \"{}\" || Health: {} ", 
+                    unitID, 
+                    InfoExample.itemType,
+                    InfoExample.itemHealth
+                    )); 
+                }
+            //returnKingdomMenu();   
         }
-        goKingdomMenu();
     }
 
-    // function setAddrForRequest_Warrior(uint32 index) public view {
-    //     index = index;
-    //     address ExampleAddr = Warrior_Addr; ////////////////////////////////////////////////// JUST FOR TEST! SET IN ANOTHER WAY!
-    //     requestInformation(ExampleAddr);
-    // }
 
-    // function requestInformation(address ExampleAddr) public view {
-    //     optional(uint256) none;
-    //     IWarGameObj(ExampleAddr).getInfo{
-    //         abiVer: 2,
-    //         extMsg: true,
-    //         sign: false,
-    //         pubkey: none,
-    //         time: uint64(now),
-    //         expire: 0,
-    //         callbackId: tvm.functionId(showObjInfo),
-    //         onErrorId: 0
-    //     }(); 
-    // } 
 
-    // function showObjInfo(Information ObjectInfo) public {
-    //     Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
-    //         ObjectInfo.itemID,
-    //         ObjectInfo.itemType,
-    //         ObjectInfo.itemAddr,
-    //         ObjectInfo.itemOwnerPubkey,
-    //         ObjectInfo.itemHealth,
-    //         ObjectInfo.itemAttack, 
-    //         ObjectInfo.itemDefence)); 
-    //     goKingdomMenu();
-    // }
 
-    // function getBaseUnitsInfo() public {
-    //     optional(uint256) none;
-    //     IWarGameBase(Base_Addr).getUnitsInfo{
-    //         abiVer: 2,
-    //         extMsg: true,
-    //         sign: false,
-    //         pubkey: none, 
-    //         time: uint64(now),
-    //         expire: 0,
-    //         callbackId: tvm.functionId(setUnitsInfo),
-    //         onErrorId: 0
-    //     }();
-    // }
+    function invokeSendAttack(uint256 _playerPubkey, mapping(int32 => Information) _UnitsInfo) external { 
+        playerPubkey = _playerPubkey;
+        InitialWGB_addr = msg.sender; 
+        UnitsInfo = _UnitsInfo;
+        for ((int32 ExampleID, Information InfoExample) : UnitsInfo) {
+            if (Scout_Addr.isStdZero()){
+                if (InfoExample.itemType=="Scout") {
+                    Scout_Addr = InfoExample.itemAddr;
+                }
+            }
+        }
 
-    // function setUnitsInfo(mapping(int32 => Information) newUnitsInfo) public {
-    //     UnitsInfo = newUnitsInfo;
-    //     showUnitsInfo();
-        
-    // }
+        if (Scout_Addr.isStdZero()){
+            Terminal.print(0, "You have no scout alive, let's see for some saved scouted info..");
+            if (ScoutedInfo.empty()) {
+                Terminal.print(0, "There is no previous scouted info.");
+                returnKingdomMenu();
+            }       
+            else {
+                attackProcessing = true;
+                sendAttack_Start();
+            }
+        }
+        else {
+            attackProcessing = true;
+            getScoutedInfo();
+        }
+    } 
 
-    // function showUnitsInfo() internal {
-    //     if (UnitsInfo.empty()) {
-    //         Terminal.print(0, "You have no alive units. Produce some in kingdom menu.");
+    // function showUnitsInfo(mapping(int32 => Information) _UnitsInfo) internal {
+    //     if (_UnitsInfo.empty()) {
+    //         Terminal.print(0, "There are no alive units. Produce some in kingdom menu.");
     //     }
     //     else {
-    //         for ((int32 unitID , Information InfoExample) : UnitsInfo) {    
+    //         for ((int32 unitID , Information InfoExample) : _UnitsInfo) {    
     //         Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
     //             unitID, 
     //             InfoExample.itemType,
@@ -292,40 +217,235 @@ contract WGBot_Units is WGBot_Basics {
     //     showUnitsInfoExit();
     // }
 
-    // function showUnitsInfoExit() internal{
-    //     if (attackProcessing) {
-    //         Terminal.input(tvm.functionId(sendAttackChooseAim),"Enter ID of unit who will attack",false);
+    function sendAttack_Start() public {
+        
+        if (UnitsInfo.empty()) {
+            Terminal.print(0, "You have no alive units. Produce some in kingdom menu.");
+            attackProcessing = false;
+            returnKingdomMenu(); 
+        }
+        else {
+            if (ScoutedInfo.empty()) {
+                Terminal.print(0, "You didn't explore any kingdom. Send scout.");
+                attackProcessing = false;
+                returnKingdomMenu();
+            }
+            else {
+                for ((int32 unitID , Information InfoExample) : UnitsInfo) {     
+                    if (unitID > 0) {
+                    Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
+                        unitID, 
+                        InfoExample.itemType,
+                        InfoExample.itemAddr,
+                        InfoExample.itemOwnerPubkey,
+                        InfoExample.itemHealth,
+                        InfoExample.itemAttack, 
+                        InfoExample.itemDefence)); 
+                    }
+                }
+                Terminal.input(tvm.functionId(sendAttack_1),"Enter ID of unit who will attack",false);
+            }
+        }
+    }
+
+    function sendAttack_1(string value) public {
+        //address EmptyAddr;
+        int32 ExampleID = 1;
+        (uint res, bool status) = stoi(value);
+        if (status) {
+            attackerUnitID = int32(res);
+            if (attackerUnitID > 0 && UnitsInfo.exists(attackerUnitID)) {
+                attackerUnitAddr = UnitsInfo[attackerUnitID].itemAddr;
+                
+                Terminal.print(0, "Your LAST KNOWN info:");
+                for ((address addrExample, mapping (int32 => Information) unitsInfoExample) : ScoutedInfo) {
+                    enemiesList[ExampleID] = addrExample;
+                    Terminal.print(0, format("Units of kingdom [ID: {}]:", ExampleID)); /////Here better to write NAME of kingdom////////////////////
+                    showScoutedInfo(addrExample);
+                    // for ((int32 unitID , Information InfoExample) : unitsInfoExample) {    
+                    //     Terminal.print(0, format("      ID: {} || Type: \"{}\" || Health: {} ", 
+                    //     unitID, 
+                    //     InfoExample.itemType,
+                    //     InfoExample.itemHealth
+                    // ));
+                    // }
+                    ExampleID++; 
+                }
+
+                Terminal.input(tvm.functionId(sendAttack_2),"Enter ID of kingdom",false);
+            }
+            else {
+                Terminal.input(tvm.functionId(sendAttack_1),"No such ID. Try again!\nEnter ID of unit who will attack",false);
+            }
+        }
+        else {
+            Terminal.input(tvm.functionId(sendAttack_1),"Wrong ID. Try again!\nEnter ID of unit who will attack",false);
+
+        }
+    }
+
+
+    // function sendAttack_3() public {
+    //     Terminal.input(tvm.functionId(sendAttack_4),"Enter ID of kingdom",false);
+    // }
+
+
+    function sendAttack_2(string value) public {
+        (uint res, bool status) = stoi(value);
+        if (status && enemiesList.exists(int32(res))) {
+            aimKingdomAddr = enemiesList[int32(res)];
+            //returnFuncID = tvm.functionId(sendAttack_5);
+            showScoutedInfo(aimKingdomAddr);
+            Terminal.input(tvm.functionId(sendAttack_3),"Enter ID of aim unit",false);
+        }
+        else {
+            Terminal.input(tvm.functionId(sendAttack_2),"Wrong ID. Try again!\nEnter ID of kingdom",false);
+
+        }
+    }
+
+    // function sendAttack_5() public {
+    //     Terminal.input(tvm.functionId(sendAttack_6),"Enter ID of aim unit",false);
+    // }
+
+    function sendAttack_3(string value) public {
+        (uint res, bool status) = stoi(value);
+        if (status && ScoutedInfo[aimKingdomAddr].exists(int32(res))) {
+            aimUnitAddr = ScoutedInfo[aimKingdomAddr][int32(res)].itemAddr;
             
+            Sdk.getAccountType(tvm.functionId(checkAccountStatus), aimUnitAddr);
+            //req_sendAttack();
+        }
+        else {
+            Terminal.input(tvm.functionId(sendAttack_3),"Wrong ID. Try again!\nEnter ID of aim unit",false);
+
+        }
+    }
+
+    function checkAccountStatus(int8 acc_type) public {
+        if (acc_type == 1) { // acc is active and  contract is already deployed
+            req_sendAttack();
+            // if (attackProcessing) {
+            //     req_sendAttack();
+            // }
+            // else {
+
+            // }
+        } else {
+            Terminal.print(0, "Unit is DEAD or it's balance too low");
+            attackProcessing = false;
+            returnKingdomMenu();
+        }
+    }
+
+
+    function req_sendAttack() public {
+        //attackProcessing = false;
+        //_aimAddr = Base_Addr;//address.makeAddrStd(0,value); 
+        optional(uint256) pubkey = 0;
+        IWarGameUnit(attackerUnitAddr).attackEnemy{
+                abiVer: 2,
+                extMsg: true,
+                sign: true,
+                pubkey: pubkey,
+                time: uint64(now), 
+                expire: 0,
+                callbackId: tvm.functionId(onSuccessAttack),
+                onErrorId: tvm.functionId(onError)
+            }(aimUnitAddr); 
+    }
+
+
+    function onSuccessAttack() public {
+        Terminal.print(0, "Attack successfully done");
+        attackProcessing = false;
+        returnReqObjInfo(aimUnitAddr);
+        //goKingdomMenu();
+    } 
+
+
+    function returnReqObjInfo(address reqObj_Addr) internal {
+        address _Produce_Addr = reqObj_Addr; 
+        IWGBot_initial(InitialWGB_addr).checkAccStatus(_Produce_Addr);
+    }
+    
+
+
+    function getDebotInfo() public functionID(0xDEB) virtual override view returns(
+        string name, string version, string publisher, string key, string author,
+        address support, string hello, string language, string dabi, bytes icon
+    ) {
+        name = "EverWar Game Units DeBot";
+        version = "0.0.5";
+        publisher = "d0ubleit";
+        key = "EverWar Game DeBot";
+        author = "d0ubleit";
+        support = address.makeAddrStd(0, 0x81b6312da6eaed183f9976622b5a39a90d5cff47e4d2a541bd97ee216e8300b1);
+        hello = "Welcome to strategy blockchain game!";
+        language = "en";
+        dabi = m_debotAbi.get();
+        icon = m_icon;
+    }
+
+    function onCodeUpgrade() internal override {
+        tvm.resetStorage();
+    }
+
+    function getRequiredInterfaces() public view override returns (uint256[] interfaces) {
+        return [ Terminal.ID, Menu.ID, AddressInput.ID, ConfirmInput.ID ];
+    }
+    
+
+
+    //////This function made in bad style//////////////////////////////// MAKE IT BETTER
+    // function showScoutedInfo(mapping(address => mapping (int32 => Information)) _scoutedInfo, address _kingdomAddr) internal {
+    //     int32 ExampleID = 1;
+    //     if (_scoutedInfo.empty()) {
+    //         Terminal.print(0, "There are no alive units in this kingdom.");
+    //         returnKingdomMenu();
     //     }
     //     else {
-    //         goKingdomMenu();
-    //     }
-    // }
-    
-    
-    // function deleteListItem(uint32 index) public {
-    //     index = index;
-    //     if (SL_Summary.numItemsPaid + SL_Summary.numItemsNotPaid > 0) {
-    //         Terminal.input(tvm.functionId(requestDeleteListItem), "Enter ID of item you want to delete:", false);
-    //     } else {
-    //         Terminal.print(0, "Sorry, you have no items in shopping list.");
-    //         openMenu();
+    //         Terminal.print(0, "Your LAST SCOUTED info:");
+    //         if (_kingdomAddr.isStdZero()) {
+    //             for ((address addrExample, mapping (int32 => Information) unitsInfoExample) : _scoutedInfo) {
+    //                 enemiesList[ExampleID] = addrExample;
+    //                 Terminal.print(0, format("Units of kingdom [ID: {}]:", ExampleID)); /////Here better to write NAME of kingdom////////////////////
+    //                 for ((int32 unitID , Information InfoExample) : unitsInfoExample) {    
+    //                     Terminal.print(0, format("      ID: {} || Type: \"{}\" || Health: {} ", 
+    //                     unitID, 
+    //                     InfoExample.itemType,
+    //                     InfoExample.itemHealth
+    //                 )); 
+    //                 ExampleID++;
+    //             }
+    //             }
+
+    //         }
+    //         else {
+    //             for ((int32 unitID , Information InfoExample) : _scoutedInfo[_kingdomAddr]) {    
+    //             Terminal.print(0, format(" ID: {} || Type: \"{}\" || Health: {} ", 
+    //                 unitID, 
+    //                 InfoExample.itemType,
+    //                 InfoExample.itemHealth
+    //                 )); 
+    //             }
+    //         }
+    //         commutator();
     //     }
     // }
 
-    // function requestDeleteListItem(string value) public view { 
-    //     (uint256 _itemID,) = stoi(value); 
-    //     optional(uint256) pubkey = 0;
-    //     IshoppingList(SL_address).deleteItemFromList{ 
-    //             abiVer: 2,
-    //             extMsg: true,
-    //             sign: true,
-    //             pubkey: pubkey,
-    //             time: uint64(now),
-    //             expire: 0,
-    //             callbackId: tvm.functionId(onSuccess),
-    //             onErrorId: tvm.functionId(onError)
-    //         }(int32(_itemID)); 
-    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 }

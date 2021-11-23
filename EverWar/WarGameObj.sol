@@ -37,6 +37,7 @@ contract WarGameObj is IWarGameObj {
                 deathProcessing(enemyAddr);
             }
             else {
+                objInfo.itemHealth -= damage;
                 onAcceptAttack();
             }
         }        

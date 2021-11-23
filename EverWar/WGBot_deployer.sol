@@ -23,7 +23,7 @@ contract WGBot_deployer is Debot, Upgradable {
     bytes m_icon;
 
     address InitialWGB_addr;
-    address StorageAddr;
+    //address StorageAddr;
 
     TvmCell Base_Code;
     //int32 BaseID = 1;

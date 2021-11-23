@@ -17,6 +17,20 @@
 			]
 		},
 		{
+			"name": "reqWGB_sendAttack",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "reqWGB_sendScout",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "req_produceWarrior",
 			"inputs": [
 			],
@@ -49,104 +63,9 @@
 			]
 		},
 		{
-			"name": "sendAttack_Start",
+			"name": "checkAccStatus",
 			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "sendAttack_1",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "sendAttack_2",
-			"inputs": [
-				{"name":"value","type":"bytes"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "sendAttack_3",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "sendAttack_4",
-			"inputs": [
-				{"name":"value","type":"bytes"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "sendAttack_5",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "sendAttack_6",
-			"inputs": [
-				{"name":"value","type":"bytes"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "req_sendAttack",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "onSuccessAttack",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "sendScout_Start",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "sendScout_1",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "sendScout_2",
-			"inputs": [
-				{"name":"value","type":"bytes"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "getScoutedInfo",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "setScoutedInfo",
-			"inputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_scoutedInfo","type":"map(address,map(int32,tuple))"}
+				{"name":"_Obj_Addr","type":"address"}
 			],
 			"outputs": [
 			]
@@ -186,7 +105,8 @@
 			"name": "setAddreses",
 			"inputs": [
 				{"name":"storageAddress","type":"address"},
-				{"name":"wgBot_deployerAddr","type":"address"}
+				{"name":"wgBot_deployerAddr","type":"address"},
+				{"name":"wgBot_UnitsAddr","type":"address"}
 			],
 			"outputs": [
 			]

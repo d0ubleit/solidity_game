@@ -27,15 +27,15 @@ interface IWarGameBase {
 
     function getUnitsInfo() external responsible returns(mapping(int32 => Information) _UnitsInfo);
 
-    // function getUnitsInfo() external responsible returns(uint incstore);
-
-    function getUnitInfoByAddr(address _unitAddr) external returns(Information _unitInfo);
+    //function getUnitInfoByAddr(address _unitAddr) external returns(Information _unitInfo);
     
     function removeWarUnit() external;
 }
 
 interface IWarGameUnit {
     function attackEnemy(address _aimAddr) external;
+
+    function deathOfBase(address _enemyAddr) external;
 
 } 
 

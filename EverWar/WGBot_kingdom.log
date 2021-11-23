@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "lesson suit repeat also outer slot idea grace also nasty exercise people"
-Raw address: 0:51da7a75d923a172e81c53b0b884792614ba2a4ec15480dd4248bc0bed1dd4e3
+Seed phrase: "else stage strong another sauce abstract enable coast length own august crush"
+Raw address: 0:6da1e013b35afa320550b2f51228f61a1e288e6154658084adb1dad1b8147bbf
 testnet:
-Non-bounceable address (for init): 0QBR2np12SOhcugcU7C4hHkmFLoqTsFUgN1CSLwL7R3U4_5L
-Bounceable address (for later access): kQBR2np12SOhcugcU7C4hHkmFLoqTsFUgN1CSLwL7R3U46OO
+Non-bounceable address (for init): 0QBtoeATs1r6MgVQsvUSKPYaHiiOYVRlgIStsdrRuBR7v-IB
+Bounceable address (for later access): kQBtoeATs1r6MgVQsvUSKPYaHiiOYVRlgIStsdrRuBR7v7_E
 mainnet:
-Non-bounceable address (for init): UQBR2np12SOhcugcU7C4hHkmFLoqTsFUgN1CSLwL7R3U40XB
-Bounceable address (for later access): EQBR2np12SOhcugcU7C4hHkmFLoqTsFUgN1CSLwL7R3U4xgE
+Non-bounceable address (for init): UQBtoeATs1r6MgVQsvUSKPYaHiiOYVRlgIStsdrRuBR7v1mL
+Bounceable address (for later access): EQBtoeATs1r6MgVQsvUSKPYaHiiOYVRlgIStsdrRuBR7vwRO
 Succeeded

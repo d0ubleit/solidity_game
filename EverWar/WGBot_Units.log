@@ -2,16 +2,15 @@ Config: default
 Input arguments:
      tvc: WGBot_Units.tvc
       wc: None
-    keys: WGBot_Units.keys.json
+    keys: WGBot_kingdom.keys.json
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "sister silent clerk grunt head canvas never virtual fiction laptop sword super"
-Raw address: 0:c4885726774e9132c67d04a3ffe940fc6eb45e0e4da7250594655e2f5eb80f47
+Raw address: 0:4e3d109380f7fffc633656cef2ead4a81978482f92ed6442a20d06691dadd2fa
 testnet:
-Non-bounceable address (for init): 0QDEiFcmd06RMsZ9BKP_6UD8brReDk2nJQWUZV4vXrgPRxeX
-Bounceable address (for later access): kQDEiFcmd06RMsZ9BKP_6UD8brReDk2nJQWUZV4vXrgPR0pS
+Non-bounceable address (for init): 0QBOPRCTgPf__GM2Vs7y6tSoGXhIL5LtZEKiDQZpHa3S-qIo
+Bounceable address (for later access): kQBOPRCTgPf__GM2Vs7y6tSoGXhIL5LtZEKiDQZpHa3S-v_t
 mainnet:
-Non-bounceable address (for init): UQDEiFcmd06RMsZ9BKP_6UD8brReDk2nJQWUZV4vXrgPR6wd
-Bounceable address (for later access): EQDEiFcmd06RMsZ9BKP_6UD8brReDk2nJQWUZV4vXrgPR_HY
+Non-bounceable address (for init): UQBOPRCTgPf__GM2Vs7y6tSoGXhIL5LtZEKiDQZpHa3S-hmi
+Bounceable address (for later access): EQBOPRCTgPf__GM2Vs7y6tSoGXhIL5LtZEKiDQZpHa3S-kRn
 Succeeded

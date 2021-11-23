@@ -20,7 +20,7 @@ contract WGBot_infos is WGBot_initial {
     //     checkAccStatus(Base_Addr); 
     // }
 
-    function checkAccStatus(address _Obj_Addr) internal virtual override {
+    function checkAccStatus(address _Obj_Addr) public virtual override {
         reqObjInfo_Addr = _Obj_Addr;
         Sdk.getAccountType(tvm.functionId(checkAccountStatus), reqObjInfo_Addr);    
     }
@@ -109,18 +109,21 @@ contract WGBot_infos is WGBot_initial {
     function setUnitsInfo(mapping(int32 => Information) _UnitsInfo) public {
         UnitsInfo = _UnitsInfo;
         UnitsAliveCnt = 0;
-        Information NotNeeded;
+        //Information NotNeeded;
         // optional(int32, Information) MaxId = UnitsInfo.max();
         // mainUnitID = MaxId().get();
+        delete Scout_Addr;
         for ((int32 ExampleID, Information InfoExample) : UnitsInfo) {
             if (InfoExample.itemType!="Base") {
                 UnitsAliveCnt++;
             }
-            if (Scout_Addr.isStdZero()){
-                if (InfoExample.itemType=="Scout") {
-                    Scout_Addr = InfoExample.itemAddr;
-                }
+            
+            //if (Scout_Addr.isStdZero()){
+            if (InfoExample.itemType=="Scout") {
+                Scout_Addr = InfoExample.itemAddr;
             }
+            //}
+            
             if (mainUnitID <= ExampleID) {
                 mainUnitID = ExampleID + 1;
             }
@@ -128,6 +131,7 @@ contract WGBot_infos is WGBot_initial {
         }
 
         if (showUInfo){
+            returnFuncID = tvm.functionId(goKingdomMenu);
             showUnitsInfo(UnitsInfo); 
         }
         else{
@@ -152,13 +156,14 @@ contract WGBot_infos is WGBot_initial {
                 InfoExample.itemDefence)); 
             }
         }
-        showUnitsInfoExit();
+        //showUnitsInfoExit();
+        commutator();
     }
 
 
-    function showUnitsInfoExit() internal virtual{ 
-        goKingdomMenu();
-    }
+    // function showUnitsInfoExit() internal virtual{ 
+    //     goKingdomMenu();
+    // }
 
     // function updateUnitsInfo() public virtual{
     //     goKingdomMenu();

@@ -27,7 +27,8 @@ contract WGBot_initial is Debot, Upgradable {
     bool showPL = false;
 
     address StorageAddr;
-    address WGBot_deployerAddr; 
+    address WGBot_deployerAddr;
+    address WGBot_UnitsAddr;  
           
     uint256 playerPubkey; 
 
@@ -45,11 +46,12 @@ contract WGBot_initial is Debot, Upgradable {
 
     int32 mainUnitID;
 
-    function setAddreses(address storageAddress, address wgBot_deployerAddr) public {
+    function setAddreses(address storageAddress, address wgBot_deployerAddr, address wgBot_UnitsAddr) public {
         require(msg.pubkey() == tvm.pubkey(), 101);
         tvm.accept();
         StorageAddr = storageAddress; 
         WGBot_deployerAddr = wgBot_deployerAddr;
+        WGBot_UnitsAddr = wgBot_UnitsAddr;
     }
 
     
@@ -273,7 +275,7 @@ contract WGBot_initial is Debot, Upgradable {
     //     requestGetPlayersList(tvm.functionId(setPlayersList)); 
     // }
 
-    function checkAccStatus(address _Produce_Addr) internal virtual {
+    function checkAccStatus(address _Produce_Addr) public virtual {
         showPL = false;
         returnFuncID = tvm.functionId(goMainMenu);
         requestGetPlayersList(tvm.functionId(setPlayersList)); 

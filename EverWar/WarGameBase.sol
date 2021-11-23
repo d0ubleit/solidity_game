@@ -11,16 +11,8 @@ import "AWarGameExample.sol";
 
 contract WarGameBase is WarGameObj { 
     
-    //FOR DEBUG ONLY 
-    uint SomeSalt = 1234;
-    uint SomeSalt2 = 1234;
-    uint SomeSalt3 = 1234;
-    uint SomeSalt4 = 1234;
-
-
     int32 static exampleID;
-    int32 public warriorID = 1; 
-    //address rootWarrior;
+    
     int32 unitID = 1;
 
     mapping(address => int32) public UnitsMap;
@@ -62,14 +54,14 @@ contract WarGameBase is WarGameObj {
         _UnitsInfo = UnitsInfo;
     } 
 
-    function getUnitInfoByAddr(address _unitAddr) external returns(Information _unitInfo) {
-        require(UnitsMap.exists(_unitAddr), 107, "Error: There are no unit with such ID");
-        tvm.accept();
-        //mapping(int32 => Information) _UnitsInfo = UnitsInfo;
-        //return _UnitsInfo; 
-        Information _unitInfo = UnitsInfo[UnitsMap[_unitAddr]];
-        return _unitInfo;
-    }
+    // function getUnitInfoByAddr(address _unitAddr) external returns(Information _unitInfo) {
+    //     require(UnitsMap.exists(_unitAddr), 107, "Error: There are no unit with such ID");
+    //     tvm.accept();
+    //     //mapping(int32 => Information) _UnitsInfo = UnitsInfo;
+    //     //return _UnitsInfo; 
+    //     Information _unitInfo = UnitsInfo[UnitsMap[_unitAddr]];
+    //     return _unitInfo;
+    // }
 
     // function getUnitsInfo() external responsible returns(uint incstore) {
     //     tvm.accept();
@@ -92,35 +84,19 @@ contract WarGameBase is WarGameObj {
 
     function deathProcessing(address _enemyAddr) internal override { 
         tvm.accept(); 
-        //mapping(address => bool) TempMap = UnitsMap;
+        //mapping(address => int32) TempMap = UnitsMap;
+        for ((address unitAddr, ) : UnitsMap) {
+            IWarGameUnit(unitAddr).deathOfBase(_enemyAddr);
+        }
+        unitID = 1;
+        delete UnitsMap;
+        delete UnitsInfo;
+        delete thisPubkey;
         destroyAndTransfer(_enemyAddr);   
     }  
 
-    // function produceWarrior() public {
-    //     require(tvm.pubkey() == msg.pubkey(), 102, "Error: You already have base!");
-    //     tvm.accept();         
-    //     address newWarrior;
-    //     //newWarrior = WGW.WarGameWarrior(rootWarrior).selfProduceWarrior(warriorID, tvm.pubkey()).await;
-    //     addWarrior(newWarrior);
-    //     warriorID++;
-    // }
-    
-    // function selfProduceBase(uint _baseID, uint senderPubkey) external responsible returns(address) {
-    //     tvm.accept();
-    //     TvmCell code = tvm.code();
-    //     address newBase = new WarGameBase{
-    //         value: 2 ton,
-    //         code: code,
-    //         pubkey: senderPubkey,
-    //         bounce: false,
-    //         varInit: {
-    //             baseID: _baseID
-    //         }
-    //     }(rootWarrior);
-    //     tvm.accept();
-    //     return newBase; 
-    // } 
     function onAcceptAttack() internal override{
+        UnitsInfo[0].itemHealth = objInfo.itemHealth;
     }
     
 }

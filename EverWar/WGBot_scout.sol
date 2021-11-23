@@ -4,6 +4,7 @@ pragma AbiHeader time;
 pragma AbiHeader pubkey;
     
 import "WGBot_infos.sol";
+
 //import "AWarGameExample.sol"; 
 //import "IWarGameObj.sol";
 

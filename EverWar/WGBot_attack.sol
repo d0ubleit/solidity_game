@@ -14,7 +14,7 @@ contract WGBot_attack is WGBot_scout {
     // int32 UnitsAliveCnt;
     
     
-    bool attackProcessing = false;
+    //bool attackProcessing = false; 
     int32 attackerUnitID;
     address attackerUnitAddr;
     address aimKingdomAddr;
@@ -137,7 +137,7 @@ contract WGBot_attack is WGBot_scout {
 
 
     function req_sendAttack() public {
-        attackProcessing = false;
+        //attackProcessing = false;
         //_aimAddr = Base_Addr;//address.makeAddrStd(0,value); 
         optional(uint256) pubkey = 0;
         IWarGameUnit(attackerUnitAddr).attackEnemy{

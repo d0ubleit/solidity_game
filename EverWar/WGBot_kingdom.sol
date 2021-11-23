@@ -4,11 +4,11 @@ pragma AbiHeader time;
 pragma AbiHeader pubkey;
 
 //import "WGBot_infos.sol";    
-import "WGBot_attack.sol";
+import "WGBot_infos.sol";
 import "AWarGameExample.sol"; 
 //import "IWarGameObj.sol";
 
-contract WGBot_kingdom is WGBot_attack {  
+contract WGBot_kingdom is WGBot_infos {  
     
     
     
@@ -34,8 +34,8 @@ contract WGBot_kingdom is WGBot_attack {
             [
                 //MenuItem("Base info","",tvm.functionId(WGBot_infos.getBaseObjInfo)),
                 MenuItem("Kingdom info","",tvm.functionId(WGBot_infos.getBaseUnitsInfo)),
-                MenuItem("Attack!","",tvm.functionId(sendAttack_Start)),
-                MenuItem("Scout!","",tvm.functionId(sendScout_Start)),
+                MenuItem("Attack!","",tvm.functionId(reqWGB_sendAttack)),
+                MenuItem("Scout!","",tvm.functionId(reqWGB_sendScout)),
                 MenuItem("Produce warrior","",tvm.functionId(req_produceWarrior)),
                 MenuItem("Produce scout","",tvm.functionId(req_produceScout)),
                 MenuItem("<=== Back","",tvm.functionId(goMainMenu))
@@ -43,6 +43,19 @@ contract WGBot_kingdom is WGBot_attack {
             ]
         );
     } 
+
+    function reqWGB_sendAttack() public {
+        uint256 _playerPubkey = playerPubkey;
+        mapping(int32 => Information) _UnitsInfo = UnitsInfo;
+        IWGBot_Units(WGBot_UnitsAddr).invokeSendAttack(_playerPubkey, _UnitsInfo);
+    }
+
+    function reqWGB_sendScout() public {
+        uint256 _playerPubkey = playerPubkey;
+        mapping (int32 => address) _playersIDList = playersIDList;
+        address _Scout_Addr = Scout_Addr;
+        IWGBot_Units(WGBot_UnitsAddr).invokeSendScout(_playerPubkey, _playersIDList, _Scout_Addr);
+    }
 
     
     function req_produceWarrior() public {
@@ -96,24 +109,27 @@ contract WGBot_kingdom is WGBot_attack {
             returnFuncID = 0;
             updateUnitsInfo();
         }
-        else if (returnFuncID == tvm.functionId(sendScout_1)) {
-            returnFuncID = 0;
-            sendScout_1();
-        }
-        else if (returnFuncID == tvm.functionId(sendAttack_3)) {
-            returnFuncID = 0;
-            sendAttack_3();
-        }
-        else if (returnFuncID == tvm.functionId(sendAttack_5)) {
-            returnFuncID = 0;
-            sendAttack_5();
-        }
+        // else if (returnFuncID == tvm.functionId(sendScout_1)) {
+        //     returnFuncID = 0;
+        //     sendScout_1();
+        // }
+        // else if (returnFuncID == tvm.functionId(sendAttack_3)) {
+        //     returnFuncID = 0;
+        //     sendAttack_3();
+        // }
+        // else if (returnFuncID == tvm.functionId(sendAttack_5)) {
+        //     returnFuncID = 0;
+        //     sendAttack_5();
+        // }
         else {
             returnFuncID = 0;
             goMainMenu();
         }
     }
 
+    // function showUnitsInfoExit() internal virtual override{ 
+    //     goKingdomMenu();
+    // }
 
 
     function getDebotInfo() public functionID(0xDEB) virtual override view returns( 
