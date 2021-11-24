@@ -37,6 +37,7 @@ contract WGBot_deployer is Debot, Upgradable {
     TvmCell Produce_StateInit;
     address Produce_Addr;
     address Base_Addr;
+    address Storage_Addr;
 
     uint256 playerPubkey; 
     address playerWalletAddr;
@@ -75,12 +76,13 @@ contract WGBot_deployer is Debot, Upgradable {
     function start() public override {        
     }
  
-    function invokeProduce(uint _playerPubkey, DeployType _deployType, address _Base_Addr, int32 _mainUnitID) external {
+    function invokeProduce(uint _playerPubkey, DeployType _deployType, address _Base_Addr, address _Storage_Addr, int32 _mainUnitID) external {
         //require(msg.pubkey() == tvm.pubkey(), 150); 
         InitialWGB_addr = msg.sender;
         playerPubkey = _playerPubkey;
         deployType = _deployType;
         Base_Addr = _Base_Addr;
+        Storage_Addr = _Storage_Addr;
         mainUnitID = _mainUnitID;
 
         TvmBuilder salt;
@@ -186,7 +188,7 @@ contract WGBot_deployer is Debot, Upgradable {
                 sign: true,
                 pubkey: none,
                 stateInit: image,
-                call: {AWarGameExample, playerPubkey, Base_Addr} 
+                call: {AWarGameExample, playerPubkey, Base_Addr, Storage_Addr} 
             });
             tvm.sendrawmsg(deployMsg, 1);
     }

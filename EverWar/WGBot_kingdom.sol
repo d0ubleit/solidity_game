@@ -36,7 +36,7 @@ contract WGBot_kingdom is WGBot_infos {
                 MenuItem("Kingdom info","",tvm.functionId(WGBot_infos.getBaseUnitsInfo)),
                 MenuItem("Attack!","",tvm.functionId(reqWGB_sendAttack)),
                 MenuItem("Scout!","",tvm.functionId(reqWGB_sendScout)),
-                MenuItem("Produce warrior","",tvm.functionId(req_produceWarrior)),
+                MenuItem("Produce warrior","",tvm.functionId(req_produceWarrior)), 
                 MenuItem("Produce scout","",tvm.functionId(req_produceScout)),
                 MenuItem("<=== Back","",tvm.functionId(goMainMenu))
                 
@@ -62,18 +62,20 @@ contract WGBot_kingdom is WGBot_infos {
         uint _playerPubkey = playerPubkey;
         deployType = DeployType.Warrior;
         DeployType _deployType = deployType;
+        address _Storage_Addr = StorageAddr;
         address _Base_Addr = Base_Addr;
         int32 _mainUnitID = mainUnitID;
-        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType, _Base_Addr, _mainUnitID);
+        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType, _Base_Addr, _Storage_Addr, _mainUnitID); 
     }
 
     function req_produceScout() public {
         uint _playerPubkey = playerPubkey;
         deployType = DeployType.Scout;
         DeployType _deployType = deployType;
+        address _Storage_Addr = StorageAddr;
         address _Base_Addr = Base_Addr;
         int32 _mainUnitID = mainUnitID;
-        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType, _Base_Addr, _mainUnitID);
+        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType, _Base_Addr, _Storage_Addr, _mainUnitID);
     }
 
     

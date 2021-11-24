@@ -6,7 +6,7 @@ import "WarGameStructs.sol";
 
 interface IWGBot_deployer {
 
-    function invokeProduce(uint _playerPubkey, DeployType _deployType, address _Base_Addr, int32 _mainUnitID) external;
+    function invokeProduce(uint _playerPubkey, DeployType _deployType, address _Base_Addr, address _Storage_Addr, int32 _mainUnitID) external;
 } 
 
 interface IWGBot_initial {
@@ -14,11 +14,11 @@ interface IWGBot_initial {
 
     function goKingdomMenu() external;
 
-    function checkAccStatus(address _Produce_Addr) external; 
+    //function checkAccStatus(address _Produce_Addr) external; 
 } 
 
 interface IWGBot_Units {
-    function invokeSendScout(uint256 _playerPubkey, mapping (int32 => address) _playersIDList, address _Scout_Addr) external;
+    function invokeSendScout(uint256 _playerPubkey, mapping(int32 => address) _playersIDList, address _Scout_Addr) external;
 
     function invokeSendAttack(uint256 _playerPubkey, mapping(int32 => Information) _UnitsInfo) external;
 }

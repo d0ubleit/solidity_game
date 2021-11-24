@@ -188,13 +188,23 @@ contract WGBot_Units is Debot, Upgradable{
                 returnKingdomMenu();
             }       
             else {
+                Terminal.print(0, "Here is last saved info:");
                 attackProcessing = true;
                 sendAttack_Start();
             }
         }
         else {
-            attackProcessing = true;
-            getScoutedInfo();
+            if (ScoutedInfo.empty()) {
+                Terminal.print(0, "Here is info recieved from scout:");
+                attackProcessing = true;
+                getScoutedInfo();
+            }       
+            else {
+                Terminal.print(0, "Here is last saved info:");
+                attackProcessing = true;
+                sendAttack_Start();
+            }
+            
         }
     } 
 
@@ -257,7 +267,7 @@ contract WGBot_Units is Debot, Upgradable{
             if (attackerUnitID > 0 && UnitsInfo.exists(attackerUnitID)) {
                 attackerUnitAddr = UnitsInfo[attackerUnitID].itemAddr;
                 
-                Terminal.print(0, "Your LAST KNOWN info:");
+                //Terminal.print(0, "Your LAST KNOWN info:");
                 for ((address addrExample, mapping (int32 => Information) unitsInfoExample) : ScoutedInfo) {
                     enemiesList[ExampleID] = addrExample;
                     Terminal.print(0, format("Units of kingdom [ID: {}]:", ExampleID)); /////Here better to write NAME of kingdom////////////////////
@@ -324,7 +334,12 @@ contract WGBot_Units is Debot, Upgradable{
 
     function checkAccountStatus(int8 acc_type) public {
         if (acc_type == 1) { // acc is active and  contract is already deployed
-            req_sendAttack();
+            if (attackProcessing){
+                req_sendAttack();
+            }
+            else {
+                req_ObjInfo(aimUnitAddr);
+            }
             // if (attackProcessing) {
             //     req_sendAttack();
             // }
@@ -332,7 +347,7 @@ contract WGBot_Units is Debot, Upgradable{
 
             // }
         } else {
-            Terminal.print(0, "Unit is DEAD or it's balance too low");
+            Terminal.print(0, "Unit is DEAD now or it's balance too low");
             attackProcessing = false;
             returnKingdomMenu();
         }
@@ -357,17 +372,51 @@ contract WGBot_Units is Debot, Upgradable{
 
 
     function onSuccessAttack() public {
-        Terminal.print(0, "Attack successfully done");
+        Terminal.print(0, "Attack successfully done with result:");
         attackProcessing = false;
-        returnReqObjInfo(aimUnitAddr);
+        Sdk.getAccountType(tvm.functionId(checkAccountStatus), aimUnitAddr);
+        //returnReqObjInfo(aimUnitAddr);
         //goKingdomMenu();
     } 
 
 
-    function returnReqObjInfo(address reqObj_Addr) internal {
-        address _Produce_Addr = reqObj_Addr; 
-        IWGBot_initial(InitialWGB_addr).checkAccStatus(_Produce_Addr);
+    function req_ObjInfo(address _aimUnitAddr) internal { 
+        optional(uint256) none;
+        IWarGameObj(_aimUnitAddr).getInfo{
+            abiVer: 2,
+            extMsg: true,
+            sign: false,
+            pubkey: none,
+            time: uint64(now),
+            expire: 0,
+            callbackId: tvm.functionId(showObjInfo), 
+            onErrorId: 0
+        }();
     }
+
+
+    function showObjInfo(Information ObjectInfo) public {
+        Terminal.print(0, format(" Type: \"{}\" || Health: {} || Attack power: {} || Defence power: {}", 
+            ObjectInfo.itemType,
+            ObjectInfo.itemHealth,
+            ObjectInfo.itemAttack, 
+            ObjectInfo.itemDefence
+            )); 
+        
+        updateScoutedInfo(ObjectInfo);   
+    }
+
+
+    function updateScoutedInfo(Information ObjectInfo) internal {
+        ScoutedInfo[aimKingdomAddr][ObjectInfo.itemID] = ObjectInfo;
+        returnKingdomMenu();
+    }
+
+
+    // function returnReqObjInfo(address reqObj_Addr) internal {
+    //     address _Produce_Addr = reqObj_Addr; 
+    //     IWGBot_initial(InitialWGB_addr).checkAccStatus(_Produce_Addr);
+    // }
     
 
 

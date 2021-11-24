@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "else stage strong another sauce abstract enable coast length own august crush"
-Raw address: 0:6da1e013b35afa320550b2f51228f61a1e288e6154658084adb1dad1b8147bbf
+Seed phrase: "surface dash hedgehog mistake friend toe excite skirt age steel mean subject"
+Raw address: 0:af639494f670b519837cd048bc6cc836b09098d1d940d194cdc3bbe650f2f069
 testnet:
-Non-bounceable address (for init): 0QBtoeATs1r6MgVQsvUSKPYaHiiOYVRlgIStsdrRuBR7v-IB
-Bounceable address (for later access): kQBtoeATs1r6MgVQsvUSKPYaHiiOYVRlgIStsdrRuBR7v7_E
+Non-bounceable address (for init): 0QCvY5SU9nC1GYN80Ei8bMg2sJCY0dlA0ZTNw7vmUPLwaYIU
+Bounceable address (for later access): kQCvY5SU9nC1GYN80Ei8bMg2sJCY0dlA0ZTNw7vmUPLwad_R
 mainnet:
-Non-bounceable address (for init): UQBtoeATs1r6MgVQsvUSKPYaHiiOYVRlgIStsdrRuBR7v1mL
-Bounceable address (for later access): EQBtoeATs1r6MgVQsvUSKPYaHiiOYVRlgIStsdrRuBR7vwRO
+Non-bounceable address (for init): UQCvY5SU9nC1GYN80Ei8bMg2sJCY0dlA0ZTNw7vmUPLwaTme
+Bounceable address (for later access): EQCvY5SU9nC1GYN80Ei8bMg2sJCY0dlA0ZTNw7vmUPLwaWRb
 Succeeded

@@ -38,12 +38,13 @@ contract WarGameStorage {
     }
 
     function removeFromPlayersAliveList(uint playerPubkey) external {
+        require(playersAliveList.exists(playerPubkey), 116, "This player has no kingdom in storage");
         tvm.accept();
-        if (playersAliveList.exists(playerPubkey)){
-            delete playersIDList[playersAliveList[playerPubkey]];
-            delete playersAliveList[playerPubkey];
-            Stat.basesAlive--;
-        }
+        
+        delete playersIDList[playersAliveList[playerPubkey]];
+        delete playersAliveList[playerPubkey];
+        Stat.basesAlive--;
+        
     } 
     
     function getStat() external view returns(GameStat){

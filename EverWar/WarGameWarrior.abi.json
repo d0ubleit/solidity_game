@@ -6,7 +6,8 @@
 			"name": "constructor",
 			"inputs": [
 				{"name":"playerPubkey","type":"uint256"},
-				{"name":"yourBaseAddr","type":"address"}
+				{"name":"yourBaseAddr","type":"address"},
+				{"name":"Storage_Addr","type":"address"}
 			],
 			"outputs": [
 			]

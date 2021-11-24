@@ -192,9 +192,10 @@ contract WGBot_initial is Debot, Upgradable {
         deployType = DeployType.Base;
         DeployType _deployType = deployType;
         address _Base_Addr = Base_Addr;
-        mainUnitID++;
+        address _Storage_Addr = StorageAddr;
+        //mainUnitID++;
         int32 _mainUnitID = mainUnitID;
-        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType, _Base_Addr, _mainUnitID);
+        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType, _Base_Addr, _Storage_Addr, _mainUnitID);
     }
 
     function deployResult(Status _status, DeployType _deployType, address _Produce_Addr) virtual external {
@@ -275,7 +276,7 @@ contract WGBot_initial is Debot, Upgradable {
     //     requestGetPlayersList(tvm.functionId(setPlayersList)); 
     // }
 
-    function checkAccStatus(address _Produce_Addr) public virtual {
+    function checkAccStatus(address _Produce_Addr) internal virtual {
         showPL = false;
         returnFuncID = tvm.functionId(goMainMenu);
         requestGetPlayersList(tvm.functionId(setPlayersList)); 

@@ -17,10 +17,11 @@ contract WarGameScout is WarGameUnit {
 
 
 
-    constructor(uint playerPubkey, address yourBaseAddr) WarGameUnit(playerPubkey, yourBaseAddr) public {
+    constructor(uint playerPubkey, address yourBaseAddr, address Storage_Addr) public {
         //require(tvm.pubkey() != 0, 101);
         //require(msg.pubkey() == tvm.pubkey(), 102);
         tvm.accept();
+        Storage_Addr;
         BaseAddr = yourBaseAddr;
         objInfo = Information( 
             exampleID,

@@ -13,30 +13,30 @@ contract WarGameBase is WarGameObj {
     
     int32 static exampleID;
     
-    int32 unitID = 1;
+    //int32 unitID = 1;
+    address Storage_Addr_;
 
     mapping(address => int32) public UnitsMap;
     mapping (int32 => Information) public UnitsInfo;
         
-    uint public thisPubkey;
+    
     
 
     //constructor(address _rootWarrior) public {
-    constructor(uint playerPubkey, address playerBaseAddr) public { 
+    constructor(uint playerPubkey, address playerBaseAddr, address Storage_Addr) public { 
         //require(tvm.pubkey() != 0, 101);
         //require(msg.pubkey() == tvm.pubkey(), 102);
         //rootWarrior = _rootWarrior;
         tvm.accept();
+        Storage_Addr_ = Storage_Addr;
         objInfo = Information(  
             exampleID,
             "Base",
             address(this),
             playerPubkey,
-            25,
+            5,  //25,
             0,
             3);
-        
-        thisPubkey = tvm.pubkey();
         
         UnitsInfo[0] = objInfo;
     } 
@@ -70,9 +70,9 @@ contract WarGameBase is WarGameObj {
 
     function addUnit(Information _objInfo) external {
         tvm.accept();
-        UnitsMap.add(msg.sender, unitID);
-        UnitsInfo[unitID] = _objInfo;
-        unitID++;
+        UnitsMap.add(msg.sender, _objInfo.itemID);
+        UnitsInfo[_objInfo.itemID] = _objInfo;
+        //unitID++;
     }
 
     function removeWarUnit() external {
@@ -82,16 +82,20 @@ contract WarGameBase is WarGameObj {
         delete UnitsMap[msg.sender];   
     } 
 
+
+    //What if balance is low?
     function deathProcessing(address _enemyAddr) internal override { 
         tvm.accept(); 
         //mapping(address => int32) TempMap = UnitsMap;
         for ((address unitAddr, ) : UnitsMap) {
             IWarGameUnit(unitAddr).deathOfBase(_enemyAddr);
         }
-        unitID = 1;
+        uint playerPubkey = objInfo.itemOwnerPubkey;
+        IWarGameStorage(Storage_Addr_).removeFromPlayersAliveList(playerPubkey);
+        //unitID = 1;
         delete UnitsMap;
         delete UnitsInfo;
-        delete thisPubkey;
+        //delete thisPubkey;
         destroyAndTransfer(_enemyAddr);   
     }  
 

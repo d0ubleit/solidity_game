@@ -7,6 +7,6 @@ abstract contract AWarGameExample {
 
     int32 static exampleID;
 
-    constructor(uint256 playerPubkey, address playerBaseAddr) public {
+    constructor(uint256 playerPubkey, address playerBaseAddr, address Storage_Addr) public {
     }
 }

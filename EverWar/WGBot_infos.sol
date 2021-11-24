@@ -20,7 +20,7 @@ contract WGBot_infos is WGBot_initial {
     //     checkAccStatus(Base_Addr); 
     // }
 
-    function checkAccStatus(address _Obj_Addr) public virtual override {
+    function checkAccStatus(address _Obj_Addr) internal override {
         reqObjInfo_Addr = _Obj_Addr;
         Sdk.getAccountType(tvm.functionId(checkAccountStatus), reqObjInfo_Addr);    
     }
@@ -29,7 +29,7 @@ contract WGBot_infos is WGBot_initial {
         if (acc_type == 1) { // acc is active and  contract is already deployed
             req_ObjInfo(reqObjInfo_Addr);
         } else {
-            Terminal.print(0, "Unit is DEAD or it's balance too low");
+            Terminal.print(0, "Unit is already DEAD or it's balance too low");
             deployType = DeployType.Empty;
             requestGetPlayersList(tvm.functionId(setPlayersList));
         }
@@ -146,14 +146,14 @@ contract WGBot_infos is WGBot_initial {
         }
         else {
             for ((int32 unitID , Information InfoExample) : _UnitsInfo) {    
-            Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
-                unitID, 
+            Terminal.print(0, format(" ID: {} || Type: \"{}\" || Health: {} || Attack power: {} || Defence power: {} || At address:", 
+                unitID,
                 InfoExample.itemType,
-                InfoExample.itemAddr,
-                InfoExample.itemOwnerPubkey,
                 InfoExample.itemHealth,
                 InfoExample.itemAttack, 
-                InfoExample.itemDefence)); 
+                InfoExample.itemDefence));
+            
+            Terminal.print(0, format("{}", InfoExample.itemAddr));
             }
         }
         //showUnitsInfoExit();

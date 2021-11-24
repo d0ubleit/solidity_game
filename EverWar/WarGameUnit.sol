@@ -10,7 +10,8 @@ contract WarGameUnit is WarGameObj {
     address public BaseAddr; 
     //uint objAttackVal;
 
-    constructor(uint playerPubkey, address playerBaseAddr) public {
+    //constructor(uint playerPubkey, address playerBaseAddr, address Storage_Addr) public {
+    constructor() public {
         //require(tvm.pubkey() != 0, 101);
         //require(msg.pubkey() == tvm.pubkey(), 102);
         tvm.accept();

@@ -63,14 +63,6 @@
 			]
 		},
 		{
-			"name": "checkAccStatus",
-			"inputs": [
-				{"name":"_Obj_Addr","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "checkAccountStatus",
 			"inputs": [
 				{"name":"acc_type","type":"int8"}

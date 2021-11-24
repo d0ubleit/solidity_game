@@ -32,7 +32,7 @@ STORAGE_NAME=${4%.*} # filename without extension
 BASE=${5%.*} # filename without extension
 WARRIOR=${6%.*} # filename without extension
 SCOUT=${7%.*} # filename without extension
-NETWORK="${8:-http://net.ton.dev}"
+NETWORK="${8:-http://127.0.0.1}"
 
 
 echo $DEBOT_NAME
@@ -48,10 +48,10 @@ echo $NETWORK
 #
 # This is TON OS SE giver address, correct it if you use another giver
 #
-#GIVER_ADDRESS=0:b5e9240fc2d2f1ff8cbb1d1dee7fb7cae155e5f6320e585fcc685698994a19a5
+GIVER_ADDRESS=0:b5e9240fc2d2f1ff8cbb1d1dee7fb7cae155e5f6320e585fcc685698994a19a5
 
 # net.ton.dev 
-GIVER_ADDRESS=0:a532822fe755b19792cca1c26c705984ba18786d8048bd36d50c7664ec9089c0
+#GIVER_ADDRESS=0:a532822fe755b19792cca1c26c705984ba18786d8048bd36d50c7664ec9089c0
 
 
 # Check if tonos-cli installed 
@@ -70,10 +70,10 @@ fi
 
 function giver {
     $tos --url $NETWORK call \
-        --abi ../debotBase/Mygiver.abi.json \
-        --sign ../debotBase/Mygiver.keys.json \
+        --abi ../debotBase/giver.abi.json \
+        --sign ../debotBase/giver.keys.json \
         $GIVER_ADDRESS \
-        sendTransactionSimple "{\"dest\":\"$1\",\"value\":2000000000}" \
+        sendTransaction "{\"dest\":\"$1\",\"value\":10000000000,\"bounce\":false}" \
         1>/dev/null
 }
 
