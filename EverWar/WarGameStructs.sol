@@ -18,6 +18,13 @@ struct GameStat {
     
 }
 
+struct RecievedAttacksHistory {
+        uint attackerPubkey;
+        int32 damage;
+        int32 attackedUnitID;
+        string attackedUnitType;
+        bool alive;
+    }
 
 enum DeployType {
     Empty,

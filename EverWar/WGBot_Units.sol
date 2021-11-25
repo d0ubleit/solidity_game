@@ -54,13 +54,13 @@ contract WGBot_Units is Debot, Upgradable{
     }
     
     function returnKingdomMenu() internal {
-        IWGBot_initial(InitialWGB_addr).goKingdomMenu();
+        IWGBot_initial(InitialWGB_addr).updateUnitsInfo();
     }
 
     function sendScout_Start() public {
         //scoutProcessing = true;
         if (Scout_Addr.isStdZero()) {
-            Terminal.print(0, "You don't have scout. [Produce scout] in kingdom menu");
+            Terminal.print(0, "You don't have scout. [Produce scout] in produce menu");
             returnKingdomMenu();
         } 
         else {
@@ -156,7 +156,7 @@ contract WGBot_Units is Debot, Upgradable{
         }
         else {
             for ((int32 unitID , Information InfoExample) : ScoutedInfo[_kingdomToScoutAddr]) {    
-                Terminal.print(0, format("     ID: {} || Type: \"{}\" || Health: {} ", 
+                Terminal.print(0, format("     ID: {}  <{}> || Health: {} ", 
                     unitID, 
                     InfoExample.itemType,
                     InfoExample.itemHealth
@@ -188,7 +188,7 @@ contract WGBot_Units is Debot, Upgradable{
                 returnKingdomMenu();
             }       
             else {
-                Terminal.print(0, "Here is last saved info:");
+                //Terminal.print(0, "Here is last saved info:");
                 attackProcessing = true;
                 sendAttack_Start();
             }

@@ -24,7 +24,8 @@ contract WarGameUnit is WarGameObj {
     }
 
     function attackEnemy(address _aimAddr) external checkOwnerAndAccept{
-        IWarGameObj(_aimAddr).acceptAttack(_aimAddr, objInfo.itemAttack);  
+        uint _playerPubkey = objInfo.itemOwnerPubkey;
+        IWarGameObj(_aimAddr).acceptAttack(_aimAddr, objInfo.itemAttack, _playerPubkey);  
     }
 
     function deathOfBase(address _enemyAddr) external {
@@ -34,15 +35,15 @@ contract WarGameUnit is WarGameObj {
         destroyAndTransfer(_enemyAddr);
     }
 
-    function deathProcessing(address _enemyAddr) internal override {
+    function deathProcessing(address _enemyAddr, uint enemyPubkey, int32 damage) internal override {
         tvm.accept();
-        IWarGameBase(BaseAddr).removeWarUnit();
+        IWarGameBase(BaseAddr).removeWarUnit(enemyPubkey, damage); 
         destroyAndTransfer(_enemyAddr);  
     }  
 
-    function onAcceptAttack() internal override{
+    function onAcceptAttack(uint enemyPubkey, int32 damage) internal override{
         Information _objInfo = objInfo;
-        IWarGameBase(BaseAddr).updateUnitsInfo(_objInfo);
+        IWarGameBase(BaseAddr).updateUnitsInfo(_objInfo, enemyPubkey, damage);
     } 
 
 

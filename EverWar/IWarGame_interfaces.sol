@@ -5,7 +5,7 @@ pragma AbiHeader pubkey;
 import "WarGameStructs.sol";
 
 interface IWarGameObj {
-    function acceptAttack(address aimAddr, int32 _objAttackVal) external;
+    function acceptAttack(address aimAddr, int32 _objAttackVal, uint _playerPubkey) external;
 
     function getInfo() external returns(Information);
 } 
@@ -23,13 +23,13 @@ interface IWarGameStorage {
 interface IWarGameBase {
     function addUnit(Information _objInfo) external;
 
-    function updateUnitsInfo(Information _objInfo) external;
+    function updateUnitsInfo(Information _objInfo, uint enemyPubkey, int32 damage) external;
 
-    function getUnitsInfo() external responsible returns(mapping(int32 => Information) _UnitsInfo);
+    function getInfos() external responsible returns(mapping(int32 => Information) _UnitsInfo, mapping(int32 => RecievedAttacksHistory) _RxAttacksInfo);
 
     //function getUnitInfoByAddr(address _unitAddr) external returns(Information _unitInfo);
     
-    function removeWarUnit() external;
+    function removeWarUnit(uint enemyPubkey, int32 damage) external;
 }
 
 interface IWarGameUnit {

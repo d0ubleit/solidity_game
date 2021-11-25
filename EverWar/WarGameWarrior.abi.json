@@ -40,7 +40,8 @@
 			"name": "acceptAttack",
 			"inputs": [
 				{"name":"aimAddr","type":"address"},
-				{"name":"_objAttackVal","type":"int32"}
+				{"name":"_objAttackVal","type":"int32"},
+				{"name":"_playerPubkey","type":"uint256"}
 			],
 			"outputs": [
 			]
@@ -67,14 +68,6 @@
 			],
 			"outputs": [
 				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"objInfo","type":"tuple"}
-			]
-		},
-		{
-			"name": "attackersArr",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"attackersArr","type":"address[]"}
 			]
 		},
 		{

@@ -5,6 +5,7 @@
 		{
 			"name": "constructor",
 			"inputs": [
+				{"name":"_WGBMain_Addr","type":"address"}
 			],
 			"outputs": [
 			]
@@ -41,6 +42,14 @@
 			"outputs": [
 				{"name":"value0","type":"map(uint256,int32)"},
 				{"name":"value1","type":"map(int32,address)"}
+			]
+		},
+		{
+			"name": "WGBMain_Addr",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"WGBMain_Addr","type":"address"}
 			]
 		}
 	],

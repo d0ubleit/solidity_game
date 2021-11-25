@@ -14,41 +14,41 @@ contract WGBot_kingdom is WGBot_infos {
     
     // !!!!!!!!!BETTER TO UPDATE stats and info on every press Button, which lead to choose unit/kingdom menu!!!!!!!!!!!!!!!!!!! 
     
-    
     function updateUnitsInfo() public override{ 
         showUInfo = false;
         req_BaseUnitsInfo(Base_Addr);
     }
+
 
     function goKingdomMenu() public override{ 
         //attackProcessing = false; 
         string sep = '----------------------------------------';
         Menu.select(
             format(
-                "Kingdoms alive: {}, My units alive: {}",
+                "Kingdoms alive: {}, My units alive: {}, Incoming attacks: {}",
                     gameStat.basesAlive,
-                    UnitsAliveCnt
-                    
+                    UnitsAliveCnt,
+                    AttackHistoryCnt        
             ),
             sep,
             [
-                //MenuItem("Base info","",tvm.functionId(WGBot_infos.getBaseObjInfo)),
                 MenuItem("Kingdom info","",tvm.functionId(WGBot_infos.getBaseUnitsInfo)),
                 MenuItem("Attack!","",tvm.functionId(reqWGB_sendAttack)),
                 MenuItem("Scout!","",tvm.functionId(reqWGB_sendScout)),
-                MenuItem("Produce warrior","",tvm.functionId(req_produceWarrior)), 
-                MenuItem("Produce scout","",tvm.functionId(req_produceScout)),
-                MenuItem("<=== Back","",tvm.functionId(goMainMenu))
-                
+                MenuItem("Produce menu","",tvm.functionId(reqWGB_deployMenu)),
+                MenuItem("Incoming attacks","",tvm.functionId(showRxAttacks)), 
+                MenuItem("<=== Back","",tvm.functionId(goMainMenu))   
             ]
         );
     } 
+
 
     function reqWGB_sendAttack() public {
         uint256 _playerPubkey = playerPubkey;
         mapping(int32 => Information) _UnitsInfo = UnitsInfo;
         IWGBot_Units(WGBot_UnitsAddr).invokeSendAttack(_playerPubkey, _UnitsInfo);
     }
+
 
     function reqWGB_sendScout() public {
         uint256 _playerPubkey = playerPubkey;
@@ -58,27 +58,15 @@ contract WGBot_kingdom is WGBot_infos {
     }
 
     
-    function req_produceWarrior() public {
+    function reqWGB_deployMenu() public {
         uint _playerPubkey = playerPubkey;
-        deployType = DeployType.Warrior;
+        deployType = DeployType.Empty;
         DeployType _deployType = deployType;
         address _Storage_Addr = StorageAddr;
         address _Base_Addr = Base_Addr;
         int32 _mainUnitID = mainUnitID;
-        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType, _Base_Addr, _Storage_Addr, _mainUnitID); 
+        IWGBot_deployer(WGBot_deployerAddr).invokeDeployer_start(_playerPubkey, _deployType, _Base_Addr, _Storage_Addr, _mainUnitID); 
     }
-
-    function req_produceScout() public {
-        uint _playerPubkey = playerPubkey;
-        deployType = DeployType.Scout;
-        DeployType _deployType = deployType;
-        address _Storage_Addr = StorageAddr;
-        address _Base_Addr = Base_Addr;
-        int32 _mainUnitID = mainUnitID;
-        IWGBot_deployer(WGBot_deployerAddr).invokeProduce(_playerPubkey, _deployType, _Base_Addr, _Storage_Addr, _mainUnitID);
-    }
-
-    
     
     // function commutator() public virtual override {
     //     if (returnFuncID == tvm.functionId(goMainMenu)) {

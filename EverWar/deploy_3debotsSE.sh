@@ -128,7 +128,7 @@ giver $STORAGE_ADDRESS
 
 
 echo "Step 4. Deploying storage contract"
-$tos --url $NETWORK deploy $STORAGE_NAME.tvc "{}" \
+$tos --url $NETWORK deploy $STORAGE_NAME.tvc "{\"_WGBMain_Addr\":\"$DEBOT_ADDRESS\"}" \
     --sign $DEBOT_NAME.keys.json \
     --abi $STORAGE_NAME.abi.json 1>/dev/null
 

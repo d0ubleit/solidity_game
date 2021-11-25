@@ -23,7 +23,8 @@
 		{
 			"name": "setEnemyUnitsInfo",
 			"inputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_UnitsInfo","type":"map(int32,tuple)"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_UnitsInfo","type":"map(int32,tuple)"},
+				{"components":[{"name":"attackerPubkey","type":"uint256"},{"name":"damage","type":"int32"},{"name":"attackedUnitID","type":"int32"},{"name":"attackedUnitType","type":"bytes"},{"name":"alive","type":"bool"}],"name":"_RxAttacksInfo","type":"map(int32,tuple)"}
 			],
 			"outputs": [
 			]
@@ -64,7 +65,8 @@
 			"name": "acceptAttack",
 			"inputs": [
 				{"name":"aimAddr","type":"address"},
-				{"name":"_objAttackVal","type":"int32"}
+				{"name":"_objAttackVal","type":"int32"},
+				{"name":"_playerPubkey","type":"uint256"}
 			],
 			"outputs": [
 			]
@@ -91,14 +93,6 @@
 			],
 			"outputs": [
 				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"objInfo","type":"tuple"}
-			]
-		},
-		{
-			"name": "attackersArr",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"attackersArr","type":"address[]"}
 			]
 		},
 		{

@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "surface dash hedgehog mistake friend toe excite skirt age steel mean subject"
-Raw address: 0:af639494f670b519837cd048bc6cc836b09098d1d940d194cdc3bbe650f2f069
+Seed phrase: "purpose steel become lake involve absent wine run solve double excite chunk"
+Raw address: 0:1e5d2e87a299942d26082ed8e42ae14dc12dabf4897fc3b91cf8acbe95a2fcbb
 testnet:
-Non-bounceable address (for init): 0QCvY5SU9nC1GYN80Ei8bMg2sJCY0dlA0ZTNw7vmUPLwaYIU
-Bounceable address (for later access): kQCvY5SU9nC1GYN80Ei8bMg2sJCY0dlA0ZTNw7vmUPLwad_R
+Non-bounceable address (for init): 0QAeXS6HopmULSYILtjkKuFNwS2r9Il_w7kc-Ky-laL8u5X4
+Bounceable address (for later access): kQAeXS6HopmULSYILtjkKuFNwS2r9Il_w7kc-Ky-laL8u8g9
 mainnet:
-Non-bounceable address (for init): UQCvY5SU9nC1GYN80Ei8bMg2sJCY0dlA0ZTNw7vmUPLwaTme
-Bounceable address (for later access): EQCvY5SU9nC1GYN80Ei8bMg2sJCY0dlA0ZTNw7vmUPLwaWRb
+Non-bounceable address (for init): UQAeXS6HopmULSYILtjkKuFNwS2r9Il_w7kc-Ky-laL8uy5y
+Bounceable address (for later access): EQAeXS6HopmULSYILtjkKuFNwS2r9Il_w7kc-Ky-laL8u3O3
 Succeeded

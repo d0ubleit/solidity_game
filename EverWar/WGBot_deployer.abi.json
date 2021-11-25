@@ -34,13 +34,34 @@
 			]
 		},
 		{
-			"name": "invokeProduce",
+			"name": "invokeDeployer_start",
 			"inputs": [
 				{"name":"_playerPubkey","type":"uint256"},
 				{"name":"_deployType","type":"uint8"},
 				{"name":"_Base_Addr","type":"address"},
 				{"name":"_Storage_Addr","type":"address"},
 				{"name":"_mainUnitID","type":"int32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "produceWarrior",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "produceScout",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "returnKingdomMenu",
+			"inputs": [
 			],
 			"outputs": [
 			]

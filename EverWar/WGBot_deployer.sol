@@ -75,9 +75,9 @@ contract WGBot_deployer is Debot, Upgradable {
     //
     function start() public override {        
     }
- 
-    function invokeProduce(uint _playerPubkey, DeployType _deployType, address _Base_Addr, address _Storage_Addr, int32 _mainUnitID) external {
-        //require(msg.pubkey() == tvm.pubkey(), 150); 
+
+
+    function invokeDeployer_start(uint _playerPubkey, DeployType _deployType, address _Base_Addr, address _Storage_Addr, int32 _mainUnitID) external {
         InitialWGB_addr = msg.sender;
         playerPubkey = _playerPubkey;
         deployType = _deployType;
@@ -85,8 +85,47 @@ contract WGBot_deployer is Debot, Upgradable {
         Storage_Addr = _Storage_Addr;
         mainUnitID = _mainUnitID;
 
+        if (deployType == DeployType.Base) {
+            prepareProduce(deployType);
+        }
+        else {
+            goDeployMenu();
+        }
+    }
+
+    function goDeployMenu() internal {  
+        //attackProcessing = false; 
+        string sep = '----------------------------------------';
+        Menu.select(
+            format(
+                "What unit you need to create?"),
+            sep,
+            [
+                MenuItem("Produce warrior","",tvm.functionId(produceWarrior)), 
+                MenuItem("Produce scout","",tvm.functionId(produceScout)),
+                MenuItem("<=== Back","",tvm.functionId(returnKingdomMenu))   
+            ]
+        );
+    }
+
+    function produceWarrior() public {
+        deployType = DeployType.Warrior;
+        prepareProduce(deployType);
+    }
+ 
+    function produceScout() public {
+        deployType = DeployType.Scout;
+        prepareProduce(deployType);     
+    }
+
+    function returnKingdomMenu() public {
+        IWGBot_initial(InitialWGB_addr).updateUnitsInfo();
+    } 
+ 
+    function prepareProduce(DeployType _deployType) internal {
+        //require(msg.pubkey() == tvm.pubkey(), 150); 
         TvmBuilder salt;
-        salt.store(address(this));
+        salt.store(InitialWGB_addr);
 
         if (deployType == DeployType.Base) {
             TvmCell Base_Code_salt = tvm.setCodeSalt(Base_Code, salt.toCell()); 

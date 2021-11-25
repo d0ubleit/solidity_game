@@ -9,9 +9,11 @@ import "IWarGame_interfaces.sol";
 
 contract WarGameObj is IWarGameObj {
 
+    uint playerPubkey;
+
     Information public objInfo;
     
-    address[] public attackersArr;
+    //address[] public attackersArr;
 
     constructor() public {
         //require(tvm.pubkey() != 0, 101);
@@ -26,19 +28,20 @@ contract WarGameObj is IWarGameObj {
         _;
     }
 
-    function acceptAttack(address aimAddr, int32 _objAttackVal) external override {
+    function acceptAttack(address aimAddr, int32 _objAttackVal, uint _playerPubkey) external override{ 
         tvm.accept();
         address enemyAddr = msg.sender;
+        uint enemyPubkey = _playerPubkey;
         int32 damage = 0;
-        attackersArr.push(msg.sender);
+        //attackersArr.push(msg.sender);
         if (_objAttackVal > objInfo.itemDefence) {
             damage = _objAttackVal - objInfo.itemDefence;
             if (damage > objInfo.itemHealth) {
-                deathProcessing(enemyAddr);
+                deathProcessing(enemyAddr, enemyPubkey, damage);
             }
             else {
                 objInfo.itemHealth -= damage;
-                onAcceptAttack();
+                onAcceptAttack(enemyPubkey, damage);
             }
         }        
         
@@ -54,7 +57,7 @@ contract WarGameObj is IWarGameObj {
         // }
     }
 
-    function onAcceptAttack() internal virtual{   
+    function onAcceptAttack(uint enemyPubkey, int32 damage) internal virtual{   
     }
 
     function setDefenceVal(int32 _objDefenceVal) public checkOwnerAndAccept {
@@ -72,7 +75,7 @@ contract WarGameObj is IWarGameObj {
         }
     }
 
-    function deathProcessing(address _enemyAddr) internal virtual {
+    function deathProcessing(address _enemyAddr, uint enemyPubkey, int32 damage) internal virtual {
         tvm.accept();
         destroyAndTransfer(_enemyAddr);  
     } 

@@ -13,6 +13,9 @@ contract WGBot_infos is WGBot_initial {
     address reqObjInfo_Addr;
     bool showUInfo = true;
     mapping(int32 => Information) UnitsInfo;
+    mapping(int32 => RecievedAttacksHistory) RxAttacksInfo;
+
+    int32 AttackHistoryCnt;
 
     
     // function getBaseObjInfo() public override {  
@@ -94,39 +97,50 @@ contract WGBot_infos is WGBot_initial {
 
     function req_BaseUnitsInfo(address _Base_Addr) internal {
         optional(uint256) none;
-        IWarGameBase(_Base_Addr).getUnitsInfo{
+        IWarGameBase(_Base_Addr).getInfos{ 
             abiVer: 2,
             extMsg: true,
             sign: false,
             pubkey: none, 
             time: uint64(now),
             expire: 0,
-            callbackId: tvm.functionId(setUnitsInfo),
+            callbackId: tvm.functionId(setInfos),
             onErrorId: 0
         }();
     }
 
-    function setUnitsInfo(mapping(int32 => Information) _UnitsInfo) public {
+
+    function setInfos(mapping(int32 => Information) _UnitsInfo, mapping(int32 => RecievedAttacksHistory) _RxAttacksInfo ) public {
         UnitsInfo = _UnitsInfo;
+        RxAttacksInfo = _RxAttacksInfo;
         UnitsAliveCnt = 0;
-        //Information NotNeeded;
-        // optional(int32, Information) MaxId = UnitsInfo.max();
-        // mainUnitID = MaxId().get();
+        int32 unitID_;
+
+        optional(int32, Information) MaxUnitID = UnitsInfo.max();
+        if (MaxUnitID.hasValue()) { 
+            (unitID_, ) = MaxUnitID.get();
+        } 
+        mainUnitID = unitID_ >= mainUnitID ? unitID_+1 : mainUnitID; 
+
+        optional(int32, RecievedAttacksHistory) MaxHistID = RxAttacksInfo.max(); 
+        if (MaxHistID.hasValue()) {
+            (AttackHistoryCnt, ) = MaxHistID.get();
+        }
+
         delete Scout_Addr;
         for ((int32 ExampleID, Information InfoExample) : UnitsInfo) {
             if (InfoExample.itemType!="Base") {
                 UnitsAliveCnt++;
             }
             
-            //if (Scout_Addr.isStdZero()){
             if (InfoExample.itemType=="Scout") {
                 Scout_Addr = InfoExample.itemAddr;
             }
             //}
             
-            if (mainUnitID <= ExampleID) {
-                mainUnitID = ExampleID + 1;
-            }
+            // if (mainUnitID <= ExampleID) {
+            //     mainUnitID = ExampleID + 1;
+            // }
 
         }
 
@@ -140,24 +154,51 @@ contract WGBot_infos is WGBot_initial {
         }        
     }
 
+
     function showUnitsInfo(mapping(int32 => Information) _UnitsInfo) internal {
         if (_UnitsInfo.empty()) {
-            Terminal.print(0, "There are no alive units. Produce some in kingdom menu.");
+            Terminal.print(0, "There is no alive units. Produce some in kingdom menu.");
         }
         else {
             for ((int32 unitID , Information InfoExample) : _UnitsInfo) {    
-            Terminal.print(0, format(" ID: {} || Type: \"{}\" || Health: {} || Attack power: {} || Defence power: {} || At address:", 
-                unitID,
-                InfoExample.itemType,
-                InfoExample.itemHealth,
-                InfoExample.itemAttack, 
-                InfoExample.itemDefence));
-            
-            Terminal.print(0, format("{}", InfoExample.itemAddr));
+                Terminal.print(0, format(" ID: {} <{}> || Health: {} | Attack: {} | Defence: {} || At address:", 
+                    unitID,
+                    InfoExample.itemType,
+                    InfoExample.itemHealth,
+                    InfoExample.itemAttack, 
+                    InfoExample.itemDefence));
+                
+                Terminal.print(0, format("{}", InfoExample.itemAddr));
+                Terminal.print(0, "-----");
             }
         }
         //showUnitsInfoExit();
         commutator();
+    }
+
+    //mapping(int32 => RecievedAttacksHistory) RxAttacksInfo;
+    function showRxAttacks() public {
+        string isAlive;
+        int32 HP;
+        if (RxAttacksInfo.empty()) {
+            Terminal.print(0, "There is no attacks in history.");
+        }
+        else {
+            for ((int32 attackID , RecievedAttacksHistory HistExample) : RxAttacksInfo) { 
+                isAlive = HistExample.alive ? "" : "! DEAD !";
+                HP = HistExample.alive ? UnitsInfo[HistExample.attackedUnitID].itemHealth : 0;
+                Terminal.print(0, format(" Kingdom [ID: {} ] caused {} damage to unit:\n  ID: {} || Type: {} || Health: {} {}", 
+                    playersAliveList[HistExample.attackerPubkey],
+                    HistExample.damage,
+                    HistExample.attackedUnitID,
+                    HistExample.attackedUnitType, 
+                    HP,
+                    isAlive));
+                Terminal.print(0, "-----");
+            }
+        }
+        //showUnitsInfoExit();
+        goKingdomMenu(); 
     }
 
 

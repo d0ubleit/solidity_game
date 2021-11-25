@@ -15,43 +15,49 @@ contract WarGameBase is WarGameObj {
     
     //int32 unitID = 1;
     address Storage_Addr_;
+    address public WGBot_Addr;
 
     mapping(address => int32) public UnitsMap;
-    mapping (int32 => Information) public UnitsInfo;
-        
+    mapping(int32 => Information) public UnitsInfo;
+    mapping(int32 => RecievedAttacksHistory) RxAttacksInfo;
+    int32 AttacksCnt;    
     
     
-
-    //constructor(address _rootWarrior) public {
     constructor(uint playerPubkey, address playerBaseAddr, address Storage_Addr) public { 
         //require(tvm.pubkey() != 0, 101);
         //require(msg.pubkey() == tvm.pubkey(), 102);
-        //rootWarrior = _rootWarrior;
         tvm.accept();
+        optional(TvmCell) optSalt = tvm.codeSalt(tvm.code());
+        require(optSalt.hasValue(), 101);
+        (WGBot_Addr) = optSalt.get().toSlice().decode(address);
         Storage_Addr_ = Storage_Addr;
         objInfo = Information(  
             exampleID,
             "Base",
             address(this),
             playerPubkey,
-            5,  //25,
+            15,  //25,
             0,
             3);
         
         UnitsInfo[0] = objInfo;
     } 
 
-    function updateUnitsInfo(Information _objInfo) external {
+    function updateUnitsInfo(Information _objInfo, uint enemyPubkey, int32 damage) external { 
         tvm.accept();
         require(UnitsMap.exists(msg.sender), 105, "Error: This unit not associated with this base");
         UnitsInfo[UnitsMap[msg.sender]] = _objInfo;
+        AttacksCnt++;
+        RxAttacksInfo[AttacksCnt] = RecievedAttacksHistory(enemyPubkey, damage, UnitsMap[msg.sender], UnitsInfo[UnitsMap[msg.sender]].itemType, true);
+        
     } 
 
-    function getUnitsInfo() external responsible returns(mapping(int32 => Information) _UnitsInfo) {
+    function getInfos() external responsible returns(mapping(int32 => Information) _UnitsInfo, mapping(int32 => RecievedAttacksHistory) _RxAttacksInfo ) {
         tvm.accept();
         //mapping(int32 => Information) _UnitsInfo = UnitsInfo;
         //return _UnitsInfo; 
         _UnitsInfo = UnitsInfo;
+        _RxAttacksInfo = RxAttacksInfo;
     } 
 
     // function getUnitInfoByAddr(address _unitAddr) external returns(Information _unitInfo) {
@@ -75,16 +81,18 @@ contract WarGameBase is WarGameObj {
         //unitID++;
     }
 
-    function removeWarUnit() external {
+    function removeWarUnit(uint enemyPubkey, int32 damage) external {
         require(UnitsMap.exists(msg.sender), 102, "Error: This unit not associated with this base");
         tvm.accept();
-        delete UnitsInfo[UnitsMap[msg.sender]];
+        AttacksCnt++;
+        RxAttacksInfo[AttacksCnt] = RecievedAttacksHistory(enemyPubkey, damage, UnitsMap[msg.sender], UnitsInfo[UnitsMap[msg.sender]].itemType, false);
+        delete UnitsInfo[UnitsMap[msg.sender]]; 
         delete UnitsMap[msg.sender];   
     } 
 
 
     //What if balance is low?
-    function deathProcessing(address _enemyAddr) internal override { 
+    function deathProcessing(address _enemyAddr, uint enemyPubkey, int32 damage) internal override { 
         tvm.accept(); 
         //mapping(address => int32) TempMap = UnitsMap;
         for ((address unitAddr, ) : UnitsMap) {
@@ -99,8 +107,11 @@ contract WarGameBase is WarGameObj {
         destroyAndTransfer(_enemyAddr);   
     }  
 
-    function onAcceptAttack() internal override{
-        UnitsInfo[0].itemHealth = objInfo.itemHealth;
+    function onAcceptAttack(uint enemyPubkey, int32 damage) internal override{
+        UnitsInfo[objInfo.itemID].itemHealth = objInfo.itemHealth;
+        AttacksCnt++;
+        RxAttacksInfo[AttacksCnt] = RecievedAttacksHistory(enemyPubkey, damage, objInfo.itemID, objInfo.itemType, true); 
+        
     }
     
 }

@@ -31,14 +31,7 @@
 			]
 		},
 		{
-			"name": "req_produceWarrior",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "req_produceScout",
+			"name": "reqWGB_deployMenu",
 			"inputs": [
 			],
 			"outputs": [
@@ -86,9 +79,17 @@
 			]
 		},
 		{
-			"name": "setUnitsInfo",
+			"name": "setInfos",
 			"inputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_UnitsInfo","type":"map(int32,tuple)"}
+				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"_UnitsInfo","type":"map(int32,tuple)"},
+				{"components":[{"name":"attackerPubkey","type":"uint256"},{"name":"damage","type":"int32"},{"name":"attackedUnitID","type":"int32"},{"name":"attackedUnitType","type":"bytes"},{"name":"alive","type":"bool"}],"name":"_RxAttacksInfo","type":"map(int32,tuple)"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "showRxAttacks",
+			"inputs": [
 			],
 			"outputs": [
 			]

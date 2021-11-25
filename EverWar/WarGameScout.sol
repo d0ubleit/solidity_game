@@ -39,7 +39,7 @@ contract WarGameScout is WarGameUnit {
         tvm.accept();
         nowEnemy = enemyAddr;
         optional(uint256) none;
-        IWarGameBase(enemyAddr).getUnitsInfo{ 
+        IWarGameBase(enemyAddr).getInfos{ 
         //    value: 1 ton, 
             callback: WarGameScout.setEnemyUnitsInfo 
         }();
@@ -55,7 +55,7 @@ contract WarGameScout is WarGameUnit {
         // }();
     }
 
-    function setEnemyUnitsInfo(mapping(int32 => Information) _UnitsInfo) public {
+    function setEnemyUnitsInfo(mapping(int32 => Information) _UnitsInfo, mapping(int32 => RecievedAttacksHistory) _RxAttacksInfo) public {
         tvm.accept();
         //UnitsInfo = _UnitsInfo;
         ScoutedInfo[nowEnemy] = _UnitsInfo; 
