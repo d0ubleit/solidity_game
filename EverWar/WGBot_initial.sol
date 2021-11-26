@@ -11,7 +11,6 @@ import "../debotBase/ConfirmInput.sol";
 import "../debotBase/Upgradable.sol";
 import "../debotBase/Sdk.sol";
 
-//import "AWarGameExample.sol";
 import "WarGameStructs.sol";
 import "IWarGame_interfaces.sol";
 import "IWGBot_interfaces.sol";
@@ -46,6 +45,7 @@ contract WGBot_initial is Debot, Upgradable {
 
     int32 mainUnitID;
 
+
     function setAddreses(address storageAddress, address wgBot_deployerAddr, address wgBot_UnitsAddr) public {
         require(msg.pubkey() == tvm.pubkey(), 101);
         tvm.accept();
@@ -57,11 +57,10 @@ contract WGBot_initial is Debot, Upgradable {
     
     function start() public override {
         Terminal.print(0, "Welcome to EverWar! Prepare to battle!");
-        //goMainMenu(); 
-        Terminal.input(tvm.functionId(savePublicKey),"Please enter your public key",false);
-        
+        Terminal.input(tvm.functionId(savePublicKey),"Please enter your public key",false);   
     }
  
+
     function savePublicKey(string value) public {
         (uint res, bool status) = stoi("0x"+value);
         if (status) {
@@ -93,12 +92,14 @@ contract WGBot_initial is Debot, Upgradable {
         }();
     }
 
+
     function setPlayersList(mapping(uint => int32) playersList, mapping (int32 => address) _playersIDList) public { 
         playersAliveList = playersList;
         playersIDList = _playersIDList;
         requestGetStat(tvm.functionId(setStat));
     }
     
+
     function requestGetStat(uint32 answerId) internal view { 
         optional(uint256) none;
         IWarGameStorage(StorageAddr).getStat{
@@ -113,9 +114,9 @@ contract WGBot_initial is Debot, Upgradable {
         }();
     }
 
+
     function setStat(GameStat Statistics) public {
         gameStat = Statistics;
-        //Terminal.print(0, "Stat updated");
         if (showPL) {
             showPlayersList_m();
         }
@@ -124,14 +125,16 @@ contract WGBot_initial is Debot, Upgradable {
         }
     }
 
+
     function showPlayersList_m() internal { 
-        //Here will be good to show NAME OF KINGDOM instead ID
+        //Better to show NAME OF KINGDOM instead ID
         for ((, int32 itemID) : playersAliveList) {
             Terminal.print(0, format("| {} | at address {}", itemID, playersIDList[itemID]));  
         }
         showPL = false; 
         commutator();
     }
+
 
     function commutator() internal virtual {
         if (returnFuncID == tvm.functionId(goMainMenu)) { 
@@ -144,6 +147,7 @@ contract WGBot_initial is Debot, Upgradable {
         }
     }
    
+
     function goMainMenu() public { 
         string sep = '----------------------------------------';
         if (!playersAliveList.exists(playerPubkey)) {
@@ -151,35 +155,38 @@ contract WGBot_initial is Debot, Upgradable {
             
             Menu.select(
             format(
-                "Kingdoms alive: {}",
-                    gameStat.basesAlive
-                    
-            ),
+                "Kingdoms alive: {}", gameStat.basesAlive),
             sep,
             [
-                MenuItem("Create KINGDOM!","",tvm.functionId(req_produceBase)) 
-                //MenuItem("My kingdom","",tvm.functionId(updateUnitsInfo))
-                //MenuItem("Delete from shopping list","",tvm.functionId(deleteListItem))
-            ]
-        );
+                MenuItem("Create KINGDOM!","",tvm.functionId(req_produceBase)),
+                MenuItem("Description","",tvm.functionId(showDescription))  
+            ]);
         }
+        
         else {
             Base_Addr = playersIDList[playersAliveList[playerPubkey]];       
             Menu.select(
                 format(
-                    "Kingdoms alive: {}",
-                        gameStat.basesAlive
-                        
-                ),
+                    "Kingdoms alive: {}", gameStat.basesAlive),
                 sep,
                 [
-                    //MenuItem("Create KINGDOM!","",tvm.functionId(savePublicKey)),
                     MenuItem("My kingdom","",tvm.functionId(updateUnitsInfo)),
-                    MenuItem("Show players list","",tvm.functionId(showPlayersList_1)) 
-                ]
-            );
+                    MenuItem("Show players list","",tvm.functionId(showPlayersList_1)),
+                    MenuItem("Description","",tvm.functionId(showDescription)) 
+                ]);
         }
+    }
+
+    function showDescription() public {
+        Terminal.print(0, "Aim of game - to kill other units and kingdoms. You can produce kingdom, warriors and scout.");
+        Terminal.print(0, "Kingdom - is your home base. If it destroyed - all your units will also die.");
+        Terminal.print(0, "Warrior - attacking unit. Scout - brings you info about units in other kingdoms.");
+        Terminal.print(0, "Create your kingdom to start the game.\nIn main menu you can see list of other players' kingdoms.");
+        Terminal.print(0, "Info about your units, attack function and scout function in kingdom menu.\nBefore attack you need to scout enemy kingdom.");
+        Terminal.print(0, "Create units in produce menu.\n --- Enjoy! ---");
+        goMainMenu();
     } 
+
 
     function showPlayersList_1() public {
         returnFuncID = tvm.functionId(goMainMenu);
@@ -187,6 +194,7 @@ contract WGBot_initial is Debot, Upgradable {
         requestGetPlayersList(tvm.functionId(setPlayersList));
     }
     
+
     function req_produceBase() public {
         uint _playerPubkey = playerPubkey;
         deployType = DeployType.Base;
@@ -197,6 +205,7 @@ contract WGBot_initial is Debot, Upgradable {
         int32 _mainUnitID = mainUnitID;
         IWGBot_deployer(WGBot_deployerAddr).invokeDeployer_start(_playerPubkey, _deployType, _Base_Addr, _Storage_Addr, _mainUnitID);
     }
+
 
     function deployResult(Status _status, DeployType _deployType, address _Produce_Addr) virtual external {
         deployStatus = _status;
@@ -214,9 +223,6 @@ contract WGBot_initial is Debot, Upgradable {
             }
             else {
                 checkAccStatus(Produce_Addr);
-                // showPL = false;
-                // returnFuncID = tvm.functionId(goMainMenu);
-                // requestGetPlayersList(tvm.functionId(setPlayersList));
             }
         }
         else {
@@ -227,7 +233,8 @@ contract WGBot_initial is Debot, Upgradable {
             requestGetPlayersList(tvm.functionId(setPlayersList));
         }
     }
-    
+
+
     function saveToStorage() internal {  
         optional(uint256) pubkey = 0;
         uint _playerPubkey = playerPubkey;
@@ -244,13 +251,12 @@ contract WGBot_initial is Debot, Upgradable {
             }(_playerPubkey, _produceAddr); 
     } 
 
-    function onSuccessFunc() public {        //view{
+
+    function onSuccessFunc() public {       
         checkAccStatus(Base_Addr);
-        // showPL = false;
-        // returnFuncID = tvm.functionId(goMainMenu);
-        // requestGetPlayersList(tvm.functionId(setPlayersList)); 
     } 
     
+
     function onError(uint32 sdkError, uint32 exitCode) public {
         Terminal.print(0, format("Operation failed. sdkError {}, exitCode {}", sdkError, exitCode));
         goMainMenu(); 
@@ -264,23 +270,17 @@ contract WGBot_initial is Debot, Upgradable {
         goMainMenu();
     }
     
+
     function goKingdomMenu() public virtual{ 
         goMainMenu();
     }
 
-    // function getBaseObjInfo() public virtual{
-    //     showPL = false;
-    //     returnFuncID = tvm.functionId(goMainMenu);
-    //     requestGetPlayersList(tvm.functionId(setPlayersList)); 
-    // }
 
     function checkAccStatus(address _Produce_Addr) internal virtual {
         showPL = false;
         returnFuncID = tvm.functionId(goMainMenu);
         requestGetPlayersList(tvm.functionId(setPlayersList)); 
     }
-
-
 
 
     //
@@ -299,7 +299,7 @@ contract WGBot_initial is Debot, Upgradable {
         address support, string hello, string language, string dabi, bytes icon
     ) {
         name = "EverWar Game Main DeBot";
-        version = "0.0.5";
+        version = "0.1.0";
         publisher = "d0ubleit";
         key = "EverWar Game DeBot";
         author = "d0ubleit";

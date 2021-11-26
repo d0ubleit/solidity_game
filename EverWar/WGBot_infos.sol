@@ -5,7 +5,7 @@ pragma AbiHeader pubkey;
     
 import "WGBot_initial.sol";
 import "AWarGameExample.sol"; 
-//import "IWarGameObj.sol";
+
 
 contract WGBot_infos is WGBot_initial { 
     
@@ -17,17 +17,13 @@ contract WGBot_infos is WGBot_initial {
 
     int32 AttackHistoryCnt;
 
-    
-    // function getBaseObjInfo() public override {  
-    //     //callerFuncID = tvm.functionId(getBaseObjInfo);
-    //     checkAccStatus(Base_Addr); 
-    // }
 
     function checkAccStatus(address _Obj_Addr) internal override {
         reqObjInfo_Addr = _Obj_Addr;
         Sdk.getAccountType(tvm.functionId(checkAccountStatus), reqObjInfo_Addr);    
     }
     
+
     function checkAccountStatus(int8 acc_type) public {
         if (acc_type == 1) { // acc is active and  contract is already deployed
             req_ObjInfo(reqObjInfo_Addr);
@@ -37,6 +33,7 @@ contract WGBot_infos is WGBot_initial {
             requestGetPlayersList(tvm.functionId(setPlayersList));
         }
     }
+
 
     function req_ObjInfo(address _Produce_Addr) internal { 
         optional(uint256) none;
@@ -52,25 +49,15 @@ contract WGBot_infos is WGBot_initial {
         }();
     }
 
-    // function req_ObjInfo_Success(Information ObjectInfo) public{
-    //     if (showUInfo){
-    //         showObjInfo(ObjectInfo);
-    //     }
-    //     else{
-    //         showUInfo = true;
-    //         goKingdomMenu(); 
-    //     }
-    // }
     
     function showObjInfo(Information ObjectInfo) public {
-        Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
+        Terminal.print(0, format(" ID: {} | {} || Health: {} || Attack: {} || Defence: {} || At address:\n{}", 
             ObjectInfo.itemID,
             ObjectInfo.itemType,
-            ObjectInfo.itemAddr,
-            ObjectInfo.itemOwnerPubkey,
             ObjectInfo.itemHealth,
             ObjectInfo.itemAttack, 
-            ObjectInfo.itemDefence
+            ObjectInfo.itemDefence,
+            ObjectInfo.itemAddr
             )); 
         
         showPL = false;
@@ -83,12 +70,7 @@ contract WGBot_infos is WGBot_initial {
         deployType = DeployType.Empty;
         requestGetPlayersList(tvm.functionId(setPlayersList));
     }
-
-
-
-    
-    
-    
+   
     
     function getBaseUnitsInfo() public {
         req_BaseUnitsInfo(Base_Addr);
@@ -136,12 +118,6 @@ contract WGBot_infos is WGBot_initial {
             if (InfoExample.itemType=="Scout") {
                 Scout_Addr = InfoExample.itemAddr;
             }
-            //}
-            
-            // if (mainUnitID <= ExampleID) {
-            //     mainUnitID = ExampleID + 1;
-            // }
-
         }
 
         if (showUInfo){
@@ -172,11 +148,10 @@ contract WGBot_infos is WGBot_initial {
                 Terminal.print(0, "-----");
             }
         }
-        //showUnitsInfoExit();
         commutator();
     }
 
-    //mapping(int32 => RecievedAttacksHistory) RxAttacksInfo;
+    
     function showRxAttacks() public {
         string isAlive;
         int32 HP;
@@ -197,38 +172,8 @@ contract WGBot_infos is WGBot_initial {
                 Terminal.print(0, "-----");
             }
         }
-        //showUnitsInfoExit();
         goKingdomMenu(); 
     }
 
-
-    // function showUnitsInfoExit() internal virtual{ 
-    //     goKingdomMenu();
-    // }
-
-    // function updateUnitsInfo() public virtual{
-    //     goKingdomMenu();
-    // } 
-    
-
-
-
-
-
-    // function getDebotInfo() public functionID(0xDEB) virtual override view returns(
-    //     string name, string version, string publisher, string key, string author,
-    //     address support, string hello, string language, string dabi, bytes icon
-    // ) {
-    //     name = "EverWar Game Main DeBot";
-    //     version = "0.0.5";
-    //     publisher = "d0ubleit";
-    //     key = "EverWar Game DeBot";
-    //     author = "d0ubleit";
-    //     support = address.makeAddrStd(0, 0x81b6312da6eaed183f9976622b5a39a90d5cff47e4d2a541bd97ee216e8300b1);
-    //     hello = "Welcome to strategy blockchain game!";
-    //     language = "en";
-    //     dabi = m_debotAbi.get();
-    //     icon = m_icon;
-    // }
       
 }

@@ -13,14 +13,6 @@
 			]
 		},
 		{
-			"name": "setAttackVal",
-			"inputs": [
-				{"name":"_objAttackVal","type":"int32"}
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "attackEnemy",
 			"inputs": [
 				{"name":"_aimAddr","type":"address"}
@@ -47,35 +39,11 @@
 			]
 		},
 		{
-			"name": "setDefenceVal",
-			"inputs": [
-				{"name":"_objDefenceVal","type":"int32"}
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "getInfo",
 			"inputs": [
 			],
 			"outputs": [
 				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"value0","type":"tuple"}
-			]
-		},
-		{
-			"name": "objInfo",
-			"inputs": [
-			],
-			"outputs": [
-				{"components":[{"name":"itemID","type":"int32"},{"name":"itemType","type":"bytes"},{"name":"itemAddr","type":"address"},{"name":"itemOwnerPubkey","type":"uint256"},{"name":"itemHealth","type":"int32"},{"name":"itemAttack","type":"int32"},{"name":"itemDefence","type":"int32"}],"name":"objInfo","type":"tuple"}
-			]
-		},
-		{
-			"name": "BaseAddr",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"BaseAddr","type":"address"}
 			]
 		}
 	],

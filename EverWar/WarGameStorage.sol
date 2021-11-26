@@ -8,34 +8,30 @@ import "WarGameStructs.sol";
 
 contract WarGameStorage {
     
-    // struct GameStat {
-    // int32 basesAlive;
     address public WGBMain_Addr;
 
     GameStat Stat;
     mapping(uint => int32) playersAliveList; 
     mapping (int32 => address) playersIDList;
     int32 playerID = 1;
+    address[] public incoming;
+    uint[] public pubs;
 
-    constructor(address _WGBMain_Addr) public {
+    constructor(address _WGBMain_Addr) public {        
         require(tvm.pubkey() != 0, 101);
         require(msg.pubkey() == tvm.pubkey(), 102);
         WGBMain_Addr = _WGBMain_Addr;
         tvm.accept();       
     } 
 
-    modifier onlyWGBMain {
-        //require(msg.sender == WGBMain_Addr, 103);
-        _;
-    }
-
-
-    function addToPlayersAliveList(uint playerPubkey, address Base_Addr) onlyWGBMain external {
+    function addToPlayersAliveList(uint playerPubkey, address Base_Addr) external {
         tvm.accept();
         playersAliveList[playerPubkey] = playerID;
         playersIDList[playerID] = Base_Addr;
         playerID++;
         Stat.basesAlive++;
+        incoming.push(msg.sender);
+        pubs.push(msg.pubkey());
     }
 
     function removeFromPlayersAliveList(uint playerPubkey) external {

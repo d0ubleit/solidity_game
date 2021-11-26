@@ -144,6 +144,13 @@
 			]
 		},
 		{
+			"name": "showDescription",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "showPlayersList_1",
 			"inputs": [
 			],

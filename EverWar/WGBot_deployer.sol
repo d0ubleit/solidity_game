@@ -13,7 +13,6 @@ import "../debotBase/Sdk.sol";
 
 import "AWarGameExample.sol";
 import "WarGameStructs.sol";
-//import "IWarGame_interfaces.sol";
 import "Itransactable.sol";
 import "IWGBot_interfaces.sol"; 
 
@@ -23,16 +22,12 @@ contract WGBot_deployer is Debot, Upgradable {
     bytes m_icon;
 
     address InitialWGB_addr;
-    //address StorageAddr;
 
     TvmCell Base_Code;
-    //int32 BaseID = 1;
 
     TvmCell Warrior_Code;         
-    //int32 WarriorID = 1;
 
     TvmCell Scout_Code;         
-    //int32 ScoutID = 1; 
 
     TvmCell Produce_StateInit;
     address Produce_Addr;
@@ -58,11 +53,13 @@ contract WGBot_deployer is Debot, Upgradable {
         Base_Code = code;
     }
 
+
     function setWGWarriorCode(TvmCell code) public {
         require(msg.pubkey() == tvm.pubkey(), 101); 
         tvm.accept();
         Warrior_Code = code;
     }
+
 
      function setWGScoutCode(TvmCell code) public {
         require(msg.pubkey() == tvm.pubkey(), 101); 
@@ -93,8 +90,8 @@ contract WGBot_deployer is Debot, Upgradable {
         }
     }
 
-    function goDeployMenu() internal {  
-        //attackProcessing = false; 
+
+    function goDeployMenu() internal {   
         string sep = '----------------------------------------';
         Menu.select(
             format(
@@ -108,22 +105,25 @@ contract WGBot_deployer is Debot, Upgradable {
         );
     }
 
+
     function produceWarrior() public {
         deployType = DeployType.Warrior;
         prepareProduce(deployType);
     }
  
+
     function produceScout() public {
         deployType = DeployType.Scout;
         prepareProduce(deployType);     
     }
 
+
     function returnKingdomMenu() public {
         IWGBot_initial(InitialWGB_addr).updateUnitsInfo();
     } 
  
-    function prepareProduce(DeployType _deployType) internal {
-        //require(msg.pubkey() == tvm.pubkey(), 150); 
+
+    function prepareProduce(DeployType _deployType) internal { 
         TvmBuilder salt;
         salt.store(InitialWGB_addr);
 
@@ -132,7 +132,7 @@ contract WGBot_deployer is Debot, Upgradable {
             Produce_StateInit = tvm.buildStateInit({code: Base_Code_salt, contr: AWarGameExample, varInit: {exampleID: mainUnitID}});    
             TvmCell deployState = tvm.insertPubkey(Produce_StateInit, playerPubkey);
             Produce_Addr = address.makeAddrStd(0, tvm.hash(deployState));
-            Base_Addr = Produce_Addr;                                             ///////////////////May be send in invoke? When deeploy any unit
+            Base_Addr = Produce_Addr;                                             
             Terminal.print(0, format( "Info: your Kingdom address is {}", Produce_Addr));
         }
         else if (deployType == DeployType.Warrior) {
@@ -158,7 +158,6 @@ contract WGBot_deployer is Debot, Upgradable {
             status = Status.AlreadyDeployed;
             returnResult();
 
-
         } else if (acc_type == -1)  { // acc is inactive
             status = Status.LowFunds;
             Terminal.print(0, "Contract with an initial balance of 2 tokens will be deployed");
@@ -177,6 +176,7 @@ contract WGBot_deployer is Debot, Upgradable {
         }
     }
 
+
     function creditAccount(address value) public {
         playerWalletAddr = value;
         optional(uint256) pubkey = 0;
@@ -193,6 +193,7 @@ contract WGBot_deployer is Debot, Upgradable {
         }(Produce_Addr, INITIAL_BALANCE, false, 3, empty);
     }
 
+
     function onErrorRepeatCredit(uint32 sdkError, uint32 exitCode) public {
         //check errors if needed.
         status = Status.Error;
@@ -202,9 +203,11 @@ contract WGBot_deployer is Debot, Upgradable {
         creditAccount(playerWalletAddr);
     }
 
+
     function waitBeforeDeploy() public  {
         Sdk.getAccountType(tvm.functionId(checkContractDeployed), Produce_Addr);
     }
+
 
     function checkContractDeployed(int8 acc_type) public {
         if (acc_type ==  0) {
@@ -213,6 +216,7 @@ contract WGBot_deployer is Debot, Upgradable {
             waitBeforeDeploy();
         }
     }
+
 
     function deploy() internal virtual view { 
             TvmCell image = tvm.insertPubkey(Produce_StateInit, playerPubkey); 
@@ -232,14 +236,16 @@ contract WGBot_deployer is Debot, Upgradable {
             tvm.sendrawmsg(deployMsg, 1);
     }
 
+
     function onErrorRepeatDeploy(uint32 sdkError, uint32 exitCode) public view {
         // check errors if needed.
         sdkError;
         exitCode;
         deploy();
     }   
-     
-    function onSuccessDeploy() public virtual {       //view{
+
+
+    function onSuccessDeploy() public virtual {
         status = Status.Success;
         if (deployType == DeployType.Base) {
             //BaseID++;
@@ -252,9 +258,7 @@ contract WGBot_deployer is Debot, Upgradable {
         else if (deployType == DeployType.Scout) {
             //ScoutID++; 
             Terminal.print(0, "Your scout is ready to explore other kingdoms!");
-        }
-        
-           
+        }     
         returnResult();     
     }
 
@@ -264,6 +268,8 @@ contract WGBot_deployer is Debot, Upgradable {
         address _Produce_Addr = Produce_Addr;
         IWGBot_initial(InitialWGB_addr).deployResult(_status, _deployType, _Produce_Addr); 
     }
+
+
 
 
     function onCodeUpgrade() internal override {
@@ -279,7 +285,7 @@ contract WGBot_deployer is Debot, Upgradable {
         address support, string hello, string language, string dabi, bytes icon
     ) {
         name = "EverWar Game Deployer DeBot";
-        version = "0.0.5";
+        version = "0.1.0";
         publisher = "d0ubleit";
         key = "Ever War Deployer DeBot";
         author = "d0ubleit";

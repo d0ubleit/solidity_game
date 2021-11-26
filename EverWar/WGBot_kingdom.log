@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "purpose steel become lake involve absent wine run solve double excite chunk"
-Raw address: 0:1e5d2e87a299942d26082ed8e42ae14dc12dabf4897fc3b91cf8acbe95a2fcbb
+Seed phrase: "mad about illness trash rely zone abuse armor amused miss property priority"
+Raw address: 0:6218686139a772236deea4bce12948268accbc0f452bbe9cc3b23c8e64465d8f
 testnet:
-Non-bounceable address (for init): 0QAeXS6HopmULSYILtjkKuFNwS2r9Il_w7kc-Ky-laL8u5X4
-Bounceable address (for later access): kQAeXS6HopmULSYILtjkKuFNwS2r9Il_w7kc-Ky-laL8u8g9
+Non-bounceable address (for init): 0QBiGGhhOadyI23upLzhKUgmisy8D0UrvpzDsjyOZEZdj5Bu
+Bounceable address (for later access): kQBiGGhhOadyI23upLzhKUgmisy8D0UrvpzDsjyOZEZdj82r
 mainnet:
-Non-bounceable address (for init): UQAeXS6HopmULSYILtjkKuFNwS2r9Il_w7kc-Ky-laL8uy5y
-Bounceable address (for later access): EQAeXS6HopmULSYILtjkKuFNwS2r9Il_w7kc-Ky-laL8u3O3
+Non-bounceable address (for init): UQBiGGhhOadyI23upLzhKUgmisy8D0UrvpzDsjyOZEZdjyvk
+Bounceable address (for later access): EQBiGGhhOadyI23upLzhKUgmisy8D0UrvpzDsjyOZEZdj3Yh
 Succeeded

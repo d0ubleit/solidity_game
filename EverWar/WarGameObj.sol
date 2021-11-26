@@ -4,27 +4,19 @@ pragma AbiHeader time;
 pragma AbiHeader pubkey;
 
 import "IWarGame_interfaces.sol";
-//import "IWarGameObj.sol";
-//import "WarGameStructs.sol";
 
 contract WarGameObj is IWarGameObj {
 
-    uint playerPubkey;
-
-    Information public objInfo;
-    
-    //address[] public attackersArr;
+    Information objInfo;
 
     constructor() public {
-        //require(tvm.pubkey() != 0, 101);
-        //require(msg.pubkey() == tvm.pubkey(), 102);
-        tvm.accept();
-        
+        require(tvm.pubkey() != 0, 101);
+        require(msg.pubkey() == tvm.pubkey(), 102);
+        tvm.accept();   
     } 
 
-    modifier checkOwnerAndAccept {
-        //require(msg.pubkey() == tvm.pubkey(), 102);
-        tvm.accept();
+    modifier onlyOwner {
+        require(msg.pubkey() == tvm.pubkey(), 102);
         _;
     }
 
@@ -33,7 +25,7 @@ contract WarGameObj is IWarGameObj {
         address enemyAddr = msg.sender;
         uint enemyPubkey = _playerPubkey;
         int32 damage = 0;
-        //attackersArr.push(msg.sender);
+        
         if (_objAttackVal > objInfo.itemDefence) {
             damage = _objAttackVal - objInfo.itemDefence;
             if (damage > objInfo.itemHealth) {
@@ -44,26 +36,16 @@ contract WarGameObj is IWarGameObj {
                 onAcceptAttack(enemyPubkey, damage);
             }
         }        
-        
-        // if (_objAttackVal > objInfo.itemDefence) {
-        //     objInfo.itemHealth -= uint32(_objAttackVal) - uint32(objInfo.itemDefence);  
-        // }
-        
-        // if (checkObjIsDead()) {
-        //     deathProcessing(enemyAddr);
-        // }
-        // else{
-        //     onAcceptAttack(); 
-        // }
     }
 
     function onAcceptAttack(uint enemyPubkey, int32 damage) internal virtual{   
     }
 
-    function setDefenceVal(int32 _objDefenceVal) public checkOwnerAndAccept {
-        tvm.accept();
-        objInfo.itemDefence = _objDefenceVal;
-    }
+    ///////////Later change it to upgrade defence
+    // function setDefenceVal(int32 _objDefenceVal) public onlyOwner{
+    //     tvm.accept();
+    //     objInfo.itemDefence = _objDefenceVal;
+    // }
 
     function checkObjIsDead() private returns(bool) {
         tvm.accept();

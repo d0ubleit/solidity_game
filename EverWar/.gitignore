@@ -1,1 +1,4 @@
 keys*
+*.tvc
+*i.json
+*decode*

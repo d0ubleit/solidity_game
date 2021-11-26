@@ -14,8 +14,7 @@ import "../debotBase/Sdk.sol";
 import "WarGameStructs.sol";
 import "IWarGame_interfaces.sol";
 import "IWGBot_interfaces.sol";
-//import "AWarGameExample.sol"; 
-//import "IWarGameObj.sol";
+
 
 contract WGBot_Units is Debot, Upgradable{  
     bytes m_icon; 
@@ -35,16 +34,14 @@ contract WGBot_Units is Debot, Upgradable{
     mapping (int32 => address) playersIDList;
     mapping (address => mapping (int32 => Information)) ScoutedInfo;
     
-    
     mapping(int32 => Information) UnitsInfo;
-    
-    
-    //mapping (int32 => Information) enemyUnitsInfo; 
+     
     mapping (int32 => address) enemiesList;
     
     function start() public override {        
     }
     
+
     function invokeSendScout(uint256 _playerPubkey, mapping (int32 => address) _playersIDList, address _Scout_Addr) public {
         playerPubkey = _playerPubkey;
         InitialWGB_addr = msg.sender;
@@ -53,35 +50,31 @@ contract WGBot_Units is Debot, Upgradable{
         sendScout_Start();
     }
     
+
     function returnKingdomMenu() internal {
         IWGBot_initial(InitialWGB_addr).updateUnitsInfo();
     }
 
+
     function sendScout_Start() public {
-        //scoutProcessing = true;
         if (Scout_Addr.isStdZero()) {
             Terminal.print(0, "You don't have scout. [Produce scout] in produce menu");
             returnKingdomMenu();
         } 
         else {
-            //returnFuncID = tvm.functionId(sendScout_1);
             showPlayersList();
         }
     }
 
+
     function showPlayersList() internal { 
-        //Here will be good to show NAME OF KINGDOM instead ID
+        //Here better to show NAME OF KINGDOM instead ID
         for ((int32 playerID, address playerAddr ) : playersIDList) {
             Terminal.print(0, format("| {} | at address {}", playerID, playerAddr));  
         }
-        //showPL = false; 
-        //commutator();
         Terminal.input(tvm.functionId(sendScout_1),"Enter ID of kingdom to explore",false);
     }
 
-    // function sendScout_1() public{
-    //     Terminal.input(tvm.functionId(sendScout_2),"Enter ID of kingdom to explore",false);
-    // }
 
     function sendScout_1(string value) public {
         (uint res, bool status) = stoi(value);
@@ -91,12 +84,11 @@ contract WGBot_Units is Debot, Upgradable{
         }
         else {
             Terminal.input(tvm.functionId(sendScout_1),"Wrong ID. Try again!\nEnter ID of kingdom to explore",false);
-
         }
     }
 
+
     function req_sendScout() internal {
-        //optional(uint256) none;
         IWarGameScout(Scout_Addr).getEnemyUnitsInfo{
             abiVer: 2,
             extMsg: true,
@@ -108,6 +100,7 @@ contract WGBot_Units is Debot, Upgradable{
             onErrorId: tvm.functionId(onError) 
         }(kingdomToScoutAddr);
     }
+
 
     function onError(uint32 sdkError, uint32 exitCode) public {
         Terminal.print(0, format("Operation failed. sdkError {}, exitCode {}", sdkError, exitCode));
@@ -129,12 +122,12 @@ contract WGBot_Units is Debot, Upgradable{
         }();
     }
 
+
     function setScoutedInfo(mapping(address => mapping (int32 => Information)) _scoutedInfo) public {
         //ScoutedInfo.add(_scoutedInfo);
         for ((address enemyAddr, mapping (int32 => Information) enemyInfo) : _scoutedInfo) {
             ScoutedInfo[enemyAddr] = enemyInfo;
         } 
-        
         if (!attackProcessing) {
             Terminal.print(0, "Your scout got some info:");
             showScoutedInfo(kingdomToScoutAddr);
@@ -143,16 +136,12 @@ contract WGBot_Units is Debot, Upgradable{
         else{
             sendAttack_Start();
         }
-        
-        //returnFuncID = tvm.functionId(goKingdomMenu); 
-        //showScoutedInfo(ScoutedInfo, kingdomToScoutAddr);
     } 
 
+
     function showScoutedInfo(address _kingdomToScoutAddr) internal {
-        //Terminal.print(0, "Your scout got some info:");
         if (ScoutedInfo.empty()) {
             Terminal.print(0, "There are no alive units in this kingdom.");
-            //returnKingdomMenu();
         }
         else {
             for ((int32 unitID , Information InfoExample) : ScoutedInfo[_kingdomToScoutAddr]) {    
@@ -161,8 +150,7 @@ contract WGBot_Units is Debot, Upgradable{
                     InfoExample.itemType,
                     InfoExample.itemHealth
                     )); 
-                }
-            //returnKingdomMenu();   
+                } 
         }
     }
 
@@ -180,7 +168,6 @@ contract WGBot_Units is Debot, Upgradable{
                 }
             }
         }
-
         if (Scout_Addr.isStdZero()){
             Terminal.print(0, "You have no scout alive, let's see for some saved scouted info..");
             if (ScoutedInfo.empty()) {
@@ -188,7 +175,6 @@ contract WGBot_Units is Debot, Upgradable{
                 returnKingdomMenu();
             }       
             else {
-                //Terminal.print(0, "Here is last saved info:");
                 attackProcessing = true;
                 sendAttack_Start();
             }
@@ -208,24 +194,6 @@ contract WGBot_Units is Debot, Upgradable{
         }
     } 
 
-    // function showUnitsInfo(mapping(int32 => Information) _UnitsInfo) internal {
-    //     if (_UnitsInfo.empty()) {
-    //         Terminal.print(0, "There are no alive units. Produce some in kingdom menu.");
-    //     }
-    //     else {
-    //         for ((int32 unitID , Information InfoExample) : _UnitsInfo) {    
-    //         Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
-    //             unitID, 
-    //             InfoExample.itemType,
-    //             InfoExample.itemAddr,
-    //             InfoExample.itemOwnerPubkey,
-    //             InfoExample.itemHealth,
-    //             InfoExample.itemAttack, 
-    //             InfoExample.itemDefence)); 
-    //         }
-    //     }
-    //     showUnitsInfoExit();
-    // }
 
     function sendAttack_Start() public {
         
@@ -259,26 +227,17 @@ contract WGBot_Units is Debot, Upgradable{
     }
 
     function sendAttack_1(string value) public {
-        //address EmptyAddr;
         int32 ExampleID = 1;
         (uint res, bool status) = stoi(value);
         if (status) {
             attackerUnitID = int32(res);
             if (attackerUnitID > 0 && UnitsInfo.exists(attackerUnitID)) {
                 attackerUnitAddr = UnitsInfo[attackerUnitID].itemAddr;
-                
-                //Terminal.print(0, "Your LAST KNOWN info:");
+
                 for ((address addrExample, mapping (int32 => Information) unitsInfoExample) : ScoutedInfo) {
                     enemiesList[ExampleID] = addrExample;
                     Terminal.print(0, format("Units of kingdom [ID: {}]:", ExampleID)); /////Here better to write NAME of kingdom////////////////////
                     showScoutedInfo(addrExample);
-                    // for ((int32 unitID , Information InfoExample) : unitsInfoExample) {    
-                    //     Terminal.print(0, format("      ID: {} || Type: \"{}\" || Health: {} ", 
-                    //     unitID, 
-                    //     InfoExample.itemType,
-                    //     InfoExample.itemHealth
-                    // ));
-                    // }
                     ExampleID++; 
                 }
 
@@ -295,16 +254,10 @@ contract WGBot_Units is Debot, Upgradable{
     }
 
 
-    // function sendAttack_3() public {
-    //     Terminal.input(tvm.functionId(sendAttack_4),"Enter ID of kingdom",false);
-    // }
-
-
     function sendAttack_2(string value) public {
         (uint res, bool status) = stoi(value);
         if (status && enemiesList.exists(int32(res))) {
             aimKingdomAddr = enemiesList[int32(res)];
-            //returnFuncID = tvm.functionId(sendAttack_5);
             showScoutedInfo(aimKingdomAddr);
             Terminal.input(tvm.functionId(sendAttack_3),"Enter ID of aim unit",false);
         }
@@ -314,9 +267,6 @@ contract WGBot_Units is Debot, Upgradable{
         }
     }
 
-    // function sendAttack_5() public {
-    //     Terminal.input(tvm.functionId(sendAttack_6),"Enter ID of aim unit",false);
-    // }
 
     function sendAttack_3(string value) public {
         (uint res, bool status) = stoi(value);
@@ -324,13 +274,13 @@ contract WGBot_Units is Debot, Upgradable{
             aimUnitAddr = ScoutedInfo[aimKingdomAddr][int32(res)].itemAddr;
             
             Sdk.getAccountType(tvm.functionId(checkAccountStatus), aimUnitAddr);
-            //req_sendAttack();
         }
         else {
             Terminal.input(tvm.functionId(sendAttack_3),"Wrong ID. Try again!\nEnter ID of aim unit",false);
 
         }
     }
+
 
     function checkAccountStatus(int8 acc_type) public {
         if (acc_type == 1) { // acc is active and  contract is already deployed
@@ -340,12 +290,6 @@ contract WGBot_Units is Debot, Upgradable{
             else {
                 req_ObjInfo(aimUnitAddr);
             }
-            // if (attackProcessing) {
-            //     req_sendAttack();
-            // }
-            // else {
-
-            // }
         } else {
             Terminal.print(0, "Unit is DEAD now or it's balance too low");
             attackProcessing = false;
@@ -355,8 +299,6 @@ contract WGBot_Units is Debot, Upgradable{
 
 
     function req_sendAttack() public {
-        //attackProcessing = false;
-        //_aimAddr = Base_Addr;//address.makeAddrStd(0,value); 
         optional(uint256) pubkey = 0;
         IWarGameUnit(attackerUnitAddr).attackEnemy{
                 abiVer: 2,
@@ -375,8 +317,6 @@ contract WGBot_Units is Debot, Upgradable{
         Terminal.print(0, "Attack successfully done with result:");
         attackProcessing = false;
         Sdk.getAccountType(tvm.functionId(checkAccountStatus), aimUnitAddr);
-        //returnReqObjInfo(aimUnitAddr);
-        //goKingdomMenu();
     } 
 
 
@@ -412,11 +352,6 @@ contract WGBot_Units is Debot, Upgradable{
         returnKingdomMenu();
     }
 
-
-    // function returnReqObjInfo(address reqObj_Addr) internal {
-    //     address _Produce_Addr = reqObj_Addr; 
-    //     IWGBot_initial(InitialWGB_addr).checkAccStatus(_Produce_Addr);
-    // }
     
 
 
@@ -425,7 +360,7 @@ contract WGBot_Units is Debot, Upgradable{
         address support, string hello, string language, string dabi, bytes icon
     ) {
         name = "EverWar Game Units DeBot";
-        version = "0.0.5";
+        version = "0.1.0";
         publisher = "d0ubleit";
         key = "EverWar Game DeBot";
         author = "d0ubleit";
@@ -443,58 +378,5 @@ contract WGBot_Units is Debot, Upgradable{
     function getRequiredInterfaces() public view override returns (uint256[] interfaces) {
         return [ Terminal.ID, Menu.ID, AddressInput.ID, ConfirmInput.ID ];
     }
-    
-
-
-    //////This function made in bad style//////////////////////////////// MAKE IT BETTER
-    // function showScoutedInfo(mapping(address => mapping (int32 => Information)) _scoutedInfo, address _kingdomAddr) internal {
-    //     int32 ExampleID = 1;
-    //     if (_scoutedInfo.empty()) {
-    //         Terminal.print(0, "There are no alive units in this kingdom.");
-    //         returnKingdomMenu();
-    //     }
-    //     else {
-    //         Terminal.print(0, "Your LAST SCOUTED info:");
-    //         if (_kingdomAddr.isStdZero()) {
-    //             for ((address addrExample, mapping (int32 => Information) unitsInfoExample) : _scoutedInfo) {
-    //                 enemiesList[ExampleID] = addrExample;
-    //                 Terminal.print(0, format("Units of kingdom [ID: {}]:", ExampleID)); /////Here better to write NAME of kingdom////////////////////
-    //                 for ((int32 unitID , Information InfoExample) : unitsInfoExample) {    
-    //                     Terminal.print(0, format("      ID: {} || Type: \"{}\" || Health: {} ", 
-    //                     unitID, 
-    //                     InfoExample.itemType,
-    //                     InfoExample.itemHealth
-    //                 )); 
-    //                 ExampleID++;
-    //             }
-    //             }
-
-    //         }
-    //         else {
-    //             for ((int32 unitID , Information InfoExample) : _scoutedInfo[_kingdomAddr]) {    
-    //             Terminal.print(0, format(" ID: {} || Type: \"{}\" || Health: {} ", 
-    //                 unitID, 
-    //                 InfoExample.itemType,
-    //                 InfoExample.itemHealth
-    //                 )); 
-    //             }
-    //         }
-    //         commutator();
-    //     }
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
 }

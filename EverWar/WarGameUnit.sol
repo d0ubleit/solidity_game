@@ -3,27 +3,22 @@ pragma AbiHeader expire;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 import "WarGameObj.sol";
-//import "IWarGame_interfaces.sol"; 
 
 contract WarGameUnit is WarGameObj {
 
-    address public BaseAddr; 
-    //uint objAttackVal;
-
-    //constructor(uint playerPubkey, address playerBaseAddr, address Storage_Addr) public {
+    address BaseAddr; 
+    
     constructor() public {
-        //require(tvm.pubkey() != 0, 101);
-        //require(msg.pubkey() == tvm.pubkey(), 102);
-        tvm.accept();
-        // BaseAddr = playerBaseAddr; 
-        // IWarGameBase(BaseAddr).addUnit(objInfo);    
+        tvm.accept(); 
     }  
 
-    function setAttackVal(int32 _objAttackVal) public checkOwnerAndAccept {
-        objInfo.itemAttack = _objAttackVal;  
-    }
+    ////////Later change it to upgrade attack func
+    // function setAttackVal(int32 _objAttackVal) public onlyOwner {
+    //     objInfo.itemAttack = _objAttackVal;  
+    // }
 
-    function attackEnemy(address _aimAddr) external checkOwnerAndAccept{
+    function attackEnemy(address _aimAddr) external onlyOwner{
+        tvm.accept();
         uint _playerPubkey = objInfo.itemOwnerPubkey;
         IWarGameObj(_aimAddr).acceptAttack(_aimAddr, objInfo.itemAttack, _playerPubkey);  
     }
@@ -31,7 +26,6 @@ contract WarGameUnit is WarGameObj {
     function deathOfBase(address _enemyAddr) external {
         require(msg.sender == BaseAddr, 102, "Error: Call not from owner base");
         tvm.accept();
-        //deathProcessing(_enemyAddr);
         destroyAndTransfer(_enemyAddr);
     }
 
@@ -42,6 +36,7 @@ contract WarGameUnit is WarGameObj {
     }  
 
     function onAcceptAttack(uint enemyPubkey, int32 damage) internal override{
+        tvm.accept();
         Information _objInfo = objInfo;
         IWarGameBase(BaseAddr).updateUnitsInfo(_objInfo, enemyPubkey, damage);
     } 

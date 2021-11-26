@@ -51,6 +51,22 @@
 			"outputs": [
 				{"name":"WGBMain_Addr","type":"address"}
 			]
+		},
+		{
+			"name": "incoming",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"incoming","type":"address[]"}
+			]
+		},
+		{
+			"name": "pubs",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"pubs","type":"uint256[]"}
+			]
 		}
 	],
 	"data": [
