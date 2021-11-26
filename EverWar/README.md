@@ -15,12 +15,9 @@ Main debots:
 
 This DeBot is already deployed on net.ton.dev
 
-DeBot address: 0:ba06ea5c648ff6149e75a0a589becd827a2d959e42a34eb5e6ee29cb080bc552
+DeBot address: 0:370737c2b57422f53861ac01a42cc1aafa953ab110993cf0ba4056ada457b997
 
-Open the link: https://uri.ton.surf/debot?address=0%3Ae9638f5aacce1920e16bdc863852119177696d66aeba7a156829e043efaa969b&net=devnet
-
-![](../assets/net.ton.dev.svg)
-
+Open the link: https://uri.ton.surf/debot?address=0%3A370737c2b57422f53861ac01a42cc1aafa953ab110993cf0ba4056ada457b997&net=devnet
 
 -   You need to have a Surf wallet with balance at least 8 rubies to try all functions.
 
@@ -41,6 +38,7 @@ $ tondev tonos-cli install
 
 ### Compile and deploy using script
 
+Move to EverWar directory
 
 if you use TON OS SE:
 

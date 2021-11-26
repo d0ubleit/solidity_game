@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "mad about illness trash rely zone abuse armor amused miss property priority"
-Raw address: 0:6218686139a772236deea4bce12948268accbc0f452bbe9cc3b23c8e64465d8f
+Seed phrase: "luxury actor credit hood earth pig merit capable diamond lend exhaust ozone"
+Raw address: 0:370737c2b57422f53861ac01a42cc1aafa953ab110993cf0ba4056ada457b997
 testnet:
-Non-bounceable address (for init): 0QBiGGhhOadyI23upLzhKUgmisy8D0UrvpzDsjyOZEZdj5Bu
-Bounceable address (for later access): kQBiGGhhOadyI23upLzhKUgmisy8D0UrvpzDsjyOZEZdj82r
+Non-bounceable address (for init): 0QA3BzfCtXQi9ThhrAGkLMGq-pU6sRCZPPC6QFatpFe5l5Gj
+Bounceable address (for later access): kQA3BzfCtXQi9ThhrAGkLMGq-pU6sRCZPPC6QFatpFe5l8xm
 mainnet:
-Non-bounceable address (for init): UQBiGGhhOadyI23upLzhKUgmisy8D0UrvpzDsjyOZEZdjyvk
-Bounceable address (for later access): EQBiGGhhOadyI23upLzhKUgmisy8D0UrvpzDsjyOZEZdj3Yh
+Non-bounceable address (for init): UQA3BzfCtXQi9ThhrAGkLMGq-pU6sRCZPPC6QFatpFe5lyop
+Bounceable address (for later access): EQA3BzfCtXQi9ThhrAGkLMGq-pU6sRCZPPC6QFatpFe5l3fs
 Succeeded
