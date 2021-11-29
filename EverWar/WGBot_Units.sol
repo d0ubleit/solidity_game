@@ -211,14 +211,13 @@ contract WGBot_Units is Debot, Upgradable{
             else {
                 for ((int32 unitID , Information InfoExample) : UnitsInfo) {     
                     if (unitID > 0) {
-                    Terminal.print(0, format(" ID: {} || Type: \"{}\" || Address: {} || Owner PubKey: {} || Health: {} || Attack power: {} || Defence power: {}", 
-                        unitID, 
+                    Terminal.print(0, format(" ID: {} | {} || Health: {} || Attack: {} || Defence: {} || At address:\n{}", 
+                        InfoExample.itemID,
                         InfoExample.itemType,
-                        InfoExample.itemAddr,
-                        InfoExample.itemOwnerPubkey,
                         InfoExample.itemHealth,
                         InfoExample.itemAttack, 
-                        InfoExample.itemDefence)); 
+                        InfoExample.itemDefence,
+                        InfoExample.itemAddr)); 
                     }
                 }
                 Terminal.input(tvm.functionId(sendAttack_1),"Enter ID of unit who will attack",false);
