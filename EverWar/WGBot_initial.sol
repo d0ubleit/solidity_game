@@ -178,12 +178,12 @@ contract WGBot_initial is Debot, Upgradable {
     }
 
     function showDescription() public {
-        Terminal.print(0, "Aim of game - to kill other units and kingdoms. You can produce kingdom, warriors and scout.");
-        Terminal.print(0, "Kingdom - is your home base. If it destroyed - all your units will also die.");
-        Terminal.print(0, "Warrior - attacking unit. Scout - brings you info about units in other kingdoms.");
+        Terminal.print(0, "Aim of game - to kill other units and kingdoms. If any contract destroyed - it's tokens sends to killer.\nKingdom - is your home base. If destroyed - all your units will also die.");
+        Terminal.print(0, "You can produce kingdom, warriors and scout.\nWarrior - attacking unit. Scout - brings you info about units in other kingdoms.");
         Terminal.print(0, "Create your kingdom to start the game.\nIn main menu you can see list of other players' kingdoms.");
         Terminal.print(0, "Info about your units, attack function and scout function in kingdom menu.\nBefore attack you need to scout enemy kingdom.");
-        Terminal.print(0, "Create units in produce menu.\n --- Enjoy! ---");
+        Terminal.print(0, "Create units in produce menu.");
+        Terminal.print(0, "--- Enjoy! ---");
         goMainMenu();
     } 
 
