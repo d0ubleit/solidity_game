@@ -67,6 +67,14 @@
 			]
 		},
 		{
+			"name": "genRandomProps",
+			"inputs": [
+				{"name":"_deployType","type":"uint8"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "checkAccountStatus",
 			"inputs": [
 				{"name":"acc_type","type":"int8"}

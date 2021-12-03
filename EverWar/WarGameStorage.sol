@@ -55,6 +55,5 @@ contract WarGameStorage {
         return(playersAliveList, playersIDList); 
     }
 
-
 } 
 

@@ -6,6 +6,9 @@ pragma AbiHeader pubkey;
 abstract contract AWarGameExample {
 
     int32 static exampleID;
+    int32 static exampleHealth;
+    int32 static exampleDefence;
+    int32 static exampleAttack;
 
     constructor(uint256 playerPubkey, address playerBaseAddr, address Storage_Addr) public {
     }

@@ -81,7 +81,10 @@
 		}
 	],
 	"data": [
-		{"key":1,"name":"exampleID","type":"int32"}
+		{"key":1,"name":"exampleID","type":"int32"},
+		{"key":2,"name":"exampleHealth","type":"int32"},
+		{"key":3,"name":"exampleDefence","type":"int32"},
+		{"key":4,"name":"exampleAttack","type":"int32"}
 	],
 	"events": [
 	]

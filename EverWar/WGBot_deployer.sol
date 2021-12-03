@@ -15,19 +15,20 @@ import "AWarGameExample.sol";
 import "WarGameStructs.sol";
 import "Itransactable.sol";
 import "IWGBot_interfaces.sol"; 
+import "IWarGame_interfaces.sol";
 
 
 contract WGBot_deployer is Debot, Upgradable {
-
+    
     bytes m_icon;
 
     address InitialWGB_addr;
 
     TvmCell Base_Code;
-
     TvmCell Warrior_Code;         
+    TvmCell Scout_Code;
+    TvmCell Tower_Code;         
 
-    TvmCell Scout_Code;         
 
     TvmCell Produce_StateInit;
     address Produce_Addr;
@@ -43,6 +44,31 @@ contract WGBot_deployer is Debot, Upgradable {
 
     uint32 INITIAL_BALANCE =  2000000000; 
 
+    //////  Indexes (according to enum DeployState):
+    //////  0 = Base, 1 = Warrior, 2 = Scout
+    //////
+    // int8 minHP0 = 1; int8 minHP1 = 2; int8 minHP2 = 3;
+    // int8 HPlim0 = 1; int8 HPlim1 = 2; int8 HPlim2 = 3;
+    
+    // int8 minDefence0 = 1; int8 minDefence1 = 2; int8 minDefence2 = 3;
+    // int8 Defencelim0 = 1; int8 Defencelim1 = 2; int8 Defencelim2 = 3;
+
+    // int8 minAttack0 = 1; int8 minAttack1 = 2; int8 minAttack2 = 3;
+    // int8 Attacklim0 = 1; int8 Attacklim1 = 2; int8 Attacklim2 = 3;
+    
+    //mapping(int8 => int8) minHealth; 
+      
+
+    // int8[3] minHealth;// = [int8(1), 2, 3]; 
+    // int8[3] healthRndLimits;// = [int8(1), 2];// = [int8(20), 10, 5]; 
+
+    // int8[3] minDefence;// = [int8(100), 50, 10]; 
+    // int8[3] defenceRndLimits;// = [int8(20), 10, 5];
+
+    // int8[3] minAttack;// = [int8(100), 50, 10]; 
+    // int8[3] attackRndLimits;// = [int8(20), 10, 5];
+
+    
 
     ///////////////
     // Set Codes //
@@ -83,7 +109,9 @@ contract WGBot_deployer is Debot, Upgradable {
         mainUnitID = _mainUnitID;
 
         if (deployType == DeployType.Base) {
-            prepareProduce(deployType);
+            genRandomProps(deployType); 
+            //prepareProduce(deployType);
+            // getTime();
         }
         else {
             goDeployMenu();
@@ -108,28 +136,88 @@ contract WGBot_deployer is Debot, Upgradable {
 
     function produceWarrior() public {
         deployType = DeployType.Warrior;
-        prepareProduce(deployType);
+        // getTime();
+        genRandomProps(deployType);
     }
  
 
     function produceScout() public {
         deployType = DeployType.Scout;
-        prepareProduce(deployType);     
+        // getTime();
+        genRandomProps(deployType);     
     }
 
 
     function returnKingdomMenu() public {
         IWGBot_initial(InitialWGB_addr).updateUnitsInfo();
     } 
+
+
+    // function getTime() public {
+    //     optional(uint256) none;
+    //     IWarGameStorage(Storage_Addr).getTimeNow{
+    //             abiVer: 2,
+    //             extMsg: true,
+    //             sign: false,
+    //             pubkey: none,
+    //             time: uint64(now), 
+    //             expire: 0,
+    //             callbackId: tvm.functionId(genRandomProps),
+    //             onErrorId: 0
+    //         }(); 
+    // }
+    function randomizer(int8 minVal, int8 rndLim) private returns(int32 randomRes) {
+        rnd.shuffle(now);
+        randomRes = minVal + rnd.next(rndLim);
+    } 
+
+
+    function genRandomProps(DeployType _deployType) public {
+        //////  Indexes (according to enum DeployState):
+        //////  0 = Base, 1 = Warrior, 2 = Scout
+        //////
+        int8[3] minHealth = [int8(15), 6, 4];
+        int8[3] healthRndLimits = [int8(9), 5, 3]; 
+
+        int8[3] minDefence = [int8(3), 2, 1]; 
+        int8[3] defenceRndLimits = [int8(2), 2, 2];
+
+        int8[3] minAttack = [int8(0), 6, 1]; 
+        int8[3] attackRndLimits = [int8(0), 3, 5];
+        
+        int32 produceHealth;
+        int32 produceDefence;
+        int32 produceAttack;
+        
+        if (uint8(_deployType) > 0) {        
+            produceHealth = randomizer(minHealth[uint8(_deployType)-1], healthRndLimits[uint8(_deployType)-1]); 
+            produceDefence = randomizer(minDefence[uint8(_deployType)-1], defenceRndLimits[uint8(_deployType)-1]);
+            produceAttack = randomizer(minAttack[uint8(_deployType)-1], attackRndLimits[uint8(_deployType)-1]);
+            prepareProduce(deployType, produceHealth, produceDefence, produceAttack);
+        }
+        else {
+            Terminal.print(0, "Error: Wrong deploy state.");
+            returnKingdomMenu();
+        }
+    }
  
 
-    function prepareProduce(DeployType _deployType) internal { 
+    function prepareProduce(DeployType _deployType, 
+                            int32 produceHealth,
+                            int32 produceDefence,
+                            int32 produceAttack) internal { 
         TvmBuilder salt;
         salt.store(InitialWGB_addr);
 
         if (deployType == DeployType.Base) {
             TvmCell Base_Code_salt = tvm.setCodeSalt(Base_Code, salt.toCell()); 
-            Produce_StateInit = tvm.buildStateInit({code: Base_Code_salt, contr: AWarGameExample, varInit: {exampleID: mainUnitID}});    
+            Produce_StateInit = tvm.buildStateInit({code: Base_Code_salt,
+                                                    contr: AWarGameExample, 
+                                                    varInit: {  exampleID: mainUnitID,
+                                                                exampleHealth: produceHealth,
+                                                                exampleDefence: produceDefence,
+                                                                exampleAttack: produceAttack
+                                                    }});    
             TvmCell deployState = tvm.insertPubkey(Produce_StateInit, playerPubkey);
             Produce_Addr = address.makeAddrStd(0, tvm.hash(deployState));
             Base_Addr = Produce_Addr;                                             
@@ -137,14 +225,26 @@ contract WGBot_deployer is Debot, Upgradable {
         }
         else if (deployType == DeployType.Warrior) {
             TvmCell Warrior_Code_salt = tvm.setCodeSalt(Warrior_Code, salt.toCell());
-            Produce_StateInit = tvm.buildStateInit({code: Warrior_Code_salt, contr: AWarGameExample, varInit: {exampleID: mainUnitID}});  
+            Produce_StateInit = tvm.buildStateInit({code: Warrior_Code_salt,
+                                                    contr: AWarGameExample, 
+                                                    varInit: {  exampleID: mainUnitID,
+                                                                exampleHealth: produceHealth,
+                                                                exampleDefence: produceDefence,
+                                                                exampleAttack: produceAttack
+                                                    }});      
             TvmCell deployState = tvm.insertPubkey(Produce_StateInit, playerPubkey);
             Produce_Addr = address.makeAddrStd(0, tvm.hash(deployState)); 
             Terminal.print(0, format( "Info: your Warrior address is {}", Produce_Addr));
         }
         else if (deployType == DeployType.Scout) {
             TvmCell Scout_Code_salt = tvm.setCodeSalt(Scout_Code, salt.toCell());
-            Produce_StateInit = tvm.buildStateInit({code: Scout_Code_salt, contr: AWarGameExample, varInit: {exampleID: mainUnitID}});   
+            Produce_StateInit = tvm.buildStateInit({code: Scout_Code_salt,
+                                                    contr: AWarGameExample, 
+                                                    varInit: {  exampleID: mainUnitID,
+                                                                exampleHealth: produceHealth,
+                                                                exampleDefence: produceDefence,
+                                                                exampleAttack: produceAttack
+                                                    }});       
             TvmCell deployState = tvm.insertPubkey(Produce_StateInit, playerPubkey);
             Produce_Addr = address.makeAddrStd(0, tvm.hash(deployState)); 
             Terminal.print(0, format( "Info: your Scout address is {}", Produce_Addr));

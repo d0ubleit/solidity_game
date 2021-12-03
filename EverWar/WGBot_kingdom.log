@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "luxury actor credit hood earth pig merit capable diamond lend exhaust ozone"
-Raw address: 0:370737c2b57422f53861ac01a42cc1aafa953ab110993cf0ba4056ada457b997
+Seed phrase: "cake garden december bench puzzle scale sorry range page birth assault piano"
+Raw address: 0:d263bd200a159b151f93d65521bfb4f4cd250ae2b929d8f91f29b518eaf16131
 testnet:
-Non-bounceable address (for init): 0QA3BzfCtXQi9ThhrAGkLMGq-pU6sRCZPPC6QFatpFe5l5Gj
-Bounceable address (for later access): kQA3BzfCtXQi9ThhrAGkLMGq-pU6sRCZPPC6QFatpFe5l8xm
+Non-bounceable address (for init): 0QDSY70gChWbFR-T1lUhv7T0zSUK4rkp2PkfKbUY6vFhMdmW
+Bounceable address (for later access): kQDSY70gChWbFR-T1lUhv7T0zSUK4rkp2PkfKbUY6vFhMYRT
 mainnet:
-Non-bounceable address (for init): UQA3BzfCtXQi9ThhrAGkLMGq-pU6sRCZPPC6QFatpFe5lyop
-Bounceable address (for later access): EQA3BzfCtXQi9ThhrAGkLMGq-pU6sRCZPPC6QFatpFe5l3fs
+Non-bounceable address (for init): UQDSY70gChWbFR-T1lUhv7T0zSUK4rkp2PkfKbUY6vFhMWIc
+Bounceable address (for later access): EQDSY70gChWbFR-T1lUhv7T0zSUK4rkp2PkfKbUY6vFhMT_Z
 Succeeded

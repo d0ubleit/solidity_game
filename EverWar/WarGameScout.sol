@@ -9,7 +9,6 @@ import "IWarGame_interfaces.sol";
 
 contract WarGameScout is WarGameUnit {
 
-    int32 static exampleID;
     address nowEnemy;
  
     mapping (address => mapping ( int32 => Information )) public ScoutedInfo; 
@@ -26,9 +25,9 @@ contract WarGameScout is WarGameUnit {
             "Scout",
             address(this),
             playerPubkey,
-            5,
-            1,
-            0);
+            exampleHealth,
+            exampleDefence,
+            exampleAttack);
           
         IWarGameBase(BaseAddr).addUnit(objInfo);   
     }

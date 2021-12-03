@@ -7,6 +7,11 @@ import "IWarGame_interfaces.sol";
 
 contract WarGameObj is IWarGameObj {
 
+    int32 static exampleID;
+    int32 static exampleHealth;
+    int32 static exampleDefence;
+    int32 static exampleAttack;
+
     Information objInfo;
 
     constructor() public {

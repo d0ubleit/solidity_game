@@ -8,9 +8,7 @@ import "AWarGameExample.sol";
     
 
 contract WarGameBase is WarGameObj { 
-    
-    int32 static exampleID;
-    
+        
     address Storage_Addr_;
     address WGBot_Addr;
 
@@ -32,9 +30,9 @@ contract WarGameBase is WarGameObj {
             "Base",
             address(this),
             playerPubkey,
-            15,  //25,
-            0,
-            3);
+            exampleHealth,  //25,
+            exampleDefence,
+            exampleAttack);
         
         UnitsInfo[0] = objInfo;
     } 
