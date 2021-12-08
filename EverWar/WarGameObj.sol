@@ -33,7 +33,7 @@ contract WarGameObj is IWarGameObj {
         
         if (_objAttackVal > objInfo.itemDefence) {
             damage = _objAttackVal - objInfo.itemDefence;
-            if (damage > objInfo.itemHealth) {
+            if (damage >= objInfo.itemHealth) {
                 deathProcessing(enemyAddr, enemyPubkey, damage);
             }
             else {
