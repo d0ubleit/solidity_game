@@ -15,9 +15,9 @@ Main debots:
 
 This DeBot is already deployed on net.ton.dev
 
-DeBot address: 0:370737c2b57422f53861ac01a42cc1aafa953ab110993cf0ba4056ada457b997
+DeBot address: 0:c5e19961a82825ccac3a1f94a5694ba5b6a2c624f33b1da1f3f522aac628c130
 
-Open the link: https://uri.ton.surf/debot?address=0%3A370737c2b57422f53861ac01a42cc1aafa953ab110993cf0ba4056ada457b997&net=devnet
+Open the link: https://uri.ton.surf/debot?address=0%3Ac5e19961a82825ccac3a1f94a5694ba5b6a2c624f33b1da1f3f522aac628c130&net=devnet
 
 -   You need to have a Surf wallet with balance at least 8 rubies to try all functions.
 

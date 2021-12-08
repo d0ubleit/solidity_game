@@ -6,12 +6,17 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "escape bargain silent use beyond pony suspect prize surprise split nice differ"
-Raw address: 0:922cfb19819242e8a0e5cd8ee61eb3dbf0d6556d26ba4a2035b921e505d6d387
+Seed phrase: "ribbon unable grain inner potato distance exhaust humble furnace butter word wood"
+Raw address: 0:c5e19961a82825ccac3a1f94a5694ba5b6a2c624f33b1da1f3f522aac628c130
 testnet:
-Non-bounceable address (for init): 0QCSLPsZgZJC6KDlzY7mHrPb8NZVbSa6SiA1uSHlBdbTh9jQ
-Bounceable address (for later access): kQCSLPsZgZJC6KDlzY7mHrPb8NZVbSa6SiA1uSHlBdbTh4UV
+Non-bounceable address (for init): 0QDF4ZlhqCglzKw6H5SlaUultqLGJPM7HaHz9SKqxijBMMdU
+Bounceable address (for later access): kQDF4ZlhqCglzKw6H5SlaUultqLGJPM7HaHz9SKqxijBMJqR
 mainnet:
-Non-bounceable address (for init): UQCSLPsZgZJC6KDlzY7mHrPb8NZVbSa6SiA1uSHlBdbTh2Na
-Bounceable address (for later access): EQCSLPsZgZJC6KDlzY7mHrPb8NZVbSa6SiA1uSHlBdbThz6f
+Non-bounceable address (for init): UQDF4ZlhqCglzKw6H5SlaUultqLGJPM7HaHz9SKqxijBMHze
+Bounceable address (for later access): EQDF4ZlhqCglzKw6H5SlaUultqLGJPM7HaHz9SKqxijBMCEb
 Succeeded
+
+Done! Deployed storage with address: 0:d4971b98e08f7a2514ab55443d7f290ef048e04acbe5c7d53f5946b27b168dc8
+Done! Deployed debot1 with address: 0:c5e19961a82825ccac3a1f94a5694ba5b6a2c624f33b1da1f3f522aac628c130
+Done! Deployed debot2 with address: 0:cb0159f0d32d4d63a96dfeeaf94c2730c1f593cd455f99254fbe9dcb24f6cb48
+Done! Deployed debot3 with address: 0:a8cf87085c7ceb3b642173effb6abc46fafaa8971e0f0fbfb788bcc14d3fd4c8
