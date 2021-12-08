@@ -55,10 +55,10 @@ $ ./deploy_3debotsDEV.sh WGBot_kingdom.sol WGBot_deployer.sol WGBot_Units.sol Wa
 ```
 
 You will see result like:
-Done! Deployed storage with address: 0:xx..
-Done! Deployed debot1 with address: 0:xx..
-Done! Deployed debot2 with address: 0:xx..
-Done! Deployed debot3 with address: 0:xx..
+Done! Deployed storage with address: 0:xxx.  
+Done! Deployed debot1 with address: 0:xxx.   
+Done! Deployed debot2 with address: 0:xxx.   
+Done! Deployed debot3 with address: 0:xxx.   
 
 Debot1 address - is main debot address. 
 Use it to run debot with surf in dev net or use tonos-cli in SE:
