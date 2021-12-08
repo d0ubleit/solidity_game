@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "cake garden december bench puzzle scale sorry range page birth assault piano"
-Raw address: 0:d263bd200a159b151f93d65521bfb4f4cd250ae2b929d8f91f29b518eaf16131
+Seed phrase: "escape bargain silent use beyond pony suspect prize surprise split nice differ"
+Raw address: 0:922cfb19819242e8a0e5cd8ee61eb3dbf0d6556d26ba4a2035b921e505d6d387
 testnet:
-Non-bounceable address (for init): 0QDSY70gChWbFR-T1lUhv7T0zSUK4rkp2PkfKbUY6vFhMdmW
-Bounceable address (for later access): kQDSY70gChWbFR-T1lUhv7T0zSUK4rkp2PkfKbUY6vFhMYRT
+Non-bounceable address (for init): 0QCSLPsZgZJC6KDlzY7mHrPb8NZVbSa6SiA1uSHlBdbTh9jQ
+Bounceable address (for later access): kQCSLPsZgZJC6KDlzY7mHrPb8NZVbSa6SiA1uSHlBdbTh4UV
 mainnet:
-Non-bounceable address (for init): UQDSY70gChWbFR-T1lUhv7T0zSUK4rkp2PkfKbUY6vFhMWIc
-Bounceable address (for later access): EQDSY70gChWbFR-T1lUhv7T0zSUK4rkp2PkfKbUY6vFhMT_Z
+Non-bounceable address (for init): UQCSLPsZgZJC6KDlzY7mHrPb8NZVbSa6SiA1uSHlBdbTh2Na
+Bounceable address (for later access): EQCSLPsZgZJC6KDlzY7mHrPb8NZVbSa6SiA1uSHlBdbThz6f
 Succeeded

@@ -20,8 +20,9 @@ contract WarGameWarrior is WarGameUnit {
             address(this),
             playerPubkey,
             exampleHealth,
-            exampleDefence,
-            exampleAttack);
+            exampleAttack,
+            exampleDefence
+            );
           
         IWarGameBase(BaseAddr).addUnit(objInfo);   
     }

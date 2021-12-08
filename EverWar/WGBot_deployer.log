@@ -6,11 +6,11 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Raw address: 0:2b076912bcdc72c013c441c3b6d4a1e93d60cdca661313368703d7e700695212
+Raw address: 0:5d78ceb0991d71e2f1e8427f04bb1d953a43102f00a3b51c5488c97d770abe90
 testnet:
-Non-bounceable address (for init): 0QArB2kSvNxywBPEQcO21KHpPWDNymYTEzaHA9fnAGlSEpgR
-Bounceable address (for later access): kQArB2kSvNxywBPEQcO21KHpPWDNymYTEzaHA9fnAGlSEsXU
+Non-bounceable address (for init): 0QBdeM6wmR1x4vHoQn8Eux2VOkMQLwCjtRxUiMl9dwq-kCtE
+Bounceable address (for later access): kQBdeM6wmR1x4vHoQn8Eux2VOkMQLwCjtRxUiMl9dwq-kHaB
 mainnet:
-Non-bounceable address (for init): UQArB2kSvNxywBPEQcO21KHpPWDNymYTEzaHA9fnAGlSEiOb
-Bounceable address (for later access): EQArB2kSvNxywBPEQcO21KHpPWDNymYTEzaHA9fnAGlSEn5e
+Non-bounceable address (for init): UQBdeM6wmR1x4vHoQn8Eux2VOkMQLwCjtRxUiMl9dwq-kJDO
+Bounceable address (for later access): EQBdeM6wmR1x4vHoQn8Eux2VOkMQLwCjtRxUiMl9dwq-kM0L
 Succeeded

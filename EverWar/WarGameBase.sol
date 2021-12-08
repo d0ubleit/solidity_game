@@ -31,8 +31,9 @@ contract WarGameBase is WarGameObj {
             address(this),
             playerPubkey,
             exampleHealth,  //25,
-            exampleDefence,
-            exampleAttack);
+            exampleAttack,
+            exampleDefence
+            );
         
         UnitsInfo[0] = objInfo;
     } 
