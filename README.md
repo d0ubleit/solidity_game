@@ -1,7 +1,7 @@
 # EverWar multiplayer game
 
 This is a game where you can create your own kingdom, produce warriors and scout.
-Explore other players' kingdoms, kill enemy units and destroy whole kingdom!
+Explore other players' kingdoms, kill enemy units and destroy whole kingdom!!!
 
 ## Consists of
 
